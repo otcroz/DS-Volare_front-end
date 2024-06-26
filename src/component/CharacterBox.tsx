@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 
-
 const TitleText = styled.div`
   color: white;
   font-size: 1.75rem;
@@ -11,10 +10,9 @@ const TitleText = styled.div`
 
 const ContentBox = styled.div`
   background-color: white;
-  width: 560px;
-  height: 560px;
+  width: 600px;
+  height: 450px;
   border-radius: 1.25rem;
-  padding: 1.25rem;
 `
 
 const TutorialBox = styled.div`
@@ -55,74 +53,40 @@ const ConvertButton = styled.button`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
 `;
 
-
-const ScriptTextArea = styled.textarea`
-  width: 100%;
-  height: calc(100% - 2.5rem);
-  border: none;
-  border-radius: 5px;
-  box-sizing: border-box;
-  font-size: 1rem;
-  font-family: 'Arial', sans-serif;
-  
-  resize: none;
-  margin-top: 10px;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-
-  &:focus {
-    outline: none;
-  }
-`
-
-const FileDownloadButton = styled.div`
-  width: 12.5rem;
-  
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.2rem;
-  padding: 1.25rem;
-  background-color: #BB4E11;
-  border-radius: 0.625rem 0.625rem 0 0;
-
-  position: absolute;
-  top: 1.75rem;
-  right: 3rem;
-
-  cursor: pointer;
-`
-
 type props = {
   data: string;
+  characterList: string;
 };
 
-const StoryboardBox = ({ data }: props) => {
+const CharacterBox = ({ data, characterList }: props) => {
 
   return (
     <>
       {data ? 
         <ConvertBoxWrapper>
-          <TitleText>스토리보드</TitleText>
-          <FileDownloadButton>다운로드</FileDownloadButton>
+          <TitleText>등장인물 확인</TitleText>
           <ContentBox>
-            <ScriptTextArea></ScriptTextArea>
+            
             
           </ContentBox>
+          <TitleText>등장인물</TitleText>
+        
         </ConvertBoxWrapper>
       :
         <ConvertBoxWrapper mode="tutorial">
           <TutorialBox>
-            <TutorialTitle>#3 스토리보드 생성과 챗봇 기능</TutorialTitle>
+            <TutorialTitle>#1 소설 원고 입력하기</TutorialTitle>
             <TutorialText>
-              1. 대본에 기반한 <HighlightedText>스토리보드</HighlightedText>가 생성됩니다.<br/>
-              2. 수정과 각색에 도움을 주는 <HighlightedText>챗봇</HighlightedText>을 사용할 수 있습니다.
+              1. 좌측에 소설 원고를 작성합니다.<br />
+              2. <HighlightedText>등장인물 인식 버튼</HighlightedText>을 누릅니다.<br />
+              3. 등장인물 목록을 확인하고 수정합니다.
             </TutorialText>
           </TutorialBox>
-          <ConvertButton>스토리보드 변환</ConvertButton>
+          <ConvertButton>등장인물 인식</ConvertButton>
         </ConvertBoxWrapper>
       }
     </>
   );
 };
 
-export default StoryboardBox;
+export default CharacterBox;
