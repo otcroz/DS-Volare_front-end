@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+@font-face {
+  font-family: 'BookkMyungjo';
+  src: url('./assets/fonts/BookkMyungjo_Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BookkMyungjo';
+  src: url('./assets/fonts/BookkMyungjo_Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
+
+
+body {
+  font-family: "BookkMyungjo", sans-serif;
+}
