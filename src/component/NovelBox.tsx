@@ -2,37 +2,11 @@ import React, { ChangeEvent, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
-
-const TitleText = styled.div`
-  color: white;
-  font-size: 1.75rem;
-  padding: 1rem;
-`
-
-const ContentBox = styled.div`
-  background-color: white;
-  width: 560px;
-  height: 560px;
-  border-radius: 1.25rem;
-  padding: 1.25rem;
-`
-
-const FileUploadButton = styled.div`
-  width: 12.5rem;
-  text-align: center;
-  color: #ffffff;
-  font-size: 1.2rem;
-  padding: 0.75rem;
-  background-color: #BB4E11;
-  border-radius: 0.625rem 0.625rem 0 0;
-  position: absolute;
-  top: 2.2rem;
-  right: 3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
+import {
+  TitleText,
+  ContentBox,
+  FileButton
+} from './convertBoxStyles';
 
 const NovelTextArea = styled.textarea`
   width: 100%;
@@ -49,7 +23,6 @@ const NovelTextArea = styled.textarea`
     outline: none;
   }
 `
-
 
 const HiddenFileInput = styled.input`
   display: none;
@@ -91,7 +64,7 @@ const NovelBox = ({ data }: props) => {
   return (
     <ConvertBoxWrapper>
       <TitleText>원고 작성</TitleText>
-      <FileUploadButton onClick={handleButtonClick}><FileUploadIcon width="2rem" height="2rem" />&nbsp;파일 업로드</FileUploadButton>
+      <FileButton onClick={handleButtonClick}><FileUploadIcon width="2rem" height="2rem" />&nbsp;파일 업로드</FileButton>
       <HiddenFileInput
         type="file"
         accept=".txt"

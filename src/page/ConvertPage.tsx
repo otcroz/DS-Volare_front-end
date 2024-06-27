@@ -9,9 +9,9 @@ import StatisticsBox from '../component/StatisticsBox';
 
 const PageContainer = styled.div`
   width: 4000px;
-  height: 1000px;
+  height: 98vh;
 `
-// height 100%으로 설정하고 싶은데 어떻게 하지
+
 const ComponentContainer = styled.div`
   width: 4000px;
   height: 100%;
@@ -25,11 +25,11 @@ const ConvertPage = () => {
   return (
     <PageContainer>
       <ComponentContainer>
-        <NovelBox data="data" />
-        <CharacterBox data="data" characterList={characterList} />
-        <ScriptBox data="data" />
-        <StoryboardBox data="data" />
-        <StatisticsBox data="data" />
+        <NovelBox data="novel" />
+        <CharacterBox data="character" characterList={characterList} />
+        <ScriptBox data="script" />
+        <StoryboardBox data="storyboard" />
+        <StatisticsBox data="statistics" />
       </ComponentContainer>
     </PageContainer>
   );

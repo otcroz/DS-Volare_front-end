@@ -1,19 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
-
-const TitleText = styled.div`
-  color: white;
-  font-size: 28px;
-  padding: 15px;
-`
-
-const ContentBox = styled.div`
-  background-color: white;
-  width: 600px;
-  height: 600px;
-  border-radius: 20px;
-`
+import {
+  TitleText,
+  ContentBox,
+} from './convertBoxStyles';
 
 type props = {
   data: string;
