@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
+import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
 
 const TitleText = styled.div`
   color: white;
@@ -76,19 +77,19 @@ const ScriptTextArea = styled.textarea`
 
 const FileDownloadButton = styled.div`
   width: 12.5rem;
-  
   text-align: center;
   color: #ffffff;
   font-size: 1.2rem;
-  padding: 1.25rem;
+  padding: 0.75rem;
   background-color: #BB4E11;
   border-radius: 0.625rem 0.625rem 0 0;
-
   position: absolute;
-  top: 1.75rem;
+  top: 2.2rem;
   right: 3rem;
-
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 
@@ -103,7 +104,7 @@ const ScriptBox = ({ data }: props) =>  {
       {data ? 
         <ConvertBoxWrapper>
           <TitleText>대본화</TitleText>
-          <FileDownloadButton>다운로드</FileDownloadButton>
+          <FileDownloadButton><FileDownloadIcon  width="2rem" height="2rem" />&nbsp;다운로드</FileDownloadButton>
           <ContentBox>
             <ScriptTextArea></ScriptTextArea>
             
