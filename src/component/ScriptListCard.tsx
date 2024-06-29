@@ -8,25 +8,33 @@ interface TextProps {
   weight: string;
 }
 
-const ScriptListCard = () => (
-  <CardBox>
-    <Image />
-    <ContentBox>
-      <Text color={theme.colors.darkBrown} size={'1rem'} weight={'normal'}>
-        2024-06-29
-      </Text>
-      <div style={{ flex: 1 }} />
-      <Text
-        style={{ textAlign: 'right' }}
-        color={theme.colors.darkOlive}
-        size={'1rem'}
-        weight={'normal'}
-      >
-        흔들리는 꽃들 속에서 내 샴푸향이 느껴진거야
-      </Text>
-    </ContentBox>
-  </CardBox>
-);
+interface ScriptListProps {
+  date: string;
+  title: string;
+}
+
+const ScriptListCard = (props: { item: ScriptListProps }) => {
+  const { title, date } = props.item;
+  return (
+    <CardBox>
+      <Image />
+      <ContentBox>
+        <Text color={theme.colors.darkBrown} size={'1rem'} weight={'normal'}>
+          {date}
+        </Text>
+        <div style={{ flex: 1 }} />
+        <Text
+          style={{ textAlign: 'right' }}
+          color={theme.colors.darkOlive}
+          size={'1rem'}
+          weight={'normal'}
+        >
+          {title}
+        </Text>
+      </ContentBox>
+    </CardBox>
+  );
+};
 
 // text
 const Text = styled.span<TextProps>`

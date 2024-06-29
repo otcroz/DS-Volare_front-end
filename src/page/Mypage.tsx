@@ -10,6 +10,50 @@ interface TextProps {
   weight: string;
 }
 
+interface ScriptListProps {
+  date: string;
+  title: string;
+}
+
+// 더미 데이터
+let data = [
+  {
+    title: '소나기',
+    date: '2024-05-06',
+  },
+  {
+    title: '인간관계론',
+    date: '2024-03-04',
+  },
+  {
+    title: '제노사이드',
+    date: '2024-02-04',
+  },
+  {
+    title: '나미야 잡화점의 기적',
+    date: '2023-12-15',
+  },
+  {
+    title: '타이틀 테스트입니다',
+    date: '2023-05-06',
+  },
+  {
+    title: '제목이 잘 나오는지 확인합니다',
+    date: '2023-05-06',
+  },
+];
+
+const ScriptListfunc = (data: ScriptListProps[]) => {
+  // if data.length >= 6
+  const list = data.map((item, index) => {
+    return <ScriptListCard key={index} item={item} />;
+  });
+
+  // if data.length < 6
+
+  return list;
+};
+
 const MyPage = () => (
   <Background>
     <BackgroundImage>
@@ -25,14 +69,7 @@ const MyPage = () => (
           </UserInfoTextBox>
           {/* scripts list */}
           <ListContainer>
-            <ItemsContainer>
-              <ScriptListCard />
-              <ScriptListCard />
-              <ScriptListCard />
-              <ScriptListCard />
-              <ScriptListCard />
-              <ScriptListCard />
-            </ItemsContainer>
+            <ItemsContainer>{ScriptListfunc(data)}</ItemsContainer>
             <div style={{ flex: 1 }} />
             <Pagenation />
           </ListContainer>
@@ -54,7 +91,7 @@ const Background = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #d8d2c5;
+  background-color: ${({ theme }) => theme.colors.beige};
   height: 100vh;
 `;
 
