@@ -19,12 +19,12 @@ const ChipInput = styled.input`
   font-size: 1.25rem;
   width: 5rem;
   &:focus {
-    outline: 3px solid #EA7333;
+    outline: 3px solid ${({ theme }) => theme.colors.orange};
   }
 `;
 
 const AddButton = styled.button`
-  background: #EA7333;
+  background: ${({ theme }) => theme.colors.orange};
   border: none;
   border-radius: 2rem;
   width: 3.5rem;
