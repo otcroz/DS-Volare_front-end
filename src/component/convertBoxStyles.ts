@@ -15,6 +15,36 @@ export const ContentBox = styled.div`
   padding: 1.25rem;
 `;
 
+export const ScrollText = styled.div`
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.8;
+
+  white-space: pre-wrap;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+`
+
+export const ScrollTextArea = styled.textarea`
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 1rem;
+  line-height: 1.8;
+
+  font-family: 'BookkMyungjo';
+  white-space: pre-wrap;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+
+  resize: none;  
+  &:focus {
+    outline: none;
+  }
+`
+
 export const TutorialBox = styled.div`
   width: 80%;
   background: rgba(255, 255, 255, 0.5);

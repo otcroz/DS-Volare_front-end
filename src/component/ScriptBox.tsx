@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
 import {
   TitleText,
   ContentBox,
+  ScrollTextArea,
   TutorialBox,
   TutorialTitle,
   TutorialText,
@@ -12,25 +13,6 @@ import {
   ConvertButton,
   FileButton
 } from './convertBoxStyles';
-
-const ScriptTextArea = styled.textarea`
-  width: 100%;
-  height: calc(100% - 2.5rem);
-  border: none;
-  border-radius: 0.3rem;
-  box-sizing: border-box;
-  font-size: 1rem;
-  font-family: 'Arial', sans-serif;
-  
-  resize: none;
-  margin-top: 0.625rem;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-
-  &:focus {
-    outline: none;
-  }
-`
 
 
 type props = {
@@ -46,8 +28,9 @@ const ScriptBox = ({ data }: props) =>  {
           <TitleText>대본화</TitleText>
           <FileButton><FileDownloadIcon  width="2rem" height="2rem" />&nbsp;다운로드</FileButton>
           <ContentBox>
-            <ScriptTextArea></ScriptTextArea>
-            
+            <ScrollTextArea
+              placeholder="텍스트"
+            />
           </ContentBox>
         </ConvertBoxWrapper>
       :

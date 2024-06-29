@@ -5,24 +5,10 @@ import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_ic
 import {
   TitleText,
   ContentBox,
-  FileButton
+  FileButton,
+  ScrollTextArea
 } from './convertBoxStyles';
 
-const NovelTextArea = styled.textarea`
-  width: 100%;
-  height: calc(100% - 2.5rem);
-  border: none;
-  box-sizing: border-box;
-  font-size: 1rem;
-  font-family: 'Arial', sans-serif;
-  resize: none;
-  margin-top: 0.625rem;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  &:focus {
-    outline: none;
-  }
-`
 
 const HiddenFileInput = styled.input`
   display: none;
@@ -72,7 +58,7 @@ const NovelBox = ({ data }: props) => {
         onChange={handleFileUpload}
       />
       <ContentBox>
-        <NovelTextArea
+        <ScrollTextArea
           value={text}
           onChange={handleTextChange}
           wrap="soft"

@@ -40,8 +40,12 @@ const AddButton = styled.button`
 `;
 
 
-const CharacterChipList = () => {
-  const [chips, setChips] = useState<string[]>(['빨간 모자', '늑대']);
+interface Props {
+  characterList: string[];
+}
+
+const CharacterChipList = ({ characterList }: Props) => {
+  const [chips, setChips] = useState<string[]>(characterList);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);

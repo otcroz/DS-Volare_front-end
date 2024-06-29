@@ -26,7 +26,7 @@ const ConvertPage = () => {
     <PageContainer>
       <ComponentContainer>
         <NovelBox data="novel" />
-        <CharacterBox data="character" characterList={characterList} />
+        <CharacterBox data="character" />
         <ScriptBox data="script" />
         <StoryboardBox data="storyboard" />
         <StatisticsBox data="statistics" />
