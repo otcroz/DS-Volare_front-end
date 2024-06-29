@@ -16,7 +16,7 @@ export const GlobalStyle = createGlobalStyle`
       margin: 0;
       padding: 0;
       border: 0;
-      font-size: 12px;
+      font-size: 16px;
       vertical-align: baseline;
   }
   body{

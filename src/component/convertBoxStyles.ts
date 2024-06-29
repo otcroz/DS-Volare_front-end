@@ -3,15 +3,15 @@ import styled from 'styled-components';
 export const TitleText = styled.div`
   font-weight: bold;
   color: white;
-  font-size: 1.75rem;
+  font-size: 2rem;
   padding: 1rem;
 `;
 
 export const ContentBox = styled.div`
   background-color: white;
-  width: 35rem;
-  height: 35rem;
-  border-radius: 1.25rem;
+  width: auto;
+  height: 90%;
+  border-radius: 20px;
   padding: 1.25rem;
 `;
 
@@ -25,25 +25,25 @@ export const TutorialBox = styled.div`
 
 export const TutorialTitle = styled.h1`
   font-size: 1.25rem;
-  color: #4f493d;
+  color: background: ${({ theme }) => theme.colors.darkOlive};
   margin: 2rem 0;
 `;
 
 export const TutorialText = styled.p`
   font-size: 1rem;
-  color: #4f493d;
+  color: #background: ${({ theme }) => theme.colors.darkOlive};
   line-height: 2;
   text-align: center;
   margin: 2rem;
 `;
 
 export const HighlightedText = styled.span`
-  color: #d35400;
+  color: #background: ${({ theme }) => theme.colors.darkOrange};
   font-weight: bold;
 `;
 
 export const ConvertButton = styled.button`
-  background: linear-gradient(90deg, #ea7333, #84411d);
+  background: linear-gradient(90deg, ${({ theme }) => theme.colors.orange}, #84411d);
   color: #ffffff;
   border: none;
   border-radius: 3rem;
@@ -59,10 +59,10 @@ export const FileButton = styled.div`
   color: #ffffff;
   font-size: 1.2rem;
   padding: 0.75rem;
-  background-color: #BB4E11;
+  background-color: ${({ theme }) => theme.colors.darkOrange};
   border-radius: 0.625rem 0.625rem 0 0;
   position: absolute;
-  top: 2.2rem;
+  top: 2rem;
   right: 3rem;
   cursor: pointer;
   display: flex;

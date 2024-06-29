@@ -16,7 +16,7 @@ const NovelTextArea = styled.textarea`
   font-size: 1rem;
   font-family: 'Arial', sans-serif;
   resize: none;
-  margin-top: 10px;
+  margin-top: 0.625rem;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   &:focus {

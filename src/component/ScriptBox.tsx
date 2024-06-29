@@ -17,13 +17,13 @@ const ScriptTextArea = styled.textarea`
   width: 100%;
   height: calc(100% - 2.5rem);
   border: none;
-  border-radius: 5px;
+  border-radius: 0.3rem;
   box-sizing: border-box;
   font-size: 1rem;
   font-family: 'Arial', sans-serif;
   
   resize: none;
-  margin-top: 10px;
+  margin-top: 0.625rem;
   white-space: pre-wrap;
   overflow-wrap: break-word;
 

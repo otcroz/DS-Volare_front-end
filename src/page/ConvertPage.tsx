@@ -20,7 +20,7 @@ const ComponentContainer = styled.div`
   justify-content: space-around;
 `
 const ConvertPage = () => {
-  const [characterList, setCharacterList] = useState<string>("뭔데");
+  const [characterList, setCharacterList] = useState<string>("");
 
   return (
     <PageContainer>
