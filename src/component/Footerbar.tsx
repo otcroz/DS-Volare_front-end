@@ -22,7 +22,7 @@ const Container = styled.div`
   align-items: center;
   height: 80px;
   padding: 0 50px;
-  background-color: ${({ theme }) => theme.colors.baseColor1};
+  background-color: ${({ theme }) => theme.colors.olive};
 `;
 
 export default FooterBar;

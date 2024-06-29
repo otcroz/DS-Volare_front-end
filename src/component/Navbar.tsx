@@ -33,7 +33,7 @@ const Container = styled.div`
   height: 80px;
   padding: 0 50px;
   gap: 30px;
-  background-color: ${({ theme }) => theme.colors.baseColor1};
+  background-color: ${({ theme }) => theme.colors.olive};
 `;
 
 // component
