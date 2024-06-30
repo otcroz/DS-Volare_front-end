@@ -131,7 +131,7 @@ const UserInfoTextBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  top: -4.5rem;
+  top: -3.5rem;
 `;
 
 export default MyPage;

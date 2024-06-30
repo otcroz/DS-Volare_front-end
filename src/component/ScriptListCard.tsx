@@ -19,14 +19,14 @@ const ScriptListCard = (props: { item: ScriptListProps }) => {
     <CardBox>
       <Image />
       <ContentBox>
-        <Text color={theme.colors.darkBrown} size={'1rem'} weight={'normal'}>
+        <Text color={theme.colors.darkBrown} size={'0.9rem'} weight={'normal'}>
           {date}
         </Text>
         <div style={{ flex: 1 }} />
         <Text
           style={{ textAlign: 'right' }}
           color={theme.colors.darkOlive}
-          size={'1rem'}
+          size={'0.9rem'}
           weight={'normal'}
         >
           {title}
@@ -51,20 +51,20 @@ const CardBox = styled.div`
   width: 300px;
   height: 200px;
   background-color: ${({ theme }) => theme.colors.beige + 'aa'};
-  border-radius: 1.5rem;
+  border-radius: 1.2rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const ContentBox = styled.div`
   display: flex;
-  padding: 1rem 2rem;
+  padding: 0.7rem 1rem;
 `;
 
 // component
 const Image = styled.img`
   width: 260px;
   height: 150px;
-  border-radius: 1.5rem 1.2rem 1.2rem 1.2rem;
+  border-radius: 1.2rem 0.7rem 0.7rem 0.7rem;
   background-color: white;
 `;
 
