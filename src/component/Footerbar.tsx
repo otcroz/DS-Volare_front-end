@@ -11,7 +11,7 @@ const FooterBar = () => (
 
 // text
 const Text = styled.span`
-  font-size: 20px;
+  font-size: 1rem;
   color: white;
   font-weight: bold;
 `;
