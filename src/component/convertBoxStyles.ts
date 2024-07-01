@@ -55,20 +55,21 @@ export const TutorialBox = styled.div`
 
 export const TutorialTitle = styled.h1`
   font-size: 1.25rem;
-  color: background: ${({ theme }) => theme.colors.darkOlive};
+  color: ${(props) => props.theme.colors.darkOlive};
   margin: 2rem 0;
+  font-weight: bold;
 `;
 
 export const TutorialText = styled.p`
   font-size: 1rem;
-  color: #background: ${({ theme }) => theme.colors.darkOlive};
+  color: ${({ theme }) => theme.colors.darkOlive};
   line-height: 2;
   text-align: center;
   margin: 2rem;
 `;
 
 export const HighlightedText = styled.span`
-  color: #background: ${({ theme }) => theme.colors.darkOrange};
+  color: ${({ theme }) => theme.colors.darkOrange};
   font-weight: bold;
 `;
 
