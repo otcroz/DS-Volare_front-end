@@ -56,7 +56,10 @@ const ConvertIndicator = ({ stateProps, stepProps }: IndicatorProps) => {
         return (
           <IndicatorBox
             key={index}
-            style={{ backgroundColor: levelColor[index] }}
+            style={{
+              backgroundColor: levelColor[index],
+              color: levelColor[index] === '#d8d2c5' ? '#8B766C' : 'white',
+            }}
           >
             {item}
           </IndicatorBox>
@@ -79,8 +82,8 @@ const IndicatorBox = styled.div`
   max-width: 120px;
   height: 30px;
   background-color: ${({ theme }) => theme.colors.beige};
-  background-color: #d8d2c5;
-  padding: 1rem;
+  padding: 1.1rem;
+  font-weight: bold;
 `;
 
 export default ConvertIndicator;

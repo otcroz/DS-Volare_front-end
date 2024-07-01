@@ -25,7 +25,10 @@ const ConvertPage = () => {
           <TitleInput placeholder="제목을 입력해주세요." />
           <IndicatorBox>
             <ConvertIndicator stateProps={state} stepProps={step} />
-            <SaveButton>저장</SaveButton>
+            <div style={{ width: '2rem' }} />
+            <SaveButtonBox>
+              <SaveButton>저장</SaveButton>
+            </SaveButtonBox>
           </IndicatorBox>
         </TopContainer>
         <ConvertStepWrapper>
@@ -85,26 +88,39 @@ const IndicatorBox = styled.div`
   align-items: center;
 `;
 
+const SaveButtonBox = styled.div`
+  display: flex;
+  gap: 5px;
+`;
+
 // component
 const TitleInput = styled.input`
   width: 50vw; // equal convert box width
   max-width: 650px;
   height: 3rem;
   font-family: BookkMyungjo;
-  opacity: 0.5;
+  border-style: solid;
   border-color: #ffffffaa;
+  background-color: #ffffff99;
   border-width: 2px;
   border-radius: 1rem;
   padding: 1rem;
-  placeholdertextcolor: ${({ theme }) => theme.colors.brown};
-  color: black;
+  color: #000000ff;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.brown};
+  }
 `;
 
 const SaveButton = styled.button`
-  height: 1.5rem;
+  width: 100px;
+  height: 2.7rem;
+  font-size: 1.1rem;
   font-family: BookkMyungjo;
   font-weight: bold;
   color: white;
+  border-radius: 0.5rem;
+  background: linear-gradient(90deg, #959b88, #58613e);
 `;
 
 export default ConvertPage;
