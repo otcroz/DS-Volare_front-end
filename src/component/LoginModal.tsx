@@ -85,6 +85,7 @@ const Button = styled.div<ButtonProps>`
   background-color: ${(props) => props.bgColor};
   color: ${(props) => props.color};
   border-radius: 1rem;
+  box-shadow: 0px 1px 4px #00000033;
 `;
 
 // modal style
