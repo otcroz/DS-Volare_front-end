@@ -12,6 +12,10 @@ const NavBar = () => {
     navigate('/convert');
   };
 
+  const navigateMypage = () => {
+    navigate('/mypage');
+  };
+
   return (
     <Container>
       <Logo />
@@ -24,7 +28,7 @@ const NavBar = () => {
         </>
       ) : (
         <>
-          <Text>마이페이지</Text>
+          <Text onClick={navigateMypage}>마이페이지</Text>
           <Text>로그아웃</Text>
         </>
       )}
