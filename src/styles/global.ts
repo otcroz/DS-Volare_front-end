@@ -22,7 +22,6 @@ export const GlobalStyle = createGlobalStyle`
   body{
       line-height: 1;
       font-family: 'BookkMyungjo';
-      margin-bottom: 100px;
   }
   ol, ul{
       list-style: none;
