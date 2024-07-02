@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import bgImg from '../assets/background/bg-5.png';
 import ConvertIndicator from '../component/ConvertIndicator';
+import NovelBox from '../component/NovelBox';
+import CharacterBox from '../component/CharacterBox';
+import ScriptBox from '../component/ScriptBox';
+import StoryboardBox from '../component/StoryboardBox';
+import StatisticsBox from '../component/StatisticsBox';
+import bgImg from '../assets/background/bg-5.png';
 
 interface TextProps {
   color: string;
@@ -34,9 +39,11 @@ const ConvertPage = () => {
           </IndicatorBox>
         </TopContainer>
         <ConvertStepWrapper>
-          {/* 컴포넌트 삽입 */}
-          <div>컴포넌트 1</div>
-          <div>컴포넌트 2</div>
+          <NovelBox data="novel" />
+          <CharacterBox data="character" />
+          <ScriptBox data="script" />
+          <StoryboardBox data="" />
+          <StatisticsBox data="" />
         </ConvertStepWrapper>
       </BackgroundCover>
     </Background>

@@ -30,5 +30,6 @@ export const GlobalStyle = createGlobalStyle`
       border: 0;
       background: transparent;
       cursor: pointer;
+      font-family: 'BookkMyungjo';
   }
 `;
