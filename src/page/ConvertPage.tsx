@@ -72,6 +72,7 @@ const BackgroundCover = styled.p`
 // container
 const ConvertStepWrapper = styled.div`
   display: flex;
+  overflow-x: scroll;
   gap: 0 10vw;
   padding: 10vh 0; // TopContainer > height와 값 동일, margin을 주기 위해 값 크게해도 됨
 `;

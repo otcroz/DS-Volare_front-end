@@ -35,4 +35,5 @@ const ChipLabel = styled.span`
 const ChipDelete = styled.span`
   cursor: pointer;
   font-size: 1.5rem;
+  color: ${({ theme })=> theme.colors.olive}
 `;

@@ -71,7 +71,6 @@ export default CharacterChipList;
 
 const ChipContainer = styled.div`
   display: flex;
-  width: 37.5rem;
   flex-wrap: wrap;
   align-items: center;
 `;
@@ -79,10 +78,12 @@ const ChipContainer = styled.div`
 const ChipInput = styled.input`
   border: none;
   border-radius: 2rem;
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   margin-right: 0.625rem;
+  margin-bottom: 1rem;
   font-size: 1.25rem;
+  font-family: 'BookkMyungjo';
   width: 5rem;
   &:focus {
     outline: 3px solid ${({ theme }) => theme.colors.orange};
@@ -93,11 +94,12 @@ const AddButton = styled.button`
   background: ${({ theme }) => theme.colors.orange};
   border: none;
   border-radius: 2rem;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 3rem;
+  height: 3rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  font-size: 2rem;
+  color: ${({ theme })=> theme.colors.darkBrown};
+  font-size: 1.5rem;
+  font-weight: bold;
   padding: 0;
   margin-bottom: 1rem;
   &:focus {

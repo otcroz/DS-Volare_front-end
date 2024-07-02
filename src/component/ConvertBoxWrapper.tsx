@@ -23,7 +23,7 @@ const ConvertBoxWrapper = ({ children, mode }: props) => {
 export default ConvertBoxWrapper;
 
 const GlassBox = styled.div<GlassBoxProps>`
-  width: 41rem;
+  min-width: 41rem;
   height: 45rem;
   background: rgba(255, 252, 245, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);

@@ -97,7 +97,7 @@ const CharacterBox = ({ data }: Props) => {
       {data ? (
         <ConvertBoxWrapper>
           <TitleText>등장인물 인식 결과</TitleText>
-          <ContentBox style={{height: '30rem'}}>
+          <ContentBox style={{height: '27rem'}}>
             <ScrollText>
               {renderWords()}
             </ScrollText>
