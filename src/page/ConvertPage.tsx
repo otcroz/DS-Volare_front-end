@@ -7,11 +7,12 @@ import ScriptBox from '../component/ScriptBox';
 import StoryboardBox from '../component/StoryboardBox';
 import StatisticsBox from '../component/StatisticsBox';
 
+// dummy
 const PageContainer = styled.div`
   width: 4000px;
   height: 98vh;
 `
-
+// dummy
 const ComponentContainer = styled.div`
   width: 4000px;
   height: 100%;
@@ -20,16 +21,15 @@ const ComponentContainer = styled.div`
   justify-content: space-around;
 `
 const ConvertPage = () => {
-  const [characterList, setCharacterList] = useState<string>("");
 
   return (
     <PageContainer>
       <ComponentContainer>
         <NovelBox data="novel" />
-        <CharacterBox data="" />
-        <ScriptBox data="" />
+        <CharacterBox data="character" />
+        <ScriptBox data="script" />
         <StoryboardBox data="" />
-        <StatisticsBox data="statistics" />
+        <StatisticsBox data="" />
       </ComponentContainer>
     </PageContainer>
   );

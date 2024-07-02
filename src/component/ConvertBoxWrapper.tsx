@@ -1,10 +1,26 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-
 interface GlassBoxProps {
   boxtype: 'tutorial' | undefined;
 }
+
+type props = {
+    children: React.ReactNode;
+    mode?: 'tutorial' | undefined;
+  };
+
+const ConvertBoxWrapper = ({ children, mode }: props) => {
+  return (
+    <>
+    <GlassBox boxtype={mode}>
+        {children}
+    </GlassBox>
+  </>
+  )
+};
+
+export default ConvertBoxWrapper;
 
 const GlassBox = styled.div<GlassBoxProps>`
   width: 41rem;
@@ -29,20 +45,3 @@ const GlassBox = styled.div<GlassBoxProps>`
     `}
   
 `
-
-type props = {
-    children: React.ReactNode;
-    mode?: 'tutorial' | undefined;
-  };
-
-const ConvertBoxWrapper = ({ children, mode }: props) => {
-  return (
-    <>
-    <GlassBox boxtype={mode}>
-        {children}
-    </GlassBox>
-  </>
-  )
-};
-
-export default ConvertBoxWrapper;

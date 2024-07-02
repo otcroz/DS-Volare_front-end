@@ -2,44 +2,6 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import CharacterChip from './CharacterChip';
 
-
-const ChipContainer = styled.div`
-  display: flex;
-  width: 37.5rem;
-  flex-wrap: wrap;
-  align-items: center;
-`;
-
-const ChipInput = styled.input`
-  border: none;
-  border-radius: 2rem;
-  padding: 1rem 1.5rem;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  margin-right: 0.625rem;
-  font-size: 1.25rem;
-  width: 5rem;
-  &:focus {
-    outline: 3px solid ${({ theme }) => theme.colors.orange};
-  }
-`;
-
-const AddButton = styled.button`
-  background: ${({ theme }) => theme.colors.orange};
-  border: none;
-  border-radius: 2rem;
-  width: 3.5rem;
-  height: 3.5rem;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  font-size: 2rem;
-  padding: 0;
-  margin-bottom: 1rem;
-  &:focus {
-    outline: none;
-  }
-`;
-
-
 interface Props {
   characterList: string[];
 }
@@ -105,3 +67,40 @@ const CharacterChipList = ({ characterList }: Props) => {
 };
 
 export default CharacterChipList;
+
+
+const ChipContainer = styled.div`
+  display: flex;
+  width: 37.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+`;
+
+const ChipInput = styled.input`
+  border: none;
+  border-radius: 2rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-right: 0.625rem;
+  font-size: 1.25rem;
+  width: 5rem;
+  &:focus {
+    outline: 3px solid ${({ theme }) => theme.colors.orange};
+  }
+`;
+
+const AddButton = styled.button`
+  background: ${({ theme }) => theme.colors.orange};
+  border: none;
+  border-radius: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 0;
+  margin-bottom: 1rem;
+  &:focus {
+    outline: none;
+  }
+`;

@@ -11,7 +11,7 @@ import {
   HighlightedText,
   ConvertButton,
   FileButton
-} from './convertBoxStyles';
+} from '../styles/convertBoxStyles';
 
 type props = {
   data: string;

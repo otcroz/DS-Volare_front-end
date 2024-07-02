@@ -4,7 +4,7 @@ import ConvertBoxWrapper from './ConvertBoxWrapper';
 import {
   TitleText,
   ContentBox,
-} from './convertBoxStyles';
+} from '../styles/convertBoxStyles';
 
 type props = {
   data: string;

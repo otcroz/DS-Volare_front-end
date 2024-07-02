@@ -55,7 +55,7 @@ export const TutorialBox = styled.div`
 
 export const TutorialTitle = styled.h1`
   font-size: 1.25rem;
-  color: ${(props) => props.theme.colors.darkOlive};
+  color: ${({ theme }) => theme.colors.darkOlive};
   margin: 2rem 0;
   font-weight: bold;
 `;

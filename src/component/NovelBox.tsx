@@ -7,12 +7,7 @@ import {
   ContentBox,
   FileButton,
   ScrollTextArea
-} from './convertBoxStyles';
-
-
-const HiddenFileInput = styled.input`
-  display: none;
-`;
+} from '../styles/convertBoxStyles';
 
 type props = {
   data: string;
@@ -71,3 +66,7 @@ const NovelBox = ({ data }: props) => {
 };
 
 export default NovelBox;
+
+const HiddenFileInput = styled.input`
+  display: none;
+`;

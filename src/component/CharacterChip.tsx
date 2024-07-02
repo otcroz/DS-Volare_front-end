@@ -1,6 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
 
+interface ChipProps {
+  label: string;
+  onDelete: () => void;
+}
+
+const CharacterChip = ({ label, onDelete }: ChipProps) => (
+  <ChipWrapper>
+    <ChipLabel>{label}</ChipLabel>
+    <ChipDelete onClick={onDelete}>×</ChipDelete>
+  </ChipWrapper>
+);
+
+export default CharacterChip;
+
 const ChipWrapper = styled.div`
   display: inline-block;
   display: flex;
@@ -22,17 +36,3 @@ const ChipDelete = styled.span`
   cursor: pointer;
   font-size: 1.5rem;
 `;
-
-interface ChipProps {
-  label: string;
-  onDelete: () => void;
-}
-
-const CharacterChip = ({ label, onDelete }: ChipProps) => (
-  <ChipWrapper>
-    <ChipLabel>{label}</ChipLabel>
-    <ChipDelete onClick={onDelete}>×</ChipDelete>
-  </ChipWrapper>
-);
-
-export default CharacterChip;
