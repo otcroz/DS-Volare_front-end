@@ -13,7 +13,7 @@ const MainPage = () => (
 
 const MainContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: columns;
 `;
 
 export default MainPage;
