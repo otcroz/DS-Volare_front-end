@@ -1,6 +1,5 @@
 // color
 const colors = {
-  /*예시 색상 작성, 추후에 삭제*/
   ivory: '#FFFCF5',
   beige: '#D8D2C5',
   olive: '#959B88',
