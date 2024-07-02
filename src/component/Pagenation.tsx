@@ -1,12 +1,8 @@
 import React from 'react';
 
-type props = {
-  name: string;
-};
-
-const Pagenation = ({ name }: props) => (
+const Pagenation = () => (
   <>
-    <div>Hello, {name}</div>
+    <div>pagenation 컴포넌트</div>
   </>
 );
 
