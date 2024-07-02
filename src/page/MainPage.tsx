@@ -1,9 +1,19 @@
 import React from 'react';
+import FooterBar from '../component/Footerbar';
+import styled from 'styled-components';
 
 const MainPage = () => (
   <>
-    <div>Hello</div>
+    <MainContainer>
+      <div>Hello</div>
+    </MainContainer>
+    <FooterBar />
   </>
 );
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: columns;
+`;
 
 export default MainPage;

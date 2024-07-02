@@ -16,13 +16,12 @@ export const GlobalStyle = createGlobalStyle`
       margin: 0;
       padding: 0;
       border: 0;
-      font-size: 12px;
+      font-size: 16px;
       vertical-align: baseline;
   }
   body{
       line-height: 1;
       font-family: 'BookkMyungjo';
-      margin-bottom: 100px;
   }
   ol, ul{
       list-style: none;
