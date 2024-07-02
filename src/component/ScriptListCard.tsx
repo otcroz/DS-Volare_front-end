@@ -2,46 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import theme from '../styles/theme';
 
-interface TextProps {
-  color: string;
-  size: string;
-  weight: string;
-}
-
 interface ScriptListProps {
   date: string;
   title: string;
 }
 
-const ScriptListCard = (props: { item: ScriptListProps }) => {
-  const { title, date } = props.item;
+const ScriptListCard = ({ date, title }: ScriptListProps) => {
   return (
     <CardBox>
       <Image />
       <ContentBox>
-        <Text color={theme.colors.darkBrown} size={'0.9rem'} weight={'normal'}>
+        <ContentText style={{ color: theme.colors.darkBrown }}>
           {date}
-        </Text>
+        </ContentText>
         <div style={{ flex: 1 }} />
-        <Text
-          style={{ textAlign: 'right' }}
-          color={theme.colors.darkOlive}
-          size={'0.9rem'}
-          weight={'normal'}
+        <ContentText
+          style={{ textAlign: 'right', color: theme.colors.darkOlive }}
         >
           {title}
-        </Text>
+        </ContentText>
       </ContentBox>
     </CardBox>
   );
 };
 
 // text
-const Text = styled.span<TextProps>`
+const ContentText = styled.span`
   width: 200px;
-  color: ${(props) => props.color};
-  font-size: ${(props) => props.size};
-  font-weight: ${(props) => props.weight};
+  font-size: 0.9rem;
 `;
 
 // box
@@ -50,7 +38,7 @@ const CardBox = styled.div`
   flex-direction: column;
   width: 300px;
   height: 200px;
-  background-color: ${({ theme }) => theme.colors.beige + 'aa'};
+  background-color: rgba(255, 255, 245, 0.6);
   border-radius: 1.2rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.1);
 `;

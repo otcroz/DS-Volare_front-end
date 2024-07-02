@@ -4,12 +4,6 @@ import bgImg from '../assets/background/bg-1.png';
 import Pagenation from '../component/Pagenation';
 import ScriptListCard from '../component/ScriptListCard';
 
-interface TextProps {
-  color: string;
-  size: string;
-  weight: string;
-}
-
 interface ScriptListProps {
   date: string;
   title: string;
@@ -46,7 +40,7 @@ let data = [
 const ScriptListfunc = (data: ScriptListProps[]) => {
   // if data.length >= 6
   const list = data.map((item, index) => {
-    return <ScriptListCard key={index} item={item} />;
+    return <ScriptListCard key={index} date={item.date} title={item.title} />;
   });
 
   // if data.length < 6
@@ -60,12 +54,10 @@ const MyPage = () => (
       <BackgroundCover>
         <LayoutWrapper>
           <UserInfoTextBox>
-            <Text color={'white'} size={'20px'} weight={'bold'}>
+            <TitleText style={{ fontSize: '20px' }}>
               asfg1234@gmail.com
-            </Text>
-            <Text color={'white'} size={'40px'} weight={'bold'}>
-              Works
-            </Text>
+            </TitleText>
+            <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
           </UserInfoTextBox>
           {/* scripts list */}
           <ListContainer>
@@ -80,10 +72,9 @@ const MyPage = () => (
 );
 
 // text
-const Text = styled.span<TextProps>`
-  color: ${(props) => props.color};
-  font-size: ${(props) => props.size};
-  font-weight: ${(props) => props.weight};
+const TitleText = styled.span`
+  color: white;
+  font-weight: bold;
 `;
 
 // background
