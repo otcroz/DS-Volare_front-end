@@ -8,6 +8,7 @@ const colors = {
   darkBrown: '#4F493D',
   orange: '#EA7333',
   darkOrange: '#BB4E11',
+
   /* 나머지 색상들 생략 ( https://tailwindcss.com/docs/customizing-colors ) */
 
   /* 아래 부분을 비워둔 이유는 타입때문 ( "<ThemeProvider>"에서 조건에 따라 다르게 값을 채움 ) */
