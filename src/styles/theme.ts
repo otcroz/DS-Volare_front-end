@@ -1,6 +1,14 @@
 // color
 const colors = {
   /*예시 색상 작성, 추후에 삭제*/
+  ivory: '#FFFCF5',
+  beige: '#D8D2C5',
+  olive: '#959B88',
+  darkOlive: '#58613E',
+  brown: '#8B766C',
+  darkBrown: '#4F493D',
+  orange: '#EA7333',
+  darkOrange: '#BB4E11',
   slate50: '#f8fafc',
   slate100: '#f1f5f9',
   slate200: '#e2e8f0',

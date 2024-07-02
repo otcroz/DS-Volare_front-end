@@ -22,7 +22,9 @@ const ConvertPage = () => {
     <Background>
       <BackgroundCover>
         <TopContainer>
-          <TitleInput placeholder="제목을 입력해주세요." />
+          <TitleInputBox>
+            <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
+          </TitleInputBox>
           <IndicatorBox>
             <ConvertIndicator stateProps={state} stepProps={step} />
             <div style={{ width: '2rem' }} />
@@ -41,13 +43,6 @@ const ConvertPage = () => {
   );
 };
 
-// text
-const Text = styled.span<TextProps>`
-  color: ${(props) => props.color};
-  font-size: ${(props) => props.size};
-  font-weight: ${(props) => props.weight};
-`;
-
 // background
 const Background = styled.div`
   display: flex;
@@ -62,7 +57,7 @@ const BackgroundCover = styled.p`
   display: flex;
   flex-direction: column;
   flex: 1;
-  background-color: #a6a29a66;
+  background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
   padding: 0 5vw;
 `;
@@ -71,7 +66,7 @@ const BackgroundCover = styled.p`
 const ConvertStepWrapper = styled.div`
   display: flex;
   gap: 0 10vw;
-  padding: 10vh; // TopContainer > height와 값 동일
+  padding: 10vh 0; // TopContainer > height와 값 동일, margin을 주기 위해 값 크게해도 됨
 `;
 
 const TopContainer = styled.div`
@@ -93,20 +88,29 @@ const SaveButtonBox = styled.div`
   gap: 5px;
 `;
 
-// component
-const TitleInput = styled.input`
+const TitleInputBox = styled.div`
+  display: flex;
+  align-items: center;
   width: 50vw; // equal convert box width
   max-width: 650px;
   height: 3rem;
-  font-family: BookkMyungjo;
+  padding: 1rem;
   border-style: solid;
-  border-color: #ffffffaa;
-  background-color: #ffffff99;
+  border-color: rgba(255, 255, 255, 0.31);
+  background-color: rgba(255, 255, 255, 0.46);
   border-width: 2px;
   border-radius: 1rem;
-  padding: 1rem;
-  color: #000000ff;
+`;
 
+// component
+const TitleInput = styled.input`
+  height: 1.3rem;
+  flex: 1;
+  background-color: transparent;
+  border-width: 0 0 1px 0;
+  border-color: white;
+  font-family: BookkMyungjo;
+  color: black;
   &::placeholder {
     color: ${({ theme }) => theme.colors.brown};
   }
