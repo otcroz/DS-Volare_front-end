@@ -14,7 +14,7 @@ type pageProps = {
 };
 
 const MainPage = () => {
-  const [page, setPage] = useState(2); // 화면 전환 state
+  const [page, setPage] = useState(1); // 화면 전환 state
 
   const pageTransitionFunc = () => {
     switch (page) {
@@ -37,7 +37,7 @@ const MainPage = () => {
               <IntroduceContainer>{pageTransitionFunc()}</IntroduceContainer>
               {/* indicator */}
               <div style={{ flex: 1 }} />
-              <MainIndicator name={'1'} />
+              <MainIndicator page={page} setPage={setPage} />
             </LayoutWrapper>
           </BackgroundCover>
         </BackgroundImage>
@@ -52,7 +52,7 @@ const LayoutWrapper = styled.div`
   width: 100vw;
   display: flex;
   align-items: center;
-  padding: 0 5vw;
+  padding: 5vh 5vw;
 `;
 
 const IntroduceContainer = styled.div`
