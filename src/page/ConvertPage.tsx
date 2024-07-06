@@ -22,7 +22,12 @@ interface IndicatorProps {
 const ConvertPage = () => {
   const [state, setState] = useState('complete');
   const [step, setStep] = useState('script');
+  const [scrollTop, setScrollTop] = useState(0);  // NevelBox, CharacterBox 동시 스크롤
 
+  const handleScroll = (newScrollTop: number) => {
+    setScrollTop(newScrollTop);
+  };
+  
   return (
     <Background>
       <BackgroundCover>
@@ -39,8 +44,8 @@ const ConvertPage = () => {
           </IndicatorBox>
         </TopContainer>
         <ConvertStepWrapper>
-          <NovelBox data="novel" />
-          <CharacterBox data="character" />
+          <NovelBox data="novel" onScroll={handleScroll} scrollTop={scrollTop} />
+          <CharacterBox data="character"  onScroll={handleScroll} scrollTop={scrollTop} />
           <ScriptBox data="script" />
           <StoryboardBox data="" />
           <StatisticsBox data="" />

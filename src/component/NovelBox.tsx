@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
@@ -11,13 +11,17 @@ import {
 
 type props = {
   data: string;
+  onScroll: (scrollTop: number) => void;
+  scrollTop: number;
 };
 
 
-const NovelBox = ({ data }: props) => {
+const NovelBox = ({ data, onScroll, scrollTop }: props) => {
   const [text, setText] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // 파일 업로드
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'text/plain') {
@@ -38,8 +42,22 @@ const NovelBox = ({ data }: props) => {
     fileInputRef.current?.click(); // file input 요소를 클릭하여 파일 선택 대화 상자를 엽니다.
   };
 
+  // textarea value
   const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value); // textarea의 value를 업데이트합니다.
+  };
+
+  // CharacterBox와 동시 스크롤
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = scrollTop;
+    }
+  }, [scrollTop]);
+
+  const handleScroll = () => {
+    if (textareaRef.current) {
+      onScroll(textareaRef.current.scrollTop);
+    }
   };
   
   return (
@@ -57,7 +75,10 @@ const NovelBox = ({ data }: props) => {
           value={text}
           onChange={handleTextChange}
           wrap="soft"
-          placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요." />
+          placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
+          ref={textareaRef}
+          onScroll={handleScroll}
+        />
       </ContentBox>
     </ConvertBoxWrapper>
 
