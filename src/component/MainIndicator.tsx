@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { motion, AnimationControls } from 'framer-motion';
 
 interface boxProps {
   selected: number;
@@ -7,10 +8,11 @@ interface boxProps {
 
 interface selectProps {
   page: number;
-  setPage: (select: number) => void;
+  setPage: (select: React.SetStateAction<number>) => void;
+  controls: AnimationControls;
 }
 
-const MainIndicator = ({ page, setPage }: selectProps) => {
+const MainIndicator = ({ page, setPage, controls }: selectProps) => {
   const IndicatorName: string[] = [
     '서비스 소개',
     '체험하기',
@@ -21,7 +23,11 @@ const MainIndicator = ({ page, setPage }: selectProps) => {
     <IndicatorContainer>
       {IndicatorName.map((item, index) => {
         return (
-          <IndicatorBox key={index} onClick={() => setPage(index + 1)}>
+          <IndicatorBox
+            key={index}
+            onClick={() => setPage(index + 1)}
+            animate={controls}
+          >
             <IndicatorText selected={page} index={index + 1}>
               {item}
             </IndicatorText>
@@ -42,7 +48,7 @@ const IndicatorContainer = styled.div`
   align-items: flex-end;
 `;
 
-const IndicatorBox = styled.div`
+const IndicatorBox = styled(motion.div)`
   display: flex;
   align-items: center;
   gap: 0.6rem;

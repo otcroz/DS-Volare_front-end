@@ -17,12 +17,27 @@ type pageProps = {
 const MainPage = () => {
   const [page, setPage] = useState(1); // 화면 전환 state
 
-  const controls = useAnimation();
+  const controls = useAnimation(); // 화면 전환 애니메이션 컨트롤
+  const indicatorControls = useAnimation(); // 인디케이터 애니메이션 컨트롤
 
   // scroll transition && animation
   const handleScroll = (event: React.WheelEvent) => {
-    // 애니메이션 동작
+    // 인디케이터 애니메이션 동작
     if ((event.deltaY > 0 && page < 3) || (event.deltaY < 0 && page > 1)) {
+      indicatorControls
+        .start({
+          y: 0,
+          transition: { type: 'spring', stiffness: 100 },
+        })
+        .then(() => {
+          // 애니메이션 재시작
+          indicatorControls.start({
+            y: 10,
+            transition: { type: 'spring', stiffness: 100 },
+          });
+        });
+
+      // 메인페이지 화면 전환
       controls
         .start({
           opacity: 0,
@@ -67,7 +82,11 @@ const MainPage = () => {
               </IntroduceContainer>
               {/* indicator */}
               <div style={{ flex: 1 }} />
-              <MainIndicator page={page} setPage={setPage} />
+              <MainIndicator
+                page={page}
+                setPage={setPage}
+                controls={indicatorControls}
+              />
             </LayoutWrapper>
           </BackgroundCover>
         </BackgroundImage>
