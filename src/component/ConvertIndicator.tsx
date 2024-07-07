@@ -14,7 +14,7 @@ const ConvertIndicator = ({ stateProps, stepProps }: IndicatorProps) => {
 
   useEffect(() => {
     IndicatorItemColorFunc(); // indicator
-  });
+  }, [state, step]);
 
   const IndicatorItemColorFunc = () => {
     if (state !== 'complete') {

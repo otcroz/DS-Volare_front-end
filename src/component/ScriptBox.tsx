@@ -13,7 +13,7 @@ import {
   ConvertButton,
   FileButton
 } from '../styles/convertBoxStyles';
-
+import SceneList from './SceneList';
 
 type props = {
   data: string;
@@ -28,9 +28,10 @@ const ScriptBox = ({ data }: props) =>  {
           <TitleText>대본화</TitleText>
           <FileButton><FileDownloadIcon  width="2rem" height="2rem" />&nbsp;다운로드</FileButton>
           <ContentBox>
-            <ScrollTextArea
+            {/* <ScrollTextArea
               placeholder="텍스트"
-            />
+            /> */}
+            <SceneList />
           </ContentBox>
         </ConvertBoxWrapper>
       :
