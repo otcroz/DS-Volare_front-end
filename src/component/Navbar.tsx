@@ -28,7 +28,7 @@ const NavBar = () => {
       <Logo />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
-      {isLogin ? (
+      {!isLogin ? (
         <>
           <Text>회원가입</Text>
           <Text onClick={openModalFunc}>로그인</Text>
