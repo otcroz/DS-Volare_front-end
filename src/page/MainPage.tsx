@@ -3,11 +3,12 @@ import styled, { css } from 'styled-components';
 import bgImgFirst from '../assets/background/bg-2.png';
 import bgImgSecond from '../assets/background/bg-3.png';
 import bgImgThird from '../assets/background/bg-4.png';
-import { useState } from 'react';
+import { useState, WheelEvent, useEffect } from 'react';
 import MainIndicator from '../component/MainIndicator';
 import MainPageFirstBox from '../component/MainPageFirstBox';
 import MainPageSecondBox from '../component/MainPageSecondBox';
 import MainPageThirdBox from '../component/MainPageThirdBox';
+import { motion, useAnimation } from 'framer-motion';
 
 type pageProps = {
   page: number;
@@ -15,6 +16,33 @@ type pageProps = {
 
 const MainPage = () => {
   const [page, setPage] = useState(1); // 화면 전환 state
+
+  const controls = useAnimation();
+
+  // scroll transition && animation
+  const handleScroll = (event: React.WheelEvent) => {
+    // 애니메이션 동작
+    if ((event.deltaY > 0 && page < 3) || (event.deltaY < 0 && page > 1)) {
+      controls
+        .start({
+          opacity: 0,
+          transition: { duration: 0.5 },
+        })
+        .then(() => {
+          if (event.deltaY > 0 && page < 3) {
+            setPage((prevPage) => prevPage + 1);
+          } else if (event.deltaY < 0 && page > 1) {
+            setPage((prevPage) => prevPage - 1);
+          }
+
+          // 애니메이션 재시작
+          controls.start({
+            opacity: 1,
+            transition: { duration: 0.5 },
+          });
+        });
+    }
+  };
 
   const pageTransitionFunc = () => {
     switch (page) {
@@ -29,12 +57,14 @@ const MainPage = () => {
 
   return (
     <>
-      <Background>
+      <Background onWheel={handleScroll}>
         <BackgroundImage page={page}>
           <BackgroundCover page={page}>
             <LayoutWrapper>
               {/* main content box */}
-              <IntroduceContainer>{pageTransitionFunc()}</IntroduceContainer>
+              <IntroduceContainer animate={controls}>
+                {pageTransitionFunc()}
+              </IntroduceContainer>
               {/* indicator */}
               <div style={{ flex: 1 }} />
               <MainIndicator page={page} setPage={setPage} />
@@ -55,7 +85,7 @@ const LayoutWrapper = styled.div`
   padding: 5vh 5vw;
 `;
 
-const IntroduceContainer = styled.div`
+const IntroduceContainer = styled(motion.div)`
   display: flex;
   flex-direction: column;
   justify-content: center;
