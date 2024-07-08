@@ -5,7 +5,7 @@ import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_downloa
 import {
   TitleText,
   ContentBox,
-  ScrollTextArea,
+  ScrollText,
   TutorialBox,
   TutorialTitle,
   TutorialText,
@@ -28,10 +28,9 @@ const ScriptBox = ({ data }: props) =>  {
           <TitleText>대본화</TitleText>
           <FileButton><FileDownloadIcon  width="2rem" height="2rem" />&nbsp;다운로드</FileButton>
           <ContentBox>
-            {/* <ScrollTextArea
-              placeholder="텍스트"
-            /> */}
-            <SceneList />
+            <ScrollText>
+              <SceneList />
+            </ScrollText>
           </ContentBox>
         </ConvertBoxWrapper>
       :

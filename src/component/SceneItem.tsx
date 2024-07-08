@@ -23,7 +23,7 @@ const Input = styled.input<{ field: string }>`
   width: ${({ field }) => {
     switch (field) {
       case 'character':
-        return '6em';
+        return '4em';
       case 'direction':
         return '100%'
       default:
@@ -64,16 +64,7 @@ interface SceneItemProps {
 }
 
 const calculateWidth = (str: string): number => {
-  let width = 0;
-  for (let char of str) {
-    // 한글은 2ch, 그 외에는 1ch로 계산
-    if (/[가-힣]/.test(char)) {
-      width += 2;
-    } else {
-      width += 1;
-    }
-  }
-  return width;
+  return new TextEncoder().encode(str).length*0.625;
 };
 
 const SceneItem: React.FC<SceneItemProps> = ({ scene, sceneIndex, onContentChange }) => {
