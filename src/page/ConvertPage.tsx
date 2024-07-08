@@ -13,15 +13,10 @@ interface TextProps {
   size: string;
   weight: string;
 }
-
-interface IndicatorProps {
-  stateProps: string; // 모든 단계를 거쳤는지 여부
-  stepProps: string; // 현재 사용자가 위치한 단계
-}
-
 const ConvertPage = () => {
-  const [state, setState] = useState('complete');
-  const [step, setStep] = useState('script');
+  const [isComplete, setIsComplete] = useState(true);
+  const [step, setStep] = useState([true, true, false, false]); // 진행도
+  const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
 
   return (
     <Background>
@@ -31,7 +26,11 @@ const ConvertPage = () => {
             <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
           </TitleInputBox>
           <IndicatorBox>
-            <ConvertIndicator stateProps={state} stepProps={step} />
+            <ConvertIndicator
+              step={step}
+              select={select}
+              setSelect={setSelect}
+            />
             <div style={{ width: '2rem' }} />
             <SaveButtonBox>
               <SaveButton>저장</SaveButton>
