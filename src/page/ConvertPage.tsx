@@ -42,7 +42,7 @@ const ConvertPage = () => {
           <NovelBox data="novel" />
           <CharacterBox data="character" />
           <ScriptBox data="script" />
-          <StoryboardBox data="" />
+          <StoryboardBox data="story" />
           <StatisticsBox data="" />
         </ConvertStepWrapper>
       </BackgroundCover>
