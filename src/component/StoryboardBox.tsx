@@ -10,7 +10,8 @@ import {
   TutorialText,
   HighlightedText,
   ConvertButton,
-  FileButton
+  FileButton,
+  ScrollText
 } from '../styles/convertBoxStyles';
 import StoryboardInfo from './StoryboardInfo';
 import CutList from './CutList';
@@ -21,13 +22,6 @@ type props = {
 
 const StoryboardBox = ({ data }: props) => {
   // dummy data (스토리보드 객체)
-  const storyboardInfo = {
-    sceneNum: 1,
-    locate: "청주 동물원 - 소원의 집",
-    time: "해가 지기 직전",
-    summary: "다른 동물원에 보낸 동물들을 걱정하는 소원.",
-    cutCount: 10
-  };
   const cuts = [
     { cutNum: 1, 
       angleCam: 'wide shot',
@@ -45,6 +39,13 @@ const StoryboardBox = ({ data }: props) => {
       cutImage: "link"
     },
   ];
+  const storyboardInfo = {
+    sceneNum: 1,
+    locate: "청주 동물원 - 소원의 집",
+    time: "해가 지기 직전",
+    summary: "다른 동물원에 보낸 동물들을 걱정하는 소원.",
+    cutCount: cuts.length
+  };
 
   return (
     <>
@@ -53,8 +54,10 @@ const StoryboardBox = ({ data }: props) => {
           <TitleText>스토리보드</TitleText>
           <FileButton><FileDownloadIcon  width="2rem" height="2rem" />&nbsp;다운로드</FileButton>
           <ContentBox>
-            <StoryboardInfo data={storyboardInfo} />
-            <CutList cuts={cuts} />
+            <ScrollText>
+              <StoryboardInfo data={storyboardInfo} />
+              <CutList cuts={cuts} />
+            </ScrollText>
           </ContentBox>
         </ConvertBoxWrapper>
       :
