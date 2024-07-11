@@ -7,21 +7,16 @@ import ScriptBox from '../component/ScriptBox';
 import StoryboardBox from '../component/StoryboardBox';
 import StatisticsBox from '../component/StatisticsBox';
 import bgImg from '../assets/background/bg-5.png';
+import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 
 interface TextProps {
   color: string;
   size: string;
   weight: string;
 }
-
-interface IndicatorProps {
-  stateProps: string; // 모든 단계를 거쳤는지 여부
-  stepProps: string; // 현재 사용자가 위치한 단계
-}
-
 const ConvertPage = () => {
-  const [state, setState] = useState('complete');
-  const [step, setStep] = useState('script');
+  const [step, setStep] = useState([false, false, false, false]); // 진행도
+  const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
 
   return (
     <Background>
@@ -31,10 +26,17 @@ const ConvertPage = () => {
             <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
           </TitleInputBox>
           <IndicatorBox>
-            <ConvertIndicator stateProps={state} stepProps={step} />
+            <ConvertIndicator
+              step={step}
+              select={select}
+              setSelect={setSelect}
+            />
             <div style={{ width: '2rem' }} />
             <SaveButtonBox>
-              <SaveButton>저장</SaveButton>
+              <SaveButton>
+                <SaveFileIcon width={25} />
+                저장
+              </SaveButton>
             </SaveButtonBox>
           </IndicatorBox>
         </TopContainer>
@@ -89,6 +91,7 @@ const IndicatorBox = styled.div`
   display: flex;
   max-width: 650px;
   align-items: center;
+  gap: 0.7rem;
 `;
 
 const SaveButtonBox = styled.div`
@@ -125,14 +128,19 @@ const TitleInput = styled.input`
 `;
 
 const SaveButton = styled.button`
-  width: 100px;
-  height: 2.7rem;
-  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 6.5rem;
+  height: 3rem;
+  font-size: 1.2rem;
   font-family: BookkMyungjo;
   font-weight: bold;
   color: white;
   border-radius: 0.5rem;
   background: linear-gradient(90deg, #959b88, #58613e);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export default ConvertPage;

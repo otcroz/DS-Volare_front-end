@@ -1,65 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface IndicatorProps {
-  stateProps: string; // 모든 단계를 거쳤는지 여부
-  stepProps: string; // 현재 사용자가 위치한 단계
+  // 모든 단계를 거쳤는지 여부
+  step: boolean[]; // 현재 사용자가 위치한 단계
+  select: number;
+  setSelect: (select: number) => void;
 }
 
-const ConvertIndicator = ({ stateProps, stepProps }: IndicatorProps) => {
-  const [state, setState] = useState(stateProps);
-  const [step, setStep] = useState(stepProps);
-  const [levelColor, setLevelColor] = useState<string[]>([]);
+interface boxProps {
+  selected: number;
+  index: number;
+  step: boolean;
+}
+
+const ConvertIndicator = ({ step, select, setSelect }: IndicatorProps) => {
   const stepNameList: string[] = ['소설', '대본', '스토리보드', '통계'];
-
-  useEffect(() => {
-    IndicatorItemColorFunc(); // indicator
-  });
-
-  const IndicatorItemColorFunc = () => {
-    if (state !== 'complete') {
-      switch (step) {
-        case 'novel':
-          setLevelColor(['#EA7333', '#d8d2c5', '#d8d2c5', '#d8d2c5']);
-          break;
-        case 'script':
-          setLevelColor(['#EA7333', '#BB4E11', '#d8d2c5', '#d8d2c5']);
-          break;
-        case 'storyboard':
-          setLevelColor(['#EA7333', '#EA7333', '#BB4E11', '#d8d2c5']);
-          break;
-        case 'statistics':
-          setLevelColor(['#EA7333', '#EA7333', '#EA7333', '#BB4E11']);
-          break;
-      }
-    } else {
-      switch (step) {
-        case 'novel':
-          setLevelColor(['#BB4E11', '#EA7333', '#EA7333', '#EA7333']);
-          break;
-        case 'script':
-          setLevelColor(['#EA7333', '#BB4E11', '#EA7333', '#EA7333']);
-          break;
-        case 'storyboard':
-          setLevelColor(['#EA7333', '#EA7333', '#BB4E11', '#EA7333']);
-          break;
-        case 'statistics':
-          setLevelColor(['#EA7333', '#EA7333', '#EA7333', '#BB4E11']);
-          break;
-      }
-    }
-  };
 
   return (
     <IndicatorContainer>
       {stepNameList.map((item, index) => {
         return (
           <IndicatorBox
+            step={step[index]}
             key={index}
-            style={{
-              backgroundColor: levelColor[index],
-              color: levelColor[index] === '#d8d2c5' ? '#8B766C' : 'white',
-            }}
+            selected={select}
+            index={index}
+            onClick={() => setSelect(index)}
           >
             {item}
           </IndicatorBox>
@@ -74,16 +41,35 @@ const IndicatorContainer = styled.div`
   gap: 5px;
 `;
 
-const IndicatorBox = styled.div`
+const IndicatorBox = styled.button<boxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 7vw;
-  max-width: 120px;
+  min-width: 6vw;
+  max-width: 1.5rem;
   height: 30px;
-  background-color: ${({ theme }) => theme.colors.beige};
   padding: 1.1rem;
+  font-size: 1rem;
+  disabled: true;
+
+  background-color: ${({ theme }) => theme.colors.beige};
+  color: ${({ theme }) => theme.colors.brown};
   font-weight: bold;
+
+  ${({ selected, index, step, theme }) => css`
+    ${step &&
+    css`
+      background-color: ${theme.colors.orange};
+      color: white;
+      disabled: false;
+    `}
+
+    ${selected === index &&
+    css`
+      background-color: ${theme.colors.darkOrange};
+      color: white;
+    `}
+  `}
 `;
 
 export default ConvertIndicator;
