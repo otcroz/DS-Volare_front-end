@@ -6,6 +6,10 @@ interface Props {
   characterList: string[];
 }
 
+const calculateWidth = (str: string): number => {
+  return new TextEncoder().encode(str).length*0.58;
+};
+
 const CharacterChipList = ({ characterList }: Props) => {
   const [chips, setChips] = useState<string[]>(characterList);
   const [inputVisible, setInputVisible] = useState(false);
@@ -35,6 +39,15 @@ const CharacterChipList = ({ characterList }: Props) => {
     }, 0);
   };
 
+  const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target) {
+      const value = e.target.value;
+      setInputValue(value)
+      const width = calculateWidth(value);
+      e.target.style.width = `${width+6}ch`;
+    }
+  }
+
   const handleOnblur = ()=> {
     if (inputValue) {
       addChip();
@@ -54,7 +67,7 @@ const CharacterChipList = ({ characterList }: Props) => {
         <ChipInput
           ref={inputRef}
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onChange={handleInputChange}
           onKeyDown={(e) => e.key === 'Enter' && addChip()}
           onBlur={handleOnblur}
         />
@@ -67,7 +80,6 @@ const CharacterChipList = ({ characterList }: Props) => {
 };
 
 export default CharacterChipList;
-
 
 const ChipContainer = styled.div`
   display: flex;

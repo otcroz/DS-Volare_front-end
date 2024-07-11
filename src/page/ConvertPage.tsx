@@ -17,6 +17,11 @@ interface TextProps {
 const ConvertPage = () => {
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
+  const [scrollTop, setScrollTop] = useState(0); // NevelBox, CharacterBox 동시 스크롤
+
+  const handleScroll = (newScrollTop: number) => {
+    setScrollTop(newScrollTop);
+  };
 
   return (
     <Background>
@@ -41,8 +46,16 @@ const ConvertPage = () => {
           </IndicatorBox>
         </TopContainer>
         <ConvertStepWrapper>
-          <NovelBox data="novel" />
-          <CharacterBox data="character" />
+          <NovelBox
+            data="novel"
+            onScroll={handleScroll}
+            scrollTop={scrollTop}
+          />
+          <CharacterBox
+            data="character"
+            onScroll={handleScroll}
+            scrollTop={scrollTop}
+          />
           <ScriptBox data="script" />
           <StoryboardBox data="" />
           <StatisticsBox data="" />

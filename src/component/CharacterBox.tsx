@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 import CharacterChipList from './CharacterChipList';
@@ -37,14 +37,15 @@ const resultData = [
 
 interface Props {
   data: string;
+  onScroll: (scrollTop: number) => void;
+  scrollTop: number;
 }
 
-const CharacterBox = ({ data }: Props) => {
+const CharacterBox = ({ data, onScroll, scrollTop }: Props) => {
   const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
-  // 모든 어절을 하나의 문자열로 이어붙이기
-  const fullText = inputSentences.map(sentence => sentence.join(' ')).join(' ');
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
-  // 각 어절을 div로 랜더링
+  // 각 어절을 div로 렌더링
   const renderWords = () => {
     return inputSentences.map((sentence, sentIndex) =>
       sentence.map((word, eid) => {
@@ -92,13 +93,29 @@ const CharacterBox = ({ data }: Props) => {
     return colors[groupIndex];
   };
 
+  // NovelBox와 동시 스크롤
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollTop;
+    }
+  }, [scrollTop]);
+
+  const handleScroll = () => {
+    if (scrollAreaRef.current) {
+      onScroll(scrollAreaRef.current.scrollTop);
+    }
+  };
+
   return (
     <>
       {data ? (
         <ConvertBoxWrapper>
           <TitleText>등장인물 인식 결과</TitleText>
           <ContentBox style={{height: '27rem'}}>
-            <ScrollText>
+            <ScrollText
+              ref={scrollAreaRef}
+              onScroll={handleScroll}
+            >
               {renderWords()}
             </ScrollText>
           </ContentBox>
