@@ -57,7 +57,7 @@ const ConvertPage = () => {
             scrollTop={scrollTop}
           />
           <ScriptBox data="script" />
-          <StoryboardBox data="" />
+          <StoryboardBox data="story" />
           <StatisticsBox data="" />
         </ConvertStepWrapper>
       </BackgroundCover>
