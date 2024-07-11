@@ -11,9 +11,9 @@ const App = () => {
       <Router>
         <NavBar />
         <Routes>
-          <Route path="/main" element={<MainPage />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/convert" element={<ConvertPage />} />
+          <Route path="/main/" element={<MainPage />} />
+          <Route path="/mypage/" element={<MyPage />} />
+          <Route path="/convert/" element={<ConvertPage />} />
         </Routes>
       </Router>
     </>
