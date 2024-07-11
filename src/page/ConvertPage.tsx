@@ -15,8 +15,7 @@ interface TextProps {
   weight: string;
 }
 const ConvertPage = () => {
-  const [isComplete, setIsComplete] = useState(true);
-  const [step, setStep] = useState([true, true, false, false]); // 진행도
+  const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
 
   return (
