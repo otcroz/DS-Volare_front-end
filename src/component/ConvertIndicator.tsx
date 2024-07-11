@@ -41,7 +41,7 @@ const IndicatorContainer = styled.div`
   gap: 5px;
 `;
 
-const IndicatorBox = styled.div<boxProps>`
+const IndicatorBox = styled.button<boxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,6 +49,8 @@ const IndicatorBox = styled.div<boxProps>`
   max-width: 1.5rem;
   height: 30px;
   padding: 1.1rem;
+  font-size: 1rem;
+  disabled: true;
 
   background-color: ${({ theme }) => theme.colors.beige};
   color: ${({ theme }) => theme.colors.brown};
@@ -59,6 +61,7 @@ const IndicatorBox = styled.div<boxProps>`
     css`
       background-color: ${theme.colors.orange};
       color: white;
+      disabled: false;
     `}
 
     ${selected === index &&
