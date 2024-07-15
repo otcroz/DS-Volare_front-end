@@ -8,8 +8,8 @@ import StoryboardBox from '../component/StoryboardBox';
 import StatisticsBox from '../component/StatisticsBox';
 import bgImg from '../assets/background/bg-5.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
-import useMoveScroll from '../hooks/useMoveScroll';
-import { motion, useAnimation } from 'framer-motion';
+import { useMoveScroll } from '../hooks/useMoveScroll';
+import { AnimationProvider } from '../context/animationContext';
 
 interface TextProps {
   color: string;
@@ -24,8 +24,6 @@ const ConvertPage = () => {
   // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
   const [temp, setTemp] = useState(['', '', '']);
-
-  const controls = useAnimation(); // 변환 컴포넌트 애니메이션 컨트롤
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
@@ -62,26 +60,28 @@ const ConvertPage = () => {
             </SaveButtonBox>
           </IndicatorBox>
         </TopContainer>
-        <ConvertStepWrapper>
-          <NovelBox
-            ref={stepTabs[0].element}
-            data=""
-            onScroll={handleScroll}
-            scrollTop={scrollTop}
-            step={step}
-            setStep={setStep}
-          />
-          <CharacterBox
-            data={temp[0]}
-            onScroll={handleScroll}
-            scrollTop={scrollTop}
-            isWrite={step[0]}
-            temp={temp}
-            setTemp={setTemp}
-            step={step}
-            setStep={setStep}
-          />
-          {step[1] && (
+        {/* components */}
+        <AnimationProvider>
+          <ConvertStepWrapper>
+            <NovelBox
+              ref={stepTabs[0].element}
+              data=""
+              onScroll={handleScroll}
+              scrollTop={scrollTop}
+              step={step}
+              setStep={setStep}
+            />
+            <CharacterBox
+              data={temp[0]}
+              onScroll={handleScroll}
+              scrollTop={scrollTop}
+              isWrite={step[0]}
+              temp={temp}
+              setTemp={setTemp}
+              step={step}
+              setStep={setStep}
+              onMoveScroll={stepTabs[1].onMoveElement}
+            />
             <ScriptBox
               ref={stepTabs[1].element}
               data={temp[1]}
@@ -89,9 +89,8 @@ const ConvertPage = () => {
               setTemp={setTemp}
               step={step}
               setStep={setStep}
+              onMoveScroll={stepTabs[2].onMoveElement}
             />
-          )}
-          {step[2] && (
             <StoryboardBox
               ref={stepTabs[2].element}
               data={temp[2]}
@@ -100,10 +99,11 @@ const ConvertPage = () => {
               setTemp={setTemp}
               step={step}
               setStep={setStep}
+              onMoveScroll={stepTabs[3].onMoveElement}
             />
-          )}
-          {step[3] && <StatisticsBox ref={stepTabs[3].element} data="" />}
-        </ConvertStepWrapper>
+            <StatisticsBox ref={stepTabs[3].element} data="" />
+          </ConvertStepWrapper>
+        </AnimationProvider>
       </BackgroundCover>
     </Background>
   );

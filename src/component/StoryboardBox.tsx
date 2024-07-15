@@ -15,6 +15,8 @@ import {
 } from '../styles/convertBoxStyles';
 import StoryboardInfo from './StoryboardInfo';
 import CutList from './CutList';
+import { motion } from 'framer-motion';
+import { useAnimationContext } from '../context/animationContext';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
@@ -23,10 +25,14 @@ type props = {
   setTemp: (temp: string[]) => void;
   step: boolean[];
   setStep: (step: boolean[]) => void;
+  onMoveScroll: () => void;
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, isWrite, step, setStep, temp, setTemp }, ref) => {
+  ({ data, isWrite, step, setStep, temp, setTemp, onMoveScroll }, ref) => {
+    const { controlStatistics, controlStoryboard, startAnimation } =
+      useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
+
     // dummy data (스토리보드 객체)
     const cuts = [
       {
@@ -62,10 +68,16 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
       setStep([...step]);
       temp[2] = 'data';
       setTemp([...temp]);
+
+      // 애니메이션
+      onMoveScroll();
+      setTimeout(() => {
+        startAnimation(controlStatistics);
+      }, 2000);
     };
 
     return (
-      <div ref={ref}>
+      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
         {data ? (
           <ConvertBoxWrapper>
             <TitleText>스토리보드</TitleText>
@@ -97,7 +109,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
             </ConvertButton>
           </ConvertBoxWrapper>
         )}
-      </div>
+      </motion.div>
     );
   }
 );

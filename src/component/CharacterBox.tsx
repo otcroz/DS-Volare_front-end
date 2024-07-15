@@ -12,6 +12,8 @@ import {
   HighlightedText,
   ConvertButton,
 } from '../styles/convertBoxStyles';
+import { useAnimationContext } from '../context/animationContext';
+import { motion } from 'framer-motion';
 
 // dummy data (입력 데이터 예시)
 const inputSentences = [
@@ -88,6 +90,7 @@ interface Props {
   setTemp: (temp: string[]) => void;
   step: boolean[];
   setStep: (step: boolean[]) => void;
+  onMoveScroll: () => void;
 }
 
 const CharacterBox = ({
@@ -99,8 +102,10 @@ const CharacterBox = ({
   setStep,
   temp,
   setTemp,
+  onMoveScroll,
 }: Props) => {
   const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
+  const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // 각 어절을 div로 렌더링
@@ -181,14 +186,21 @@ const CharacterBox = ({
   };
 
   const handleClick = () => {
+    // 인디케이터 활성 및 변환 플로우
     step[1] = true;
     setStep([...step]);
     temp[0] = 'data';
     setTemp([...temp]);
+
+    // 애니메이션
+    onMoveScroll();
+    setTimeout(() => {
+      startAnimation(controlScripts);
+    }, 2000);
   };
 
   return (
-    <>
+    <motion.div>
       {data ? (
         <ConvertBoxWrapper>
           <TitleText>등장인물 인식 결과</TitleText>
@@ -218,7 +230,7 @@ const CharacterBox = ({
           </ConvertButton>
         </ConvertBoxWrapper>
       )}
-    </>
+    </motion.div>
   );
 };
 
