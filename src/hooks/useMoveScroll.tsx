@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 // ref 위치로 scroll하는 use hook
-const useMoveScroll = (name: string) => {
+export const useMoveScroll = (name: string) => {
   const element = useRef<HTMLDivElement>(null);
   const onMoveElement = () => {
     console.log(element);
@@ -10,5 +10,3 @@ const useMoveScroll = (name: string) => {
 
   return { element, name, onMoveElement };
 };
-
-export default useMoveScroll;
