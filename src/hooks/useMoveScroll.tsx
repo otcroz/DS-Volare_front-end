@@ -5,7 +5,7 @@ const useMoveScroll = (name: string) => {
   const element = useRef<HTMLDivElement>(null);
   const onMoveElement = () => {
     console.log(element);
-    element.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    element.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
   return { element, name, onMoveElement };
