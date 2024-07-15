@@ -8,6 +8,7 @@ import StoryboardBox from '../component/StoryboardBox';
 import StatisticsBox from '../component/StatisticsBox';
 import bgImg from '../assets/background/bg-5.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
+import useMoveScroll from '../hooks/useMoveScroll';
 
 interface TextProps {
   color: string;
@@ -15,13 +16,21 @@ interface TextProps {
   weight: string;
 }
 const ConvertPage = () => {
-  const [step, setStep] = useState([false, false, false, false]); // 진행도
+  const [step, setStep] = useState([true, true, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
   const [scrollTop, setScrollTop] = useState(0); // NevelBox, CharacterBox 동시 스크롤
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
   };
+
+  // 인디케이터 이동
+  const stepTabs = [
+    useMoveScroll('소설'),
+    useMoveScroll('대본'),
+    useMoveScroll('스토리보드'),
+    useMoveScroll('통계'),
+  ];
 
   return (
     <Background>
@@ -35,6 +44,7 @@ const ConvertPage = () => {
               step={step}
               select={select}
               setSelect={setSelect}
+              stepTabs={stepTabs}
             />
             <div style={{ width: '2rem' }} />
             <SaveButtonBox>
@@ -47,18 +57,32 @@ const ConvertPage = () => {
         </TopContainer>
         <ConvertStepWrapper>
           <NovelBox
+            ref={stepTabs[0].element}
             data="novel"
             onScroll={handleScroll}
             scrollTop={scrollTop}
+            style={{ opacity: step[0] ? 1 : 0 }}
           />
           <CharacterBox
             data="character"
             onScroll={handleScroll}
             scrollTop={scrollTop}
           />
-          <ScriptBox data="script" />
-          <StoryboardBox data="story" />
-          <StatisticsBox data="" />
+          <ScriptBox
+            ref={stepTabs[1].element}
+            data="script"
+            style={{ opacity: step[1] ? 1 : 0 }}
+          />
+          <StoryboardBox
+            ref={stepTabs[2].element}
+            data="story"
+            style={{ opacity: step[2] ? 1 : 0 }}
+          />
+          <StatisticsBox
+            ref={stepTabs[3].element}
+            data=""
+            style={{ opacity: step[3] ? 1 : 0 }}
+          />
         </ConvertStepWrapper>
       </BackgroundCover>
     </Background>

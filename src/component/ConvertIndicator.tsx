@@ -6,29 +6,43 @@ interface IndicatorProps {
   step: boolean[]; // 현재 사용자가 위치한 단계
   select: number;
   setSelect: (select: number) => void;
+  stepTabs: Array<UseMoveScrollReturn>;
 }
 
-interface boxProps {
+type UseMoveScrollReturn = {
+  name: string;
+  onMoveElement: () => void;
+  element: React.RefObject<HTMLDivElement>;
+};
+
+type boxProps = {
   selected: number;
   index: number;
   step: boolean;
-}
+};
 
-const ConvertIndicator = ({ step, select, setSelect }: IndicatorProps) => {
-  const stepNameList: string[] = ['소설', '대본', '스토리보드', '통계'];
-
+const ConvertIndicator = ({
+  step,
+  select,
+  setSelect,
+  stepTabs,
+}: IndicatorProps) => {
   return (
     <IndicatorContainer>
-      {stepNameList.map((item, index) => {
+      {stepTabs.map((item, index) => {
         return (
           <IndicatorBox
+            disabled={step[index]}
             step={step[index]}
             key={index}
             selected={select}
             index={index}
-            onClick={() => setSelect(index)}
+            onClick={() => {
+              setSelect(index);
+              item.onMoveElement();
+            }}
           >
-            {item}
+            {item.name}
           </IndicatorBox>
         );
       })}
@@ -41,7 +55,10 @@ const IndicatorContainer = styled.div`
   gap: 5px;
 `;
 
-const IndicatorBox = styled.button<boxProps>`
+// step에 따라서 disabled 설정하기
+const IndicatorBox = styled.button.attrs((props) => ({
+  disabled: !props.disabled ? true : undefined,
+}))<boxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +67,6 @@ const IndicatorBox = styled.button<boxProps>`
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;
-  disabled: true;
 
   background-color: ${({ theme }) => theme.colors.beige};
   color: ${({ theme }) => theme.colors.brown};
@@ -61,7 +77,6 @@ const IndicatorBox = styled.button<boxProps>`
     css`
       background-color: ${theme.colors.orange};
       color: white;
-      disabled: false;
     `}
 
     ${selected === index &&
