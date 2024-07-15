@@ -18,7 +18,6 @@ import CutList from './CutList';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
-  style?: React.CSSProperties;
   isWrite: boolean;
   temp: string[];
   setTemp: (temp: string[]) => void;
@@ -27,7 +26,7 @@ type props = {
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, style, isWrite, step, setStep, temp, setTemp }, ref) => {
+  ({ data, isWrite, step, setStep, temp, setTemp }, ref) => {
     // dummy data (스토리보드 객체)
     const cuts = [
       {
@@ -66,7 +65,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <div ref={ref} style={style}>
+      <div ref={ref}>
         {data ? (
           <ConvertBoxWrapper>
             <TitleText>스토리보드</TitleText>

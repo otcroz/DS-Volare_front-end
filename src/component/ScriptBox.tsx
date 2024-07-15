@@ -16,7 +16,6 @@ import {
 
 type props = {
   data: string;
-  style?: React.CSSProperties;
   temp: string[];
   setTemp: (temp: string[]) => void;
   step: boolean[];
@@ -24,7 +23,7 @@ type props = {
 };
 
 const ScriptBox = forwardRef<HTMLDivElement, props>(
-  ({ data, style, temp, setTemp, step, setStep }, ref) => {
+  ({ data, temp, setTemp, step, setStep }, ref) => {
     const handleClick = () => {
       temp[1] = 'data';
       setTemp([...temp]);
@@ -33,7 +32,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <div ref={ref} style={style}>
+      <div ref={ref}>
         {data ? (
           <ConvertBoxWrapper>
             <TitleText>대본화</TitleText>

@@ -9,6 +9,7 @@ import StatisticsBox from '../component/StatisticsBox';
 import bgImg from '../assets/background/bg-5.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 import useMoveScroll from '../hooks/useMoveScroll';
+import { motion, useAnimation } from 'framer-motion';
 
 interface TextProps {
   color: string;
@@ -23,6 +24,8 @@ const ConvertPage = () => {
   // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
   const [temp, setTemp] = useState(['', '', '']);
+
+  const controls = useAnimation(); // 변환 컴포넌트 애니메이션 컨트롤
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
@@ -82,7 +85,6 @@ const ConvertPage = () => {
             <ScriptBox
               ref={stepTabs[1].element}
               data={temp[1]}
-              style={{ opacity: step[1] ? 1 : 0 }}
               temp={temp}
               setTemp={setTemp}
               step={step}
@@ -93,7 +95,6 @@ const ConvertPage = () => {
             <StoryboardBox
               ref={stepTabs[2].element}
               data={temp[2]}
-              style={{ opacity: step[2] ? 1 : 0 }}
               isWrite={step[1]}
               temp={temp}
               setTemp={setTemp}
@@ -101,13 +102,7 @@ const ConvertPage = () => {
               setStep={setStep}
             />
           )}
-          {step[3] && (
-            <StatisticsBox
-              ref={stepTabs[3].element}
-              data=""
-              style={{ opacity: step[3] ? 1 : 0 }}
-            />
-          )}
+          {step[3] && <StatisticsBox ref={stepTabs[3].element} data="" />}
         </ConvertStepWrapper>
       </BackgroundCover>
     </Background>
@@ -139,6 +134,11 @@ const ConvertStepWrapper = styled.div`
   overflow-x: scroll;
   gap: 0 10vw;
   padding: 10vh 0; // TopContainer > height와 값 동일, margin을 주기 위해 값 크게해도 됨
+
+  // 스크롤바 숨김
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TopContainer = styled.div`
