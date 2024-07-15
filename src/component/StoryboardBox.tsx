@@ -19,10 +19,15 @@ import CutList from './CutList';
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
   style?: React.CSSProperties;
+  isWrite: boolean;
+  temp: string[];
+  setTemp: (temp: string[]) => void;
+  step: boolean[];
+  setStep: (step: boolean[]) => void;
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, style }, ref) => {
+  ({ data, style, isWrite, step, setStep, temp, setTemp }, ref) => {
     // dummy data (스토리보드 객체)
     const cuts = [
       {
@@ -53,6 +58,13 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
       cutCount: cuts.length,
     };
 
+    const handleClick = () => {
+      step[3] = true;
+      setStep([...step]);
+      temp[2] = 'data';
+      setTemp([...temp]);
+    };
+
     return (
       <div ref={ref} style={style}>
         {data ? (
@@ -81,7 +93,9 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                 <HighlightedText>챗봇</HighlightedText>을 사용할 수 있습니다.
               </TutorialText>
             </TutorialBox>
-            <ConvertButton>스토리보드 변환</ConvertButton>
+            <ConvertButton onClick={handleClick} isWrite={isWrite}>
+              스토리보드 변환
+            </ConvertButton>
           </ConvertBoxWrapper>
         )}
       </div>

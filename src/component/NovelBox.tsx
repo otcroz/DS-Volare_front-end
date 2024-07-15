@@ -19,11 +19,12 @@ type props = {
   data: string;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
-  style?: React.CSSProperties;
+  step: boolean[];
+  setStep: (step: boolean[]) => void;
 };
 
 const NovelBox = forwardRef<HTMLDivElement, props>(
-  ({ data, onScroll, scrollTop, style }, ref) => {
+  ({ data, onScroll, scrollTop, step, setStep }, ref) => {
     const [text, setText] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -52,6 +53,14 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     // textarea value
     const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
       setText(event.target.value); // textarea의 value를 업데이트합니다.
+      if (event.target.value !== '') {
+        // textarea가 비어있지 않을 때
+        step[0] = true;
+        setStep([...step]);
+      } else {
+        step[0] = false;
+        setStep([...step]);
+      }
     };
 
     // CharacterBox와 동시 스크롤
@@ -68,7 +77,7 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <div ref={ref} style={style}>
+      <div ref={ref}>
         <ConvertBoxWrapper>
           <TitleText>원고 작성</TitleText>
           <FileButton onClick={handleButtonClick}>

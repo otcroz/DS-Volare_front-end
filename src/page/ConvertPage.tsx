@@ -16,9 +16,13 @@ interface TextProps {
   weight: string;
 }
 const ConvertPage = () => {
-  const [step, setStep] = useState([true, true, false, false]); // 진행도
+  const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
   const [scrollTop, setScrollTop] = useState(0); // NevelBox, CharacterBox 동시 스크롤
+
+  // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
+  // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
+  const [temp, setTemp] = useState(['', '', '']);
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
@@ -58,31 +62,52 @@ const ConvertPage = () => {
         <ConvertStepWrapper>
           <NovelBox
             ref={stepTabs[0].element}
-            data="novel"
+            data=""
             onScroll={handleScroll}
             scrollTop={scrollTop}
-            style={{ opacity: step[0] ? 1 : 0 }}
+            step={step}
+            setStep={setStep}
           />
           <CharacterBox
-            data="character"
+            data={temp[0]}
             onScroll={handleScroll}
             scrollTop={scrollTop}
+            isWrite={step[0]}
+            temp={temp}
+            setTemp={setTemp}
+            step={step}
+            setStep={setStep}
           />
-          <ScriptBox
-            ref={stepTabs[1].element}
-            data="script"
-            style={{ opacity: step[1] ? 1 : 0 }}
-          />
-          <StoryboardBox
-            ref={stepTabs[2].element}
-            data="story"
-            style={{ opacity: step[2] ? 1 : 0 }}
-          />
-          <StatisticsBox
-            ref={stepTabs[3].element}
-            data=""
-            style={{ opacity: step[3] ? 1 : 0 }}
-          />
+          {step[1] && (
+            <ScriptBox
+              ref={stepTabs[1].element}
+              data={temp[1]}
+              style={{ opacity: step[1] ? 1 : 0 }}
+              temp={temp}
+              setTemp={setTemp}
+              step={step}
+              setStep={setStep}
+            />
+          )}
+          {step[2] && (
+            <StoryboardBox
+              ref={stepTabs[2].element}
+              data={temp[2]}
+              style={{ opacity: step[2] ? 1 : 0 }}
+              isWrite={step[1]}
+              temp={temp}
+              setTemp={setTemp}
+              step={step}
+              setStep={setStep}
+            />
+          )}
+          {step[3] && (
+            <StatisticsBox
+              ref={stepTabs[3].element}
+              data=""
+              style={{ opacity: step[3] ? 1 : 0 }}
+            />
+          )}
         </ConvertStepWrapper>
       </BackgroundCover>
     </Background>
