@@ -75,7 +75,6 @@ const ConvertPage = () => {
                 data={temp[0]}
                 onScroll={handleScroll}
                 scrollTop={scrollTop}
-                isWrite={step[0]}
                 temp={temp}
                 setTemp={setTemp}
                 onMoveScroll={stepTabs[1].onMoveElement}
@@ -90,7 +89,6 @@ const ConvertPage = () => {
               <StoryboardBox
                 ref={stepTabs[2].element}
                 data={temp[2]}
-                isWrite={step[1]}
                 temp={temp}
                 setTemp={setTemp}
                 onMoveScroll={stepTabs[3].onMoveElement}

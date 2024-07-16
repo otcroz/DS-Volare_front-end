@@ -21,14 +21,13 @@ import { useConvertStep } from '../context/convertStepContext';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
-  isWrite: boolean;
   temp: string[];
   setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, isWrite, temp, setTemp, onMoveScroll }, ref) => {
+  ({ data, temp, setTemp, onMoveScroll }, ref) => {
     const { controlStatistics, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
@@ -73,7 +72,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
       onMoveScroll();
       setTimeout(() => {
         startAnimation(controlStatistics);
-      }, 2000);
+      }, 1000);
     };
 
     return (

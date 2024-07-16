@@ -39,7 +39,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       onMoveScroll();
       setTimeout(() => {
         startAnimation(controlStoryboard);
-      }, 2000);
+      }, 1000);
     };
 
     return (

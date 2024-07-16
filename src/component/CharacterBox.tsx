@@ -86,7 +86,6 @@ interface Props {
   data: string;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
-  isWrite: boolean;
   temp: string[];
   setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
@@ -193,7 +192,7 @@ const CharacterBox = ({
     onMoveScroll();
     setTimeout(() => {
       startAnimation(controlScripts);
-    }, 2000);
+    }, 1000);
   };
 
   return (
