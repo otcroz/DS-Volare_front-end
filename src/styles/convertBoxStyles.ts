@@ -75,7 +75,9 @@ export const HighlightedText = styled.span`
   font-weight: bold;
 `;
 
-export const ConvertButton = styled.button<buttonProps>`
+export const ConvertButton = styled.button.attrs((props) => ({
+  disabled: !props.disabled ? true : undefined,
+}))<buttonProps>`
   background: linear-gradient(90deg, #d9d9d9, #b5b5b5);
   color: #ffffff;
   border: none;

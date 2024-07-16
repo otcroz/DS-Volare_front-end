@@ -227,7 +227,11 @@ const CharacterBox = ({
             </TutorialText>
           </TutorialBox>
           {/* 소설 작성 후 버튼 활성화 */}
-          <ConvertButton onClick={handleClick} isWrite={step[0]}>
+          <ConvertButton
+            disabled={step[0]}
+            onClick={handleClick}
+            isWrite={step[0]}
+          >
             등장인물 인식
           </ConvertButton>
         </ConvertBoxWrapper>

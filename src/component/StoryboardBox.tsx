@@ -108,7 +108,11 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
               </TutorialText>
             </TutorialBox>
             {/* 대본 변환 후 버튼 활성화 */}
-            <ConvertButton onClick={handleClick} isWrite={step[1]}>
+            <ConvertButton
+              disabled={step[1]}
+              onClick={handleClick}
+              isWrite={step[1]}
+            >
               스토리보드 변환
             </ConvertButton>
           </ConvertBoxWrapper>

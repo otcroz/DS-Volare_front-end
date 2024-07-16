@@ -71,7 +71,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
                 <HighlightedText>대본 형식으로 변환</HighlightedText>합니다.
               </TutorialText>
             </TutorialBox>
-            <ConvertButton onClick={handleClick} isWrite={true}>
+            <ConvertButton disabled={true} onClick={handleClick} isWrite={true}>
               대본 변환
             </ConvertButton>
           </ConvertBoxWrapper>
