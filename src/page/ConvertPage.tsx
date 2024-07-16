@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ConvertIndicator from '../component/ConvertIndicator';
 import NovelBox from '../component/NovelBox';
 import CharacterBox from '../component/CharacterBox';
@@ -116,7 +116,9 @@ const Background = styled.div`
   justify-content: center;
   background-image: url(${bgImg});
   background-size: cover;
-  height: 100vh;
+  ${css`
+    height: calc(100vh - 80px);
+  `}
 `;
 
 const BackgroundCover = styled.p`
@@ -126,6 +128,10 @@ const BackgroundCover = styled.p`
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
   padding: 0 5vw;
+
+  ${css`
+    height: calc(100vh - 80px);
+  `}
 `;
 
 // container
