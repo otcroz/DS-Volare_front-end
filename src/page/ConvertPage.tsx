@@ -10,6 +10,7 @@ import bgImg from '../assets/background/bg-5.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
+import { ConvertStepProvider } from '../context/convertStepContext';
 
 interface TextProps {
   color: string;
@@ -40,70 +41,64 @@ const ConvertPage = () => {
   return (
     <Background>
       <BackgroundCover>
-        <TopContainer>
-          <TitleInputBox>
-            <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
-          </TitleInputBox>
-          <IndicatorBox>
-            <ConvertIndicator
-              step={step}
-              select={select}
-              setSelect={setSelect}
-              stepTabs={stepTabs}
-            />
-            <div style={{ width: '2rem' }} />
-            <SaveButtonBox>
-              <SaveButton>
-                <SaveFileIcon width={25} />
-                저장
-              </SaveButton>
-            </SaveButtonBox>
-          </IndicatorBox>
-        </TopContainer>
-        {/* components */}
-        <AnimationProvider>
-          <ConvertStepWrapper>
-            <NovelBox
-              ref={stepTabs[0].element}
-              data=""
-              onScroll={handleScroll}
-              scrollTop={scrollTop}
-              step={step}
-              setStep={setStep}
-            />
-            <CharacterBox
-              data={temp[0]}
-              onScroll={handleScroll}
-              scrollTop={scrollTop}
-              isWrite={step[0]}
-              temp={temp}
-              setTemp={setTemp}
-              step={step}
-              setStep={setStep}
-              onMoveScroll={stepTabs[1].onMoveElement}
-            />
-            <ScriptBox
-              ref={stepTabs[1].element}
-              data={temp[1]}
-              temp={temp}
-              setTemp={setTemp}
-              step={step}
-              setStep={setStep}
-              onMoveScroll={stepTabs[2].onMoveElement}
-            />
-            <StoryboardBox
-              ref={stepTabs[2].element}
-              data={temp[2]}
-              isWrite={step[1]}
-              temp={temp}
-              setTemp={setTemp}
-              step={step}
-              setStep={setStep}
-              onMoveScroll={stepTabs[3].onMoveElement}
-            />
-            <StatisticsBox ref={stepTabs[3].element} data="" />
-          </ConvertStepWrapper>
-        </AnimationProvider>
+        <ConvertStepProvider>
+          <TopContainer>
+            <TitleInputBox>
+              <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
+            </TitleInputBox>
+            <IndicatorBox>
+              <ConvertIndicator
+                step={step}
+                select={select}
+                setSelect={setSelect}
+                stepTabs={stepTabs}
+              />
+              <div style={{ width: '2rem' }} />
+              <SaveButtonBox>
+                <SaveButton>
+                  <SaveFileIcon width={25} />
+                  저장
+                </SaveButton>
+              </SaveButtonBox>
+            </IndicatorBox>
+          </TopContainer>
+          {/* components */}
+          <AnimationProvider>
+            <ConvertStepWrapper>
+              <NovelBox
+                ref={stepTabs[0].element}
+                data=""
+                onScroll={handleScroll}
+                scrollTop={scrollTop}
+              />
+              <CharacterBox
+                data={temp[0]}
+                onScroll={handleScroll}
+                scrollTop={scrollTop}
+                isWrite={step[0]}
+                temp={temp}
+                setTemp={setTemp}
+                onMoveScroll={stepTabs[1].onMoveElement}
+              />
+              <ScriptBox
+                ref={stepTabs[1].element}
+                data={temp[1]}
+                temp={temp}
+                setTemp={setTemp}
+                onMoveScroll={stepTabs[2].onMoveElement}
+              />
+              <StoryboardBox
+                ref={stepTabs[2].element}
+                data={temp[2]}
+                isWrite={step[1]}
+                temp={temp}
+                setTemp={setTemp}
+                onMoveScroll={stepTabs[3].onMoveElement}
+              />
+              <StatisticsBox ref={stepTabs[3].element} data="" />
+            </ConvertStepWrapper>
+          </AnimationProvider>
+        </ConvertStepProvider>
       </BackgroundCover>
     </Background>
   );
@@ -128,7 +123,6 @@ const BackgroundCover = styled.p`
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
   padding: 0 5vw;
-
   ${css`
     height: calc(100vh - 80px);
   `}

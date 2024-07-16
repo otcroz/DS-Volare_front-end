@@ -14,20 +14,20 @@ import {
   FileButton,
 } from '../styles/convertBoxStyles';
 import { useAnimationContext } from '../context/animationContext';
+import { useConvertStep } from '../context/convertStepContext';
 
 type props = {
   data: string;
   temp: string[];
   setTemp: (temp: string[]) => void;
-  step: boolean[];
-  setStep: (step: boolean[]) => void;
   onMoveScroll: () => void;
 };
 
 const ScriptBox = forwardRef<HTMLDivElement, props>(
-  ({ data, temp, setTemp, step, setStep, onMoveScroll }, ref) => {
+  ({ data, temp, setTemp, onMoveScroll }, ref) => {
     const { controlScripts, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
+    const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
     const handleClick = () => {
       temp[1] = 'data';

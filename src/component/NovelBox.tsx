@@ -14,20 +14,20 @@ import {
   FileButton,
   ScrollTextArea,
 } from '../styles/convertBoxStyles';
+import { useConvertStep } from '../context/convertStepContext';
 
 type props = {
   data: string;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
-  step: boolean[];
-  setStep: (step: boolean[]) => void;
 };
 
 const NovelBox = forwardRef<HTMLDivElement, props>(
-  ({ data, onScroll, scrollTop, step, setStep }, ref) => {
+  ({ data, onScroll, scrollTop }, ref) => {
     const [text, setText] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
     // 파일 업로드
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {

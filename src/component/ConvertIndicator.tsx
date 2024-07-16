@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import {
+  ConvertStepProvider,
+  useConvertStep,
+} from '../context/convertStepContext';
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부
@@ -21,12 +25,9 @@ type boxProps = {
   step: boolean;
 };
 
-const ConvertIndicator = ({
-  step,
-  select,
-  setSelect,
-  stepTabs,
-}: IndicatorProps) => {
+const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
+  const { step, setStep } = useConvertStep();
+
   return (
     <IndicatorContainer>
       {stepTabs.map((item, index) => {

@@ -14,6 +14,7 @@ import {
 } from '../styles/convertBoxStyles';
 import { useAnimationContext } from '../context/animationContext';
 import { motion } from 'framer-motion';
+import { useConvertStep } from '../context/convertStepContext';
 
 // dummy data (입력 데이터 예시)
 const inputSentences = [
@@ -88,8 +89,6 @@ interface Props {
   isWrite: boolean;
   temp: string[];
   setTemp: (temp: string[]) => void;
-  step: boolean[];
-  setStep: (step: boolean[]) => void;
   onMoveScroll: () => void;
 }
 
@@ -97,9 +96,6 @@ const CharacterBox = ({
   data,
   onScroll,
   scrollTop,
-  isWrite,
-  step,
-  setStep,
   temp,
   setTemp,
   onMoveScroll,
@@ -107,6 +103,7 @@ const CharacterBox = ({
   const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
   // 각 어절을 div로 렌더링
   const renderWords = () => {
@@ -225,7 +222,8 @@ const CharacterBox = ({
               3. 등장인물 목록을 확인하고 수정합니다.
             </TutorialText>
           </TutorialBox>
-          <ConvertButton onClick={handleClick} isWrite={isWrite}>
+          {/* 소설 작성 후 버튼 활성화 */}
+          <ConvertButton onClick={handleClick} isWrite={step[0]}>
             등장인물 인식
           </ConvertButton>
         </ConvertBoxWrapper>

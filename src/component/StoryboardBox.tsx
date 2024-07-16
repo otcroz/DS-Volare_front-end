@@ -17,21 +17,21 @@ import StoryboardInfo from './StoryboardInfo';
 import CutList from './CutList';
 import { motion } from 'framer-motion';
 import { useAnimationContext } from '../context/animationContext';
+import { useConvertStep } from '../context/convertStepContext';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
   isWrite: boolean;
   temp: string[];
   setTemp: (temp: string[]) => void;
-  step: boolean[];
-  setStep: (step: boolean[]) => void;
   onMoveScroll: () => void;
 };
 
 const StoryboardBox = forwardRef<HTMLDivElement, props>(
-  ({ data, isWrite, step, setStep, temp, setTemp, onMoveScroll }, ref) => {
+  ({ data, isWrite, temp, setTemp, onMoveScroll }, ref) => {
     const { controlStatistics, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
+    const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
     // dummy data (스토리보드 객체)
     const cuts = [
@@ -104,7 +104,8 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                 <HighlightedText>챗봇</HighlightedText>을 사용할 수 있습니다.
               </TutorialText>
             </TutorialBox>
-            <ConvertButton onClick={handleClick} isWrite={isWrite}>
+            {/* 대본 변환 후 버튼 활성화 */}
+            <ConvertButton onClick={handleClick} isWrite={step[1]}>
               스토리보드 변환
             </ConvertButton>
           </ConvertBoxWrapper>
