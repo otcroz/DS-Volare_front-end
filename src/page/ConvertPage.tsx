@@ -137,6 +137,10 @@ const ConvertStepWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    padding: 15vh 0; // TopContainer > height와 값 동일, margin을 주기 위해 값 크게해도 됨
+  }
 `;
 
 const TopContainer = styled.div`
@@ -144,12 +148,18 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   height: 10vh;
-  gap: 10vw;
+  gap: 0 10vw;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    flex-direction: column;
+    gap: 1rem 0;
+    padding: 1rem 0;
+  }
 `;
 
 const IndicatorBox = styled.div`
+  min-width: 41rem;
   display: flex;
-  max-width: 650px;
   align-items: center;
   gap: 0.7rem;
 `;
@@ -162,8 +172,7 @@ const SaveButtonBox = styled.div`
 const TitleInputBox = styled.div`
   display: flex;
   align-items: center;
-  width: 50vw; // equal convert box width
-  max-width: 650px;
+  min-width: 41rem;
   height: 3rem;
   padding: 1rem;
   border-style: solid;

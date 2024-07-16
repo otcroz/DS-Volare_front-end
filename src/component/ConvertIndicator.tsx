@@ -63,8 +63,7 @@ const IndicatorBox = styled.button.attrs((props) => ({
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 6vw;
-  max-width: 1.5rem;
+  min-width: 7.5rem;
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;
