@@ -89,6 +89,7 @@ interface Props {
   temp: string[];
   setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
+  setSelect: (select: number) => void;
 }
 
 const CharacterBox = ({
@@ -98,6 +99,7 @@ const CharacterBox = ({
   temp,
   setTemp,
   onMoveScroll,
+  setSelect,
 }: Props) => {
   const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
@@ -187,6 +189,9 @@ const CharacterBox = ({
     setStep([...step]);
     temp[0] = 'data';
     setTemp([...temp]);
+
+    // 인디케이터 select 값 변경
+    setSelect(1); // 대본으로 이동
 
     // 애니메이션
     onMoveScroll();

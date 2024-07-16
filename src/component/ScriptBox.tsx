@@ -21,10 +21,11 @@ type props = {
   temp: string[];
   setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
+  setSelect: (select: number) => void;
 };
 
 const ScriptBox = forwardRef<HTMLDivElement, props>(
-  ({ data, temp, setTemp, onMoveScroll }, ref) => {
+  ({ data, temp, setTemp, onMoveScroll, setSelect }, ref) => {
     const { controlScripts, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
@@ -34,6 +35,9 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       setTemp([...temp]);
       step[2] = true;
       setStep([...step]);
+
+      // 인디케이터 select 값 변경
+      setSelect(2); // 스토리보드로 이동
 
       // 애니메이션
       onMoveScroll();

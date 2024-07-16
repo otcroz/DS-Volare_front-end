@@ -77,6 +77,7 @@ const ConvertPage = () => {
                 scrollTop={scrollTop}
                 temp={temp}
                 setTemp={setTemp}
+                setSelect={setSelect}
                 onMoveScroll={stepTabs[1].onMoveElement}
               />
               <ScriptBox
@@ -84,6 +85,7 @@ const ConvertPage = () => {
                 data={temp[1]}
                 temp={temp}
                 setTemp={setTemp}
+                setSelect={setSelect}
                 onMoveScroll={stepTabs[2].onMoveElement}
               />
               <StoryboardBox
@@ -91,6 +93,7 @@ const ConvertPage = () => {
                 data={temp[2]}
                 temp={temp}
                 setTemp={setTemp}
+                setSelect={setSelect}
                 onMoveScroll={stepTabs[3].onMoveElement}
               />
               <StatisticsBox ref={stepTabs[3].element} data="" />
