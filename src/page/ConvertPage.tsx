@@ -11,12 +11,14 @@ import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.s
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
+import ChatbotBox from '../component/ChatbotBox';
 
 interface TextProps {
   color: string;
   size: string;
   weight: string;
 }
+
 const ConvertPage = () => {
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
@@ -100,10 +102,13 @@ const ConvertPage = () => {
             </ConvertStepWrapper>
           </AnimationProvider>
         </ConvertStepProvider>
+        <ChatbotBox name="chat" />
       </BackgroundCover>
     </Background>
   );
 };
+
+export default ConvertPage;
 
 // background
 const Background = styled.div`
@@ -214,5 +219,3 @@ const SaveButton = styled.button`
   background: linear-gradient(90deg, #959b88, #58613e);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
-
-export default ConvertPage;
