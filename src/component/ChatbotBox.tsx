@@ -13,7 +13,7 @@ interface Message {
   id?: number;
 }
 
-const ChatbotBox: React.FC<Props> = ({ name }) => {
+const ChatbotBox = ({ name }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTypingId, setCurrentTypingId] = useState<number | null>(null);
   const [isTyping, setIsTyping] = useState(false);
@@ -109,14 +109,14 @@ interface ChatMessageProps extends Message {
   currentTypingId: number | null;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({
+const ChatMessage = ({
   text,
   isUser,
   isTyping,
   id,
   onEndTyping,
   currentTypingId,
-}) => {
+}: ChatMessageProps) => {
   return (
     <>
       {isUser ? (
@@ -299,4 +299,5 @@ const Button = styled.button`
     cursor: not-allowed;
   }
 `;
+
 export default ChatbotBox;

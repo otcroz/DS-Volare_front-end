@@ -22,7 +22,7 @@ interface TextProps {
 const ConvertPage = () => {
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
-  const [scrollTop, setScrollTop] = useState(0); // NevelBox, CharacterBox 동시 스크롤
+  const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
 
   // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
