@@ -16,6 +16,7 @@ interface Message {
 const ChatbotBox: React.FC<Props> = ({ name }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTypingId, setCurrentTypingId] = useState<number | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
   const messageListRef = useRef<HTMLDivElement>(null);
 
   // 메시지 전송 함수
@@ -61,6 +62,11 @@ const ChatbotBox: React.FC<Props> = ({ name }) => {
     }
   }, [messages]);
 
+  // 챗봇이 타이핑 시작 시 isTyping을 true로 설정
+  useEffect(() => {
+    setIsTyping(currentTypingId !== null);
+  }, [currentTypingId]);
+
   return (
     <ChatContainer>
       <ChatBox>
@@ -71,7 +77,7 @@ const ChatbotBox: React.FC<Props> = ({ name }) => {
           onEndTyping={handleEndTyping}
           ref={messageListRef}
         />
-        <MessageForm onSendMessage={handleSendMessage} />
+        <MessageForm onSendMessage={handleSendMessage} isTyping={isTyping} />
       </ChatBox>
     </ChatContainer>
   );
@@ -145,15 +151,18 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
 
 interface MessageFormProps {
   onSendMessage: (message: string) => void;
+  isTyping: boolean;
 }
 
-const MessageForm: React.FC<MessageFormProps> = ({ onSendMessage }) => {
+const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSendMessage(message);
-    setMessage('');
+    if (message.trim() && !isTyping) {
+      onSendMessage(message);
+      setMessage('');
+    }
   };
 
   return (
@@ -164,7 +173,9 @@ const MessageForm: React.FC<MessageFormProps> = ({ onSendMessage }) => {
           setMessage(event.target.value)
         }
       />
-      <Button type="submit">Send</Button>
+      <Button type="submit" disabled={!message.trim() || isTyping}>
+        Send
+      </Button>
     </Form>
   );
 };
@@ -282,6 +293,10 @@ const Button = styled.button`
   background-color: ${({ theme }) => theme.colors.orange};
   color: #fff;
   cursor: pointer;
-`;
 
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
 export default ChatbotBox;
