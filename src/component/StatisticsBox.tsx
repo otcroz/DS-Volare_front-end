@@ -10,9 +10,9 @@ type props = {
 };
 
 const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
-  const { controlStoryboard } = useAnimationContext();
+  const { controlStatistics } = useAnimationContext();
   return (
-    <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
+    <motion.div ref={ref} animate={controlStatistics} style={{ opacity: 0 }}>
       <ConvertBoxWrapper>
         <TitleText>통계</TitleText>
         <ContentBox></ContentBox>
