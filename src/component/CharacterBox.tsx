@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import CharacterChipList from './CharacterChipList';
 import {
+  GlassBox,
   TitleText,
   ContentBox,
   ScrollText,
@@ -203,7 +203,7 @@ const CharacterBox = ({
   return (
     <motion.div>
       {data ? (
-        <ConvertBoxWrapper>
+        <GlassBox hasData={true}>
           <TitleText>등장인물 인식 결과</TitleText>
           <ContentBox style={{ height: '27rem' }}>
             <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
@@ -212,9 +212,9 @@ const CharacterBox = ({
           </ContentBox>
           <TitleText>등장인물</TitleText>
           <CharacterChipList characterList={characterList} />
-        </ConvertBoxWrapper>
+        </GlassBox>
       ) : (
-        <ConvertBoxWrapper mode="tutorial">
+        <GlassBox hasData={false}>
           <TutorialBox>
             <TutorialTitle>#1 소설 원고 입력하기</TutorialTitle>
             <TutorialText>
@@ -234,7 +234,7 @@ const CharacterBox = ({
           >
             등장인물 인식
           </ConvertButton>
-        </ConvertBoxWrapper>
+        </GlassBox>
       )}
     </motion.div>
   );

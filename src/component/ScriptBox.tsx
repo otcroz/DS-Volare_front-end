@@ -1,8 +1,8 @@
 import React, { forwardRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
 import {
+  GlassBox,
   TitleText,
   ContentBox,
   ScrollTextArea,
@@ -49,7 +49,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
     return (
       <motion.div ref={ref} animate={controlScripts} style={{ opacity: 0 }}>
         {data ? (
-          <ConvertBoxWrapper>
+          <GlassBox hasData={true}>
             <TitleText>대본화</TitleText>
             <FileButton>
               <FileDownloadIcon width="2rem" height="2rem" />
@@ -58,9 +58,9 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
             <ContentBox>
               <ScrollTextArea placeholder="텍스트" />
             </ContentBox>
-          </ConvertBoxWrapper>
+          </GlassBox>
         ) : (
-          <ConvertBoxWrapper mode="tutorial">
+          <GlassBox hasData={false}>
             <TutorialBox>
               <TutorialTitle>#2 소설을 대본으로 변환하기</TutorialTitle>
               <TutorialText>
@@ -74,7 +74,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
             <ConvertButton disabled={true} onClick={handleClick} isWrite={true}>
               대본 변환
             </ConvertButton>
-          </ConvertBoxWrapper>
+          </GlassBox>
         )}
       </motion.div>
     );

@@ -1,8 +1,8 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
 import {
+  GlassBox,
   TitleText,
   ContentBox,
   TutorialBox,
@@ -82,7 +82,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     return (
       <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
         {data ? (
-          <ConvertBoxWrapper>
+          <GlassBox hasData={true}>
             <TitleText>스토리보드</TitleText>
             <FileButton>
               <FileDownloadIcon width="2rem" height="2rem" />
@@ -94,9 +94,9 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                 <CutList cuts={cuts} />
               </ScrollText>
             </ContentBox>
-          </ConvertBoxWrapper>
+          </GlassBox>
         ) : (
-          <ConvertBoxWrapper mode="tutorial">
+          <GlassBox hasData={false}>
             <TutorialBox>
               <TutorialTitle>#3 스토리보드 생성과 챗봇 기능</TutorialTitle>
               <TutorialText>
@@ -115,7 +115,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
             >
               스토리보드 변환
             </ConvertButton>
-          </ConvertBoxWrapper>
+          </GlassBox>
         )}
       </motion.div>
     );
