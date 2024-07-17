@@ -126,7 +126,8 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           <ChatbotMessage>
             {isTyping && id && currentTypingId === id ? (
               <Typing
-                speed={100}
+                startDelay={30}
+                speed={50}
                 onFinishedTyping={() => id && onEndTyping(id)}
               >
                 <p>{text}</p>
