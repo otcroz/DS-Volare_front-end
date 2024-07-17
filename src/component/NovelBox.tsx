@@ -1,4 +1,10 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useEffect,
+  useRef,
+  forwardRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
@@ -6,8 +12,9 @@ import {
   TitleText,
   ContentBox,
   FileButton,
-  ScrollTextArea
+  ScrollTextArea,
 } from '../styles/convertBoxStyles';
+import { useConvertStep } from '../context/convertStepContext';
 
 type props = {
   data: string;
@@ -15,76 +22,89 @@ type props = {
   scrollTop: number;
 };
 
+const NovelBox = forwardRef<HTMLDivElement, props>(
+  ({ data, onScroll, scrollTop }, ref) => {
+    const [text, setText] = useState<string>('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+    const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
-const NovelBox = ({ data, onScroll, scrollTop }: props) => {
-  const [text, setText] = useState<string>('');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+    // 파일 업로드
+    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (file && file.type === 'text/plain') {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result;
+          if (result && typeof result === 'string') {
+            setText(result);
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        alert('Please upload a valid text file.');
+      }
+    };
 
-  // 파일 업로드
-  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type === 'text/plain') {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result;
-        if (result && typeof result === 'string') {
-          setText(result);
-        }
-      };
-      reader.readAsText(file);
-    } else {
-      alert('Please upload a valid text file.');
-    }
-  };
+    const handleButtonClick = () => {
+      fileInputRef.current?.click(); // file input 요소를 클릭하여 파일 선택 대화 상자를 엽니다.
+    };
 
-  const handleButtonClick = () => {
-    fileInputRef.current?.click(); // file input 요소를 클릭하여 파일 선택 대화 상자를 엽니다.
-  };
+    // textarea value
+    const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+      setText(event.target.value); // textarea의 value를 업데이트합니다.
+      if (event.target.value !== '') {
+        // textarea가 비어있지 않을 때
+        step[0] = true;
+        setStep([...step]);
+      } else {
+        step[0] = false;
+        setStep([...step]);
+      }
+    };
 
-  // textarea value
-  const handleTextChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setText(event.target.value); // textarea의 value를 업데이트합니다.
-  };
+    // CharacterBox와 동시 스크롤
+    useEffect(() => {
+      if (textareaRef.current) {
+        textareaRef.current.scrollTop = scrollTop;
+      }
+    }, [scrollTop]);
 
-  // CharacterBox와 동시 스크롤
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.scrollTop = scrollTop;
-    }
-  }, [scrollTop]);
+    const handleScroll = () => {
+      if (textareaRef.current) {
+        onScroll(textareaRef.current.scrollTop);
+      }
+    };
 
-  const handleScroll = () => {
-    if (textareaRef.current) {
-      onScroll(textareaRef.current.scrollTop);
-    }
-  };
-  
-  return (
-    <ConvertBoxWrapper>
-      <TitleText>원고 작성</TitleText>
-      <FileButton onClick={handleButtonClick}><FileUploadIcon width="2rem" height="2rem" />&nbsp;파일 업로드</FileButton>
-      <HiddenFileInput
-        type="file"
-        accept=".txt"
-        ref={fileInputRef}
-        onChange={handleFileUpload}
-      />
-      <ContentBox>
-        <ScrollTextArea
-          value={text}
-          onChange={handleTextChange}
-          wrap="soft"
-          placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
-          ref={textareaRef}
-          onScroll={handleScroll}
-        />
-      </ContentBox>
-    </ConvertBoxWrapper>
-
-  );
-
-};
+    return (
+      <div ref={ref}>
+        <ConvertBoxWrapper>
+          <TitleText>원고 작성</TitleText>
+          <FileButton onClick={handleButtonClick}>
+            <FileUploadIcon width="2rem" height="2rem" />
+            &nbsp;파일 업로드
+          </FileButton>
+          <HiddenFileInput
+            type="file"
+            accept=".txt"
+            ref={fileInputRef}
+            onChange={handleFileUpload}
+          />
+          <ContentBox>
+            <ScrollTextArea
+              value={text}
+              onChange={handleTextChange}
+              wrap="soft"
+              placeholder="내용을 입력하거나 텍스트 파일을 첨부하세요."
+              ref={textareaRef}
+              onScroll={handleScroll}
+            />
+          </ContentBox>
+        </ConvertBoxWrapper>
+      </div>
+    );
+  }
+);
 
 export default NovelBox;
 

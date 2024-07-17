@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+type buttonProps = { isWrite: boolean };
 
 export const TitleText = styled.div`
   font-weight: bold;
@@ -25,7 +27,7 @@ export const ScrollText = styled.div`
   white-space: pre-wrap;
   overflow-y: scroll;
   overflow-wrap: break-word;
-`
+`;
 
 export const ScrollTextArea = styled.textarea`
   width: 100%;
@@ -39,11 +41,11 @@ export const ScrollTextArea = styled.textarea`
   overflow-y: scroll;
   overflow-wrap: break-word;
 
-  resize: none;  
+  resize: none;
   &:focus {
     outline: none;
   }
-`
+`;
 
 export const TutorialBox = styled.div`
   width: 80%;
@@ -73,8 +75,10 @@ export const HighlightedText = styled.span`
   font-weight: bold;
 `;
 
-export const ConvertButton = styled.button`
-  background: linear-gradient(90deg, ${({ theme }) => theme.colors.orange}, #84411d);
+export const ConvertButton = styled.button.attrs((props) => ({
+  disabled: !props.disabled ? true : undefined,
+}))<buttonProps>`
+  background: linear-gradient(90deg, #d9d9d9, #b5b5b5);
   color: #ffffff;
   border: none;
   border-radius: 3rem;
@@ -82,6 +86,16 @@ export const ConvertButton = styled.button`
   cursor: pointer;
   font-size: 1.25rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+  ${({ isWrite }) =>
+    isWrite &&
+    css`
+      background: linear-gradient(
+        90deg,
+        ${({ theme }) => theme.colors.orange},
+        #84411d
+      );
+    `}
 `;
 
 export const FileButton = styled.div`
@@ -99,4 +113,4 @@ export const FileButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;

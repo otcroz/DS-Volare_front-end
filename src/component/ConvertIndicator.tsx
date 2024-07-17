@@ -1,34 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
+import {
+  ConvertStepProvider,
+  useConvertStep,
+} from '../context/convertStepContext';
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부
   step: boolean[]; // 현재 사용자가 위치한 단계
   select: number;
   setSelect: (select: number) => void;
+  stepTabs: Array<UseMoveScrollReturn>;
 }
 
-interface boxProps {
+type UseMoveScrollReturn = {
+  name: string;
+  onMoveElement: () => void;
+  element: React.RefObject<HTMLDivElement>;
+};
+
+type boxProps = {
   selected: number;
   index: number;
   step: boolean;
-}
+};
 
-const ConvertIndicator = ({ step, select, setSelect }: IndicatorProps) => {
-  const stepNameList: string[] = ['소설', '대본', '스토리보드', '통계'];
+const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
+  const { step, setStep } = useConvertStep();
 
   return (
     <IndicatorContainer>
-      {stepNameList.map((item, index) => {
+      {stepTabs.map((item, index) => {
         return (
           <IndicatorBox
+            disabled={step[index]}
             step={step[index]}
             key={index}
             selected={select}
             index={index}
-            onClick={() => setSelect(index)}
+            onClick={() => {
+              setSelect(index);
+              item.onMoveElement();
+            }}
           >
-            {item}
+            {item.name}
           </IndicatorBox>
         );
       })}
@@ -41,16 +56,17 @@ const IndicatorContainer = styled.div`
   gap: 5px;
 `;
 
-const IndicatorBox = styled.button<boxProps>`
+// step에 따라서 disabled 설정하기
+const IndicatorBox = styled.button.attrs((props) => ({
+  disabled: !props.disabled ? true : undefined,
+}))<boxProps>`
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 6vw;
-  max-width: 1.5rem;
+  min-width: 7.5rem;
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;
-  disabled: true;
 
   background-color: ${({ theme }) => theme.colors.beige};
   color: ${({ theme }) => theme.colors.brown};
@@ -61,7 +77,6 @@ const IndicatorBox = styled.button<boxProps>`
     css`
       background-color: ${theme.colors.orange};
       color: white;
-      disabled: false;
     `}
 
     ${selected === index &&
