@@ -17,10 +17,10 @@ const Pagenation = ({
   pageRange,
 }: pagenationProps) => {
   const btnRange = 5;
-  const currentSet = Math.ceil(page / btnRange); // 현재 버튼이 몇번째 세트인지 나타내는 수
-  const startPage = (currentSet - 1) * btnRange + 1; // 현재 보여질 버튼의 첫번째 수
+  const currentSet = Math.ceil(page / btnRange); // 현재 버튼이 몇 번째 세트인지 나타내는 수
+  const startPage = (currentSet - 1) * btnRange + 1; // 현재 보여질 버튼의 첫 번째 수
   const endPage = startPage + btnRange - 1; // 현재 보여질 끝 버튼의 수
-  const totalSet = Math.ceil(Math.ceil(totalScript / pageRange) / btnRange); // 전체 벼튼 세트 수
+  const totalSet = Math.ceil(Math.ceil(totalScript / pageRange) / btnRange); // 전체 버튼 세트 수
 
   const pageItems = Array(btnRange)
     .fill(startPage)
