@@ -16,7 +16,7 @@ const Pagenation = ({
   totalScript,
   pageRange,
 }: pagenationProps) => {
-  const btnRange = 5;
+  const btnRange = 5; // 페이지네이션 버튼 수
   const currentSet = Math.ceil(page / btnRange); // 현재 버튼이 몇 번째 세트인지 나타내는 수
   const startPage = (currentSet - 1) * btnRange + 1; // 현재 보여질 버튼의 첫 번째 수
   const endPage = startPage + btnRange - 1; // 현재 보여질 끝 버튼의 수
@@ -26,10 +26,12 @@ const Pagenation = ({
     .fill(startPage)
     .map((_, index) => {
       return (
+        // isPost: 특정 페이지에 게시물 있는지 여부 확인
         <PageItem
           key={index}
           onClick={() => setPage(startPage + index)}
           $active={page === startPage + index}
+          $isPost={totalScript - pageRange * (startPage + index - 1)}
         >
           {startPage + index}
         </PageItem>
@@ -68,7 +70,7 @@ const PagenationContainer = styled.div`
 `;
 
 // component
-const PageItem = styled.div<{ $active: boolean }>`
+const PageItem = styled.div<{ $active: boolean; $isPost: number }>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,10 +89,13 @@ const PageItem = styled.div<{ $active: boolean }>`
       background-color: ${({ theme }) => theme.colors.orange};
       color: ${({ theme }) => theme.colors.ivory};
     `}
+  ${(props) =>
+    props.$isPost <= 0 &&
+    css`
+      display: none;
+    `}
 `;
 
-const ArrowButton = styled.button`
-  button-style: none;
-`;
+const ArrowButton = styled.button``;
 
 export default Pagenation;

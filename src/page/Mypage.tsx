@@ -23,8 +23,6 @@ const MyPage = () => {
       return <ScriptListCard key={index} date={item.date} title={item.title} />;
     });
 
-    // if data.length < 6
-
     return list;
   };
 
