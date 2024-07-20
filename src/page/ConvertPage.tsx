@@ -102,7 +102,7 @@ const ConvertPage = () => {
             </ConvertStepWrapper>
           </AnimationProvider>
         </ConvertStepProvider>
-        <ChatbotBox name="chat" />
+        <ChatbotBox />
       </BackgroundCover>
     </Background>
   );
@@ -132,6 +132,7 @@ const BackgroundCover = styled.p`
   ${css`
     height: calc(100vh - 80px);
   `}
+  overflow: hidden;
 `;
 
 // container

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Typing from 'react-typing-animation';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Props = {
-  name: string;
+  chatId?: string; // 추후 변경
 };
 
 interface Message {
@@ -13,11 +14,12 @@ interface Message {
   id?: number;
 }
 
-const ChatbotBox = ({ name }: Props) => {
+const ChatbotBox = ({ chatId }: Props) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentTypingId, setCurrentTypingId] = useState<number | null>(null);
   const [isTyping, setIsTyping] = useState(false);
   const messageListRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(true);
 
   // 메시지 전송 함수
   const handleSendMessage = (message: string) => {
@@ -67,19 +69,55 @@ const ChatbotBox = ({ name }: Props) => {
     setIsTyping(currentTypingId !== null);
   }, [currentTypingId]);
 
+  // 챗봇 drawer toggle button 애니메이션
+  const buttonVariants = {
+    init: {
+      x: 0,
+    },
+    end: (isOpen: boolean) => ({
+      x: isOpen ? -250 : 0,
+    }),
+  };
+
   return (
-    <ChatContainer>
-      <ChatBox>
-        <Title>Chat</Title>
-        <MessageList
-          messages={messages}
-          currentTypingId={currentTypingId}
-          onEndTyping={handleEndTyping}
-          ref={messageListRef}
-        />
-        <MessageForm onSendMessage={handleSendMessage} isTyping={isTyping} />
-      </ChatBox>
-    </ChatContainer>
+    <>
+      <AnimatePresence>
+        {isOpen && (
+          <ChatContainer
+            initial={{ x: 200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 200, opacity: 0 }}
+            transition={{ type: 'tween' }}
+          >
+            <ChatBox>
+              <Title>Chat</Title>
+              <MessageList
+                messages={messages}
+                currentTypingId={currentTypingId}
+                onEndTyping={handleEndTyping}
+                ref={messageListRef}
+              />
+              <MessageForm
+                onSendMessage={handleSendMessage}
+                isTyping={isTyping}
+              />
+            </ChatBox>
+          </ChatContainer>
+        )}
+      </AnimatePresence>
+
+      <ChatbotButton
+        initial="init"
+        animate="end"
+        variants={buttonVariants}
+        custom={isOpen}
+        whileTap={{ scale: 0.9 }}
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
+        transition={{ type: 'tween' }}
+      />
+    </>
   );
 };
 
@@ -181,15 +219,27 @@ const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
 };
 
 // Styled Components
-const ChatContainer = styled.div`
-  position: fixed;
+
+const ChatbotButton = styled(motion.button)`
+  position: absolute;
+  right: 5rem;
+  bottom: 1rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 2rem;
+  background-color: ${({ theme }) => theme.colors.orange};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const ChatContainer = styled(motion.div)`
+  position: absolute;
+  z-index: 1;
   right: 0;
-  width: 30vw;
+  width: 20rem;
   height: 100%;
   display: flex;
   background: rgba(149, 155, 136, 0.6);
 
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 `;
