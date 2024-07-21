@@ -15,7 +15,7 @@ type Props = {
 };
 
 const ChatbotBox = ({ chatId }: Props) => {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(true); // drawer
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
   const [messages, setMessages] = useState<Message[]>([]); // 모든 채팅 메시지
   const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션이 재생 중인 채팅 메시지
   const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
@@ -71,12 +71,8 @@ const ChatbotBox = ({ chatId }: Props) => {
 
   // 챗봇 drawer toggle button 애니메이션
   const buttonVariants = {
-    init: {
-      x: 0,
-    },
-    end: (isDrawerOpen: boolean) => ({
-      x: isDrawerOpen ? -250 : 0,
-    }),
+    open: { opacity: 1, x: -250, zIndex: 1 },
+    closed: { opacity: 1, x: 0, zIndex: 1 },
   };
 
   return (
@@ -107,15 +103,13 @@ const ChatbotBox = ({ chatId }: Props) => {
       </AnimatePresence>
 
       <ChatbotButton
-        initial="init"
-        animate="end"
+        animate={isDrawerOpen ? 'open' : 'closed'}
         variants={buttonVariants}
-        custom={isDrawerOpen}
+        transition={{ type: 'tween' }}
         whileTap={{ scale: 0.9 }}
         onClick={() => {
           setIsDrawerOpen(!isDrawerOpen);
         }}
-        transition={{ type: 'tween' }}
       />
     </>
   );
