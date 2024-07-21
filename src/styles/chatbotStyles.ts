@@ -97,7 +97,7 @@ export const ChatbotIcon = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-export const ChatFormContainer = styled.form`
+export const MessageFormContainer = styled.form`
   border-top: 1px solid #f0f0f0;
   padding: 20px;
   bottom: 0;

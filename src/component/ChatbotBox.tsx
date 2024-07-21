@@ -6,7 +6,7 @@ import {
   ChatContainer,
   Title,
 } from '../styles/chatbotStyles';
-import ChatMessageForm from './ChatForm';
+import MessageForm from './MessageForm';
 import MessageList from './MessageList';
 import { Message } from '../types';
 
@@ -17,7 +17,7 @@ type Props = {
 const ChatbotBox = ({ chatId }: Props) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
   const [messages, setMessages] = useState<Message[]>([]); // 모든 채팅 메시지
-  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션이 재생 중인 채팅 메시지
+  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션을 재생할 채팅 메시지
   const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
 
@@ -35,7 +35,7 @@ const ChatbotBox = ({ chatId }: Props) => {
     ]);
   };
 
-  // 타이핑이 끝났을 때(라이브러리 컴포넌트에서 판정함) 호출되는 함수
+  // 타이핑이 끝났을 때(Typing 컴포넌트의 onFinishedTyping 리스너) 호출되는 함수
   const handleEndTyping = (id: number) => {
     setMessages((prevMessages) =>
       prevMessages.map((msg) =>
@@ -93,7 +93,7 @@ const ChatbotBox = ({ chatId }: Props) => {
                 onEndTyping={handleEndTyping}
                 ref={messageListRef}
               />
-              <ChatMessageForm
+              <MessageForm
                 onSendMessage={handleSendMessage}
                 isTyping={isTyping}
               />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  ChatFormContainer,
+  MessageFormContainer,
   ChatInputArea,
   SubmitButton,
 } from '../styles/chatbotStyles';
@@ -10,7 +10,7 @@ interface MessageFormProps {
   isTyping: boolean;
 }
 
-const ChatForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
+const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -22,7 +22,7 @@ const ChatForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
   };
 
   return (
-    <ChatFormContainer onSubmit={handleSubmit}>
+    <MessageFormContainer onSubmit={handleSubmit}>
       <ChatInputArea
         value={message}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -32,8 +32,8 @@ const ChatForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
       <SubmitButton type="submit" disabled={!message.trim() || isTyping}>
         Send
       </SubmitButton>
-    </ChatFormContainer>
+    </MessageFormContainer>
   );
 };
 
-export default ChatForm;
+export default MessageForm;
