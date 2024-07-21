@@ -198,7 +198,7 @@ const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (message.trim() && !isTyping) {
-      onSendMessage(message);
+      onSendMessage(message.trim());
       setMessage('');
     }
   };
