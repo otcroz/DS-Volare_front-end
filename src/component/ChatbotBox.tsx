@@ -1,7 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Typing from 'react-typing-animation';
-import styled from 'styled-components';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import {
+  ChatbotButton,
+  ChatbotIcon,
+  ChatbotMessage,
+  ChatbotMessageDateTime,
+  ChatBox,
+  ChatContainer,
+  ChatForm,
+  ChatInputArea,
+  MessageContainer,
+  MessageListContainer,
+  SubmitButton,
+  Title,
+  UserMessage,
+  UserMessageDateTime,
+} from '../styles/chatbotStyles';
 
 type Props = {
   chatId?: string; // 추후 변경
@@ -15,11 +30,11 @@ interface Message {
 }
 
 const ChatbotBox = ({ chatId }: Props) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null);
-  const [isTyping, setIsTyping] = useState(false);
-  const messageListRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(true); // drawer
+  const [messages, setMessages] = useState<Message[]>([]); // 메시지 리스트(챗봇&사용자, 시간순)
+  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션이 재생되는 채팅
+  const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
+  const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
 
   // 메시지 전송 함수
   const handleSendMessage = (message: string) => {
@@ -74,15 +89,15 @@ const ChatbotBox = ({ chatId }: Props) => {
     init: {
       x: 0,
     },
-    end: (isOpen: boolean) => ({
-      x: isOpen ? -250 : 0,
+    end: (isDrawerOpen: boolean) => ({
+      x: isDrawerOpen ? -250 : 0,
     }),
   };
 
   return (
     <>
       <AnimatePresence>
-        {isOpen && (
+        {isDrawerOpen && (
           <ChatContainer
             initial={{ x: 200, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -110,10 +125,10 @@ const ChatbotBox = ({ chatId }: Props) => {
         initial="init"
         animate="end"
         variants={buttonVariants}
-        custom={isOpen}
+        custom={isDrawerOpen}
         whileTap={{ scale: 0.9 }}
         onClick={() => {
-          setIsOpen(!isOpen);
+          setIsDrawerOpen(!isDrawerOpen);
         }}
         transition={{ type: 'tween' }}
       />
@@ -204,150 +219,18 @@ const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <ChatForm onSubmit={handleSubmit}>
       <ChatInputArea
         value={message}
         onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
           setMessage(event.target.value)
         }
       />
-      <Button type="submit" disabled={!message.trim() || isTyping}>
+      <SubmitButton type="submit" disabled={!message.trim() || isTyping}>
         Send
-      </Button>
-    </Form>
+      </SubmitButton>
+    </ChatForm>
   );
 };
-
-// Styled Components
-
-const ChatbotButton = styled(motion.button)`
-  position: absolute;
-  right: 5rem;
-  bottom: 1rem;
-  width: 4rem;
-  height: 4rem;
-  border-radius: 2rem;
-  background-color: ${({ theme }) => theme.colors.orange};
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-`;
-
-const ChatContainer = styled(motion.div)`
-  position: absolute;
-  z-index: 1;
-  right: 0;
-  width: 20rem;
-  height: 100%;
-  display: flex;
-  background: rgba(149, 155, 136, 0.6);
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-`;
-
-const ChatBox = styled.div`
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-`;
-
-const Title = styled.h1`
-  text-align: center;
-  padding: 20px;
-  margin: 0;
-  color: white;
-  height: 1.25rem;
-`;
-
-const MessageListContainer = styled.div`
-  width: 100%;
-  padding: 20px;
-  flex-grow: 1;
-  overflow-y: auto;
-`;
-
-const MessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-`;
-
-const BaseMessage = styled.div`
-  max-width: 80%;
-  padding: 10px 15px;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-`;
-
-const UserMessage = styled(BaseMessage)`
-  align-self: flex-end;
-  background: ${({ theme }) => theme.colors.darkBrown};
-  color: #fff;
-  border-radius: 16px 16px 0 16px;
-  margin-left: auto;
-`;
-
-const UserMessageDateTime = styled.div`
-  margin-top: 0.4rem;
-  font-size: 0.8rem;
-  color: white;
-  margin-left: auto;
-`;
-
-const ChatbotMessage = styled(BaseMessage)`
-  align-self: flex-start;
-  background: #f0f0f0;
-  color: #333;
-  border-radius: 16px 16px 16px 0;
-`;
-
-const ChatbotMessageDateTime = styled.div`
-  margin-top: 0.4rem;
-  font-size: 0.8rem;
-  color: white;
-`;
-
-const ChatbotIcon = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background-color: ${({ theme }) => theme.colors.orange};
-  border-radius: 1rem;
-  margin-bottom: 0.5rem;
-`;
-
-const Form = styled.form`
-  border-top: 1px solid #f0f0f0;
-  padding: 20px;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-`;
-
-const ChatInputArea = styled.textarea`
-  flex-grow: 1;
-  padding: 10px;
-  border-radius: 16px;
-  border: 1px solid #ccc;
-  margin-right: 10px;
-
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  border-radius: 16px;
-  border: none;
-  background-color: ${({ theme }) => theme.colors.orange};
-  color: #fff;
-  cursor: pointer;
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
 
 export default ChatbotBox;
