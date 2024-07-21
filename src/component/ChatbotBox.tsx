@@ -1,38 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Typing from 'react-typing-animation';
 import { AnimatePresence } from 'framer-motion';
 import {
   ChatbotButton,
-  ChatbotIcon,
-  ChatbotMessage,
-  ChatbotMessageDateTime,
   ChatBox,
   ChatContainer,
-  ChatForm,
-  ChatInputArea,
-  MessageContainer,
-  MessageListContainer,
-  SubmitButton,
   Title,
-  UserMessage,
-  UserMessageDateTime,
 } from '../styles/chatbotStyles';
+import ChatMessageForm from './ChatForm';
+import MessageList from './MessageList';
+import { Message } from '../types';
 
 type Props = {
   chatId?: string; // 추후 변경
 };
 
-interface Message {
-  text: string;
-  isUser: boolean;
-  isTyping?: boolean;
-  id?: number;
-}
-
 const ChatbotBox = ({ chatId }: Props) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(true); // drawer
-  const [messages, setMessages] = useState<Message[]>([]); // 메시지 리스트(챗봇&사용자, 시간순)
-  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션이 재생되는 채팅
+  const [messages, setMessages] = useState<Message[]>([]); // 모든 채팅 메시지
+  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션이 재생 중인 채팅 메시지
   const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
 
@@ -112,7 +97,7 @@ const ChatbotBox = ({ chatId }: Props) => {
                 onEndTyping={handleEndTyping}
                 ref={messageListRef}
               />
-              <MessageForm
+              <ChatMessageForm
                 onSendMessage={handleSendMessage}
                 isTyping={isTyping}
               />
@@ -133,103 +118,6 @@ const ChatbotBox = ({ chatId }: Props) => {
         transition={{ type: 'tween' }}
       />
     </>
-  );
-};
-
-interface MessageListProps {
-  messages: Message[];
-  currentTypingId: number | null;
-  onEndTyping: (id: number) => void;
-}
-
-const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(
-  ({ messages, currentTypingId, onEndTyping }, ref) => (
-    <MessageListContainer ref={ref}>
-      {messages.map((message, index) => (
-        <ChatMessage
-          key={index}
-          {...message}
-          onEndTyping={onEndTyping}
-          currentTypingId={currentTypingId}
-        />
-      ))}
-    </MessageListContainer>
-  )
-);
-
-interface ChatMessageProps extends Message {
-  onEndTyping: (id: number) => void;
-  currentTypingId: number | null;
-}
-
-const ChatMessage = ({
-  text,
-  isUser,
-  isTyping,
-  id,
-  onEndTyping,
-  currentTypingId,
-}: ChatMessageProps) => {
-  return (
-    <>
-      {isUser ? (
-        <MessageContainer>
-          <UserMessage>
-            <p>{text}</p>
-          </UserMessage>
-          <UserMessageDateTime>2024.xx.xx</UserMessageDateTime>
-        </MessageContainer>
-      ) : (
-        <MessageContainer>
-          <ChatbotIcon></ChatbotIcon>
-          <ChatbotMessage>
-            {isTyping && id && currentTypingId === id ? (
-              <Typing
-                startDelay={30}
-                speed={50}
-                onFinishedTyping={() => id && onEndTyping(id)}
-              >
-                <p>{text}</p>
-              </Typing>
-            ) : (
-              <p>{text}</p>
-            )}
-          </ChatbotMessage>
-          <ChatbotMessageDateTime>2024.xx.xx</ChatbotMessageDateTime>
-        </MessageContainer>
-      )}
-    </>
-  );
-};
-
-interface MessageFormProps {
-  onSendMessage: (message: string) => void;
-  isTyping: boolean;
-}
-
-const MessageForm = ({ onSendMessage, isTyping }: MessageFormProps) => {
-  const [message, setMessage] = useState('');
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (message.trim() && !isTyping) {
-      onSendMessage(message.trim());
-      setMessage('');
-    }
-  };
-
-  return (
-    <ChatForm onSubmit={handleSubmit}>
-      <ChatInputArea
-        value={message}
-        onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
-          setMessage(event.target.value)
-        }
-      />
-      <SubmitButton type="submit" disabled={!message.trim() || isTyping}>
-        Send
-      </SubmitButton>
-    </ChatForm>
   );
 };
 
