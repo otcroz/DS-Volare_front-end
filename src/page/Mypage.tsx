@@ -99,6 +99,11 @@ const ItemsContainer = styled.div`
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(3, 1fr);
   gap: 60px 70px;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const UserInfoTextBox = styled.div`
