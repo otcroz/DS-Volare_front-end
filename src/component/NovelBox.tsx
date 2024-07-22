@@ -6,9 +6,9 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import ConvertBoxWrapper from './ConvertBoxWrapper';
 import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
 import {
+  GlassBox,
   TitleText,
   ContentBox,
   FileButton,
@@ -78,7 +78,7 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
 
     return (
       <div ref={ref}>
-        <ConvertBoxWrapper>
+        <GlassBox hasData={true}>
           <TitleText>원고 작성</TitleText>
           <FileButton onClick={handleButtonClick}>
             <FileUploadIcon width="2rem" height="2rem" />
@@ -100,7 +100,7 @@ const NovelBox = forwardRef<HTMLDivElement, props>(
               onScroll={handleScroll}
             />
           </ContentBox>
-        </ConvertBoxWrapper>
+        </GlassBox>
       </div>
     );
   }

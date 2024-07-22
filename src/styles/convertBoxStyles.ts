@@ -2,12 +2,27 @@ import styled, { css } from 'styled-components';
 
 type buttonProps = { isWrite: boolean };
 
-export const TitleText = styled.div`
-  font-weight: bold;
-  color: white;
-  font-size: 2rem;
-  padding: 1rem;
-`;
+export const GlassBox = styled.div<{ hasData: boolean }>`
+  min-width: 41rem;
+  height: 45rem;
+  background: rgba(255, 252, 245, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;  
+  padding: 1.5rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  // 데이터가 없는 경우 튜토리얼
+  ${({ hasData }) =>
+    !hasData &&
+    css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    `}
+`
 
 export const ContentBox = styled.div`
   background-color: white;
@@ -15,6 +30,13 @@ export const ContentBox = styled.div`
   height: 90%;
   border-radius: 20px;
   padding: 1.25rem;
+`;
+
+export const TitleText = styled.div`
+  font-weight: bold;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
 `;
 
 export const ScrollText = styled.div`
