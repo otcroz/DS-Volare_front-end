@@ -4,6 +4,7 @@ import bgImg from '../assets/background/bg-1.png';
 import Pagenation from '../component/Pagenation';
 import ScriptListCard from '../component/ScriptListCard';
 import { dummyData } from '../component/mypageDummyData'; // dummy data
+import { useAnimation } from 'framer-motion';
 
 interface ScriptListProps {
   date: string;
@@ -17,10 +18,32 @@ const MyPage = () => {
   const startPost = (page - 1) * pageRange + 1; // 시작 게시물 번호
   const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
+  // pagenation animate
+  const control = useAnimation();
+
+  const pagenationAnimate = () => {
+    control.start({
+      height: ['50%', '100%'],
+      opacity: [0.3, 1],
+      transition: {
+        duration: 1.2,
+        ease: 'easeInOut',
+        times: [0, 0.2, 0.5, 0.8, 1],
+      },
+    });
+  };
+
   const ScriptListfunc = (data: ScriptListProps[]) => {
     // if data.length >= 6
     const list = data.slice(startPost - 1, endPost).map((item, index) => {
-      return <ScriptListCard key={index} date={item.date} title={item.title} />;
+      return (
+        <ScriptListCard
+          control={control}
+          key={index}
+          date={item.date}
+          title={item.title}
+        />
+      );
     });
 
     return list;
@@ -46,6 +69,7 @@ const MyPage = () => {
                 setPage={setPage}
                 totalScript={totalScript}
                 pageRange={pageRange}
+                animate={pagenationAnimate}
               />
             </ListContainer>
           </LayoutWrapper>

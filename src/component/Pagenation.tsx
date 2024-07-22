@@ -8,6 +8,7 @@ type pagenationProps = {
   setPage: (page: number) => void;
   totalScript: number;
   pageRange: number;
+  animate: () => void;
 };
 
 const Pagenation = ({
@@ -15,12 +16,18 @@ const Pagenation = ({
   setPage,
   totalScript,
   pageRange,
+  animate,
 }: pagenationProps) => {
   const btnRange = 5; // 페이지네이션 버튼 수
   const currentSet = Math.ceil(page / btnRange); // 현재 버튼이 몇 번째 세트인지 나타내는 수
   const startPage = (currentSet - 1) * btnRange + 1; // 현재 보여질 버튼의 첫 번째 수
   const endPage = startPage + btnRange - 1; // 현재 보여질 끝 버튼의 수
   const totalSet = Math.ceil(Math.ceil(totalScript / pageRange) / btnRange); // 전체 버튼 세트 수
+
+  const handleClick = (index: number) => {
+    animate(); // animation
+    setPage(startPage + index); // page setting
+  };
 
   const pageItems = Array(btnRange)
     .fill(startPage)
@@ -29,7 +36,7 @@ const Pagenation = ({
         // isPost: 특정 페이지에 게시물 있는지 여부 확인
         <PageItem
           key={index}
-          onClick={() => setPage(startPage + index)}
+          onClick={() => handleClick(index)}
           $active={page === startPage + index}
           $isPost={totalScript - pageRange * (startPage + index - 1)}
         >
@@ -63,6 +70,7 @@ const PagenationWrapper = styled.div`
 `;
 
 const PagenationContainer = styled.div`
+  width: 5rem; // hover 효과로 item의 크기가 커져도 페이지네이션이 움직이지 않도록 값 지정
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,6 +87,12 @@ const PageItem = styled.div<{ $active: boolean; $isPost: number }>`
   height: 2.5rem;
   background-color: ${({ theme }) => theme.colors.ivory};
   color: ${({ theme }) => theme.colors.brown};
+  transition: width 0.5s ease, height 0.5s ease;
+
+  &:hover {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 
   ${(props) =>
     props.$active &&
@@ -88,6 +102,12 @@ const PageItem = styled.div<{ $active: boolean; $isPost: number }>`
       font-size: 1.2rem;
       background-color: ${({ theme }) => theme.colors.orange};
       color: ${({ theme }) => theme.colors.ivory};
+      transition: width 0.5s ease, height 0.5s ease;
+
+      &:hover {
+        width: 4.5rem;
+        height: 4.5rem;
+      }
     `}
   ${(props) =>
     props.$isPost <= 0 &&

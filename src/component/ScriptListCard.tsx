@@ -1,15 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import theme from '../styles/theme';
+import { motion, AnimationControls } from 'framer-motion';
 
 interface ScriptListProps {
   date: string;
   title: string;
+  control: AnimationControls;
 }
 
-const ScriptListCard = ({ date, title }: ScriptListProps) => {
+const ScriptListCard = ({ date, title, control }: ScriptListProps) => {
   return (
-    <CardBox>
+    <CardBox animate={control}>
       <Image />
       <ContentBox>
         <ContentText style={{ color: theme.colors.darkBrown }}>
@@ -33,7 +35,7 @@ const ContentText = styled.span`
 `;
 
 // box
-const CardBox = styled.div`
+const CardBox = styled(motion.div)`
   display: flex;
   flex-direction: column;
   width: 300px;
