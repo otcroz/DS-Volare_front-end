@@ -1,75 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import bgImg from '../assets/background/bg-1.png';
 import Pagenation from '../component/Pagenation';
 import ScriptListCard from '../component/ScriptListCard';
+import { dummyData } from '../component/mypageDummyData'; // dummy data
+import { useAnimation } from 'framer-motion';
 
 interface ScriptListProps {
   date: string;
   title: string;
 }
 
-// 더미 데이터
-let data = [
-  {
-    title: '소나기',
-    date: '2024-05-06',
-  },
-  {
-    title: '인간관계론',
-    date: '2024-03-04',
-  },
-  {
-    title: '제노사이드',
-    date: '2024-02-04',
-  },
-  {
-    title: '나미야 잡화점의 기적',
-    date: '2023-12-15',
-  },
-  {
-    title: '타이틀 테스트입니다',
-    date: '2023-05-06',
-  },
-  {
-    title: '제목이 잘 나오는지 확인합니다',
-    date: '2023-05-06',
-  },
-];
+const MyPage = () => {
+  const [page, setPage] = useState<number>(1);
+  const totalScript = dummyData.length; // 총 게시물 수
+  const pageRange = 6; // 페이지당 보여줄 게시물 수
+  const startPost = (page - 1) * pageRange + 1; // 시작 게시물 번호
+  const endPost = startPost + pageRange - 1; // 끝 게시물 번호
 
-const ScriptListfunc = (data: ScriptListProps[]) => {
-  // if data.length >= 6
-  const list = data.map((item, index) => {
-    return <ScriptListCard key={index} date={item.date} title={item.title} />;
-  });
+  // pagenation animate
+  const control = useAnimation();
 
-  // if data.length < 6
+  const pagenationAnimate = () => {
+    control.start({
+      height: ['50%', '100%'],
+      opacity: [0.3, 1],
+      transition: {
+        duration: 1.2,
+        ease: 'easeInOut',
+        times: [0, 0.2, 0.5, 0.8, 1],
+      },
+    });
+  };
 
-  return list;
+  const ScriptListfunc = (data: ScriptListProps[]) => {
+    // if data.length >= 6
+    const list = data.slice(startPost - 1, endPost).map((item, index) => {
+      return (
+        <ScriptListCard
+          control={control}
+          key={index}
+          date={item.date}
+          title={item.title}
+        />
+      );
+    });
+
+    return list;
+  };
+
+  return (
+    <Background>
+      <BackgroundImage>
+        <BackgroundCover>
+          <LayoutWrapper>
+            <UserInfoTextBox>
+              <TitleText style={{ fontSize: '20px' }}>
+                asfg1234@gmail.com
+              </TitleText>
+              <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
+            </UserInfoTextBox>
+            {/* scripts list */}
+            <ListContainer>
+              <ItemsContainer>{ScriptListfunc(dummyData)}</ItemsContainer>
+              <div style={{ flex: 1 }} />
+              <Pagenation
+                page={page}
+                setPage={setPage}
+                totalScript={totalScript}
+                pageRange={pageRange}
+                animate={pagenationAnimate}
+              />
+            </ListContainer>
+          </LayoutWrapper>
+        </BackgroundCover>
+      </BackgroundImage>
+    </Background>
+  );
 };
-
-const MyPage = () => (
-  <Background>
-    <BackgroundImage>
-      <BackgroundCover>
-        <LayoutWrapper>
-          <UserInfoTextBox>
-            <TitleText style={{ fontSize: '20px' }}>
-              asfg1234@gmail.com
-            </TitleText>
-            <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
-          </UserInfoTextBox>
-          {/* scripts list */}
-          <ListContainer>
-            <ItemsContainer>{ScriptListfunc(data)}</ItemsContainer>
-            <div style={{ flex: 1 }} />
-            <Pagenation />
-          </ListContainer>
-        </LayoutWrapper>
-      </BackgroundCover>
-    </BackgroundImage>
-  </Background>
-);
 
 // text
 const TitleText = styled.span`
@@ -115,6 +123,11 @@ const ItemsContainer = styled.div`
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(3, 1fr);
   gap: 60px 70px;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const UserInfoTextBox = styled.div`
