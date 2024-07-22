@@ -11,16 +11,18 @@ import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.s
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
+import ChatbotBox from '../component/ChatbotBox';
 
 interface TextProps {
   color: string;
   size: string;
   weight: string;
 }
+
 const ConvertPage = () => {
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
-  const [scrollTop, setScrollTop] = useState(0); // NevelBox, CharacterBox 동시 스크롤
+  const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
 
   // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
@@ -100,10 +102,13 @@ const ConvertPage = () => {
             </ConvertStepWrapper>
           </AnimationProvider>
         </ConvertStepProvider>
+        <ChatbotBox />
       </BackgroundCover>
     </Background>
   );
 };
+
+export default ConvertPage;
 
 // background
 const Background = styled.div`
@@ -127,6 +132,7 @@ const BackgroundCover = styled.p`
   ${css`
     height: calc(100vh - 80px);
   `}
+  overflow: hidden;
 `;
 
 // container
@@ -214,5 +220,3 @@ const SaveButton = styled.button`
   background: linear-gradient(90deg, #959b88, #58613e);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
-
-export default ConvertPage;
