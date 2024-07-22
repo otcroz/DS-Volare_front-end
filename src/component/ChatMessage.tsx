@@ -1,5 +1,5 @@
 import { Message } from '../types';
-import Typing from 'react-typing-animation';
+import { TypeAnimation } from 'react-type-animation';
 import {
   ChatbotIcon,
   ChatbotMessage,
@@ -36,13 +36,18 @@ const ChatMessage = ({
           <ChatbotIcon></ChatbotIcon>
           <ChatbotMessage>
             {isTyping && id && currentTypingId === id ? (
-              <Typing
-                startDelay={30}
+              <TypeAnimation
+                sequence={[
+                  text,
+                  () => {
+                    id && onEndTyping(id);
+                  },
+                ]}
+                wrapper="span"
                 speed={50}
-                onFinishedTyping={() => id && onEndTyping(id)}
-              >
-                <p>{text}</p>
-              </Typing>
+                repeat={1}
+                cursor={false}
+              />
             ) : (
               <p>{text}</p>
             )}
