@@ -71,6 +71,7 @@ const PagenationWrapper = styled.div`
 
 const PagenationContainer = styled.div`
   width: 5rem; // hover 효과로 item의 크기가 커져도 페이지네이션이 움직이지 않도록 값 지정
+  height: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
