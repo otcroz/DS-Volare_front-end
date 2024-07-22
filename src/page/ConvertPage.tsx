@@ -123,7 +123,7 @@ const BackgroundCover = styled.p`
   flex: 1;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
-  padding: 0 5vw;
+  padding: 0 6.5vw;
   ${css`
     height: calc(100vh - 80px);
   `}
