@@ -1,4 +1,4 @@
-import { Message } from '../types';
+import { Message } from '../../../types';
 import { TypeAnimation } from 'react-type-animation';
 import {
   ChatbotIcon,
@@ -7,7 +7,7 @@ import {
   MessageContainer,
   UserMessage,
   UserMessageDateTime,
-} from '../styles/chatbotStyles';
+} from '../../../styles/chatbotStyles';
 
 interface ChatMessageProps extends Message {
   onEndTyping: (id: number) => void;

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import exampleOne from '../assets/background/example-1.png';
-import exampleTwo from '../assets/background/example-2.png';
-import LoginModal from './LoginModal';
+import exampleOne from '../../assets/background/example-1.png';
+import exampleTwo from '../../assets/background/example-2.png';
+import LoginModal from '../base/LoginModal';
 import {
   ContentText,
   SubTitleText,
   ExplainGridBox,
-} from '../styles/mainStyles';
+} from '../../styles/mainStyles';
 import { useNavigate } from 'react-router-dom';
 
 const MainPageThirdBox = () => {

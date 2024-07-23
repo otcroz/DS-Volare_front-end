@@ -1,6 +1,6 @@
 import React from 'react';
-import { MessageListContainer } from '../styles/chatbotStyles';
-import { Message } from '../types';
+import { MessageListContainer } from '../../../styles/chatbotStyles';
+import { Message } from '../../../types';
 import ChatMessage from './ChatMessage';
 
 interface MessageListProps {

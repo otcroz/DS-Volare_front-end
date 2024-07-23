@@ -11,10 +11,10 @@ import {
   TutorialText,
   HighlightedText,
   ConvertButton,
-} from '../styles/convertBoxStyles';
-import { useAnimationContext } from '../context/animationContext';
+} from '../../../styles/convertBoxStyles';
+import { useAnimationContext } from '../../../context/animationContext';
 import { motion } from 'framer-motion';
-import { useConvertStep } from '../context/convertStepContext';
+import { useConvertStep } from '../../../context/convertStepContext';
 
 // dummy data (입력 데이터 예시)
 const inputSentences = [

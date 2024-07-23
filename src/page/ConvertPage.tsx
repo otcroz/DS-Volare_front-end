@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import ConvertIndicator from '../component/ConvertIndicator';
-import NovelBox from '../component/NovelBox';
-import CharacterBox from '../component/CharacterBox';
-import ScriptBox from '../component/ScriptBox';
-import StoryboardBox from '../component/StoryboardBox';
-import StatisticsBox from '../component/StatisticsBox';
+import ConvertIndicator from '../component/convert/ConvertIndicator';
+import NovelBox from '../component/convert/novel/NovelBox';
+import CharacterBox from '../component/convert/character/CharacterBox';
+import ScriptBox from '../component/convert/script/ScriptBox';
+import StoryboardBox from '../component/convert/storyboard/StoryboardBox';
+import StatisticsBox from '../component/convert/statistics/StatisticsBox';
 import bgImg from '../assets/background/bg-5.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
-import ChatbotBox from '../component/ChatbotBox';
+import ChatbotBox from '../component/convert/chat/ChatbotBox';
 
 interface TextProps {
   color: string;

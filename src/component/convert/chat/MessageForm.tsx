@@ -3,7 +3,7 @@ import {
   MessageFormContainer,
   ChatInputArea,
   SubmitButton,
-} from '../styles/chatbotStyles';
+} from '../../../styles/chatbotStyles';
 
 interface MessageFormProps {
   onSendMessage: (message: string) => void;

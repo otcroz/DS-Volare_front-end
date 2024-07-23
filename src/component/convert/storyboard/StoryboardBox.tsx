@@ -1,6 +1,6 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
+import { ReactComponent as FileDownloadIcon } from '../../../assets/icons/file_download_icon.svg';
 import {
   GlassBox,
   TitleText,
@@ -12,12 +12,12 @@ import {
   ConvertButton,
   FileButton,
   ScrollText,
-} from '../styles/convertBoxStyles';
+} from '../../../styles/convertBoxStyles';
 import StoryboardInfo from './StoryboardInfo';
 import CutList from './CutList';
 import { motion } from 'framer-motion';
-import { useAnimationContext } from '../context/animationContext';
-import { useConvertStep } from '../context/convertStepContext';
+import { useAnimationContext } from '../../../context/animationContext';
+import { useConvertStep } from '../../../context/convertStepContext';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체

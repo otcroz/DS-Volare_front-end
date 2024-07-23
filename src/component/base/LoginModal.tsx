@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import theme from '../styles/theme';
+import theme from '../../styles/theme';
 
 interface ModalProps {
   isOpen: boolean;
