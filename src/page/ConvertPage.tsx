@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import ConvertIndicator from '../component/convert/ConvertIndicator';
 import NovelBox from '../component/convert/novel/NovelBox';
-import CharacterBox from '../component/convert/novel/CharacterBox';
+import CharacterBox from '../component/convert/character/CharacterBox';
 import ScriptBox from '../component/convert/script/ScriptBox';
 import StoryboardBox from '../component/convert/storyboard/StoryboardBox';
 import StatisticsBox from '../component/convert/statistics/StatisticsBox';

@@ -7,7 +7,7 @@ interface Props {
 }
 
 const calculateWidth = (str: string): number => {
-  return new TextEncoder().encode(str).length*0.58;
+  return new TextEncoder().encode(str).length * 0.58;
 };
 
 const CharacterChipList = ({ characterList }: Props) => {
@@ -39,20 +39,19 @@ const CharacterChipList = ({ characterList }: Props) => {
     }, 0);
   };
 
-  const handleInputChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target) {
       const value = e.target.value;
-      setInputValue(value)
+      setInputValue(value);
       const width = calculateWidth(value);
-      e.target.style.width = `${width+6}ch`;
+      e.target.style.width = `${width + 6}ch`;
     }
-  }
+  };
 
-  const handleOnblur = ()=> {
+  const handleOnblur = () => {
     if (inputValue) {
       addChip();
-    }
-    else {
+    } else {
       setInputVisible(false);
       setAddVisible(true);
     }
@@ -61,7 +60,11 @@ const CharacterChipList = ({ characterList }: Props) => {
   return (
     <ChipContainer>
       {chips.map((chip, index) => (
-        <CharacterChip key={index} label={chip} onDelete={() => removeChip(index)} />
+        <CharacterChip
+          key={index}
+          label={chip}
+          onDelete={() => removeChip(index)}
+        />
       ))}
       {inputVisible && (
         <ChipInput
@@ -72,9 +75,7 @@ const CharacterChipList = ({ characterList }: Props) => {
           onBlur={handleOnblur}
         />
       )}
-      {addVisible && (
-        <AddButton onClick={handleAddButtonClick}>+</AddButton>
-      )}
+      {addVisible && <AddButton onClick={handleAddButtonClick}>+</AddButton>}
     </ChipContainer>
   );
 };
@@ -109,7 +110,7 @@ const AddButton = styled.button`
   width: 3rem;
   height: 3rem;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  color: ${({ theme })=> theme.colors.darkBrown};
+  color: ${({ theme }) => theme.colors.darkBrown};
   font-size: 1.5rem;
   font-weight: bold;
   padding: 0;
