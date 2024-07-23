@@ -9,6 +9,7 @@ import MainPageFirstBox from '../component/MainPageFirstBox';
 import MainPageSecondBox from '../component/MainPageSecondBox';
 import MainPageThirdBox from '../component/MainPageThirdBox';
 import { motion, useAnimation } from 'framer-motion';
+import axios from 'axios';
 
 type pageProps = {
   page: number;
@@ -69,6 +70,25 @@ const MainPage = () => {
         return <MainPageThirdBox />;
     }
   };
+
+  // api test
+  const testFlaskAPI = async () => {
+    const result = await axios.get('/flask/');
+    const data = result.data;
+    console.log('flask data: ', data);
+    return data;
+  };
+
+  const testSpringAPI = async () => {
+    const result = await axios.get('/spring/');
+    const data = result.data;
+    console.log('spring data: ', data);
+    return data;
+  };
+  useEffect(() => {
+    testFlaskAPI();
+    testSpringAPI();
+  }, []);
 
   return (
     <>
