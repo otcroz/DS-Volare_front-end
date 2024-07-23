@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import {
   ConvertStepProvider,
   useConvertStep,
-} from '../context/convertStepContext';
+} from '../../context/convertStepContext';
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부

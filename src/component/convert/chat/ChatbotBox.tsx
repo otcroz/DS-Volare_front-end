@@ -5,10 +5,10 @@ import {
   ChatBox,
   ChatContainer,
   Title,
-} from '../styles/chatbotStyles';
+} from '../../../styles/chatbotStyles';
 import MessageForm from './MessageForm';
 import MessageList from './MessageList';
-import { Message } from '../types';
+import { Message } from '../../../types';
 
 type Props = {
   chatId?: string; // 추후 변경

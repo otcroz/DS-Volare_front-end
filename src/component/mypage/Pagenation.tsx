@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { ReactComponent as PagePrev } from '../assets/icons/page_prev_icon.svg';
-import { ReactComponent as PageNext } from '../assets/icons/page_next_icon.svg';
+import { ReactComponent as PagePrev } from '../../assets/icons/page_prev_icon.svg';
+import { ReactComponent as PageNext } from '../../assets/icons/page_next_icon.svg';
 
 type pagenationProps = {
   page: number;

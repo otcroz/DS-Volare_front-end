@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { TitleText, SubTitleText, ContentText } from '../styles/mainStyles';
+import { TitleText, SubTitleText, ContentText } from '../../styles/mainStyles';
 
 const MainPageFirstBox = () => {
   const blank = '\u00A0\u00A0\u00A0';

@@ -1,13 +1,13 @@
-import FooterBar from '../component/Footerbar';
+import FooterBar from '../component/base/Footerbar';
 import styled, { css } from 'styled-components';
 import bgImgFirst from '../assets/background/bg-2.png';
 import bgImgSecond from '../assets/background/bg-3.png';
 import bgImgThird from '../assets/background/bg-4.png';
 import { useState, WheelEvent, useEffect } from 'react';
-import MainIndicator from '../component/MainIndicator';
-import MainPageFirstBox from '../component/MainPageFirstBox';
-import MainPageSecondBox from '../component/MainPageSecondBox';
-import MainPageThirdBox from '../component/MainPageThirdBox';
+import MainIndicator from '../component/mainpage/MainIndicator';
+import MainPageFirstBox from '../component/mainpage/MainPageFirstBox';
+import MainPageSecondBox from '../component/mainpage/MainPageSecondBox';
+import MainPageThirdBox from '../component/mainpage/MainPageThirdBox';
 import { motion, useAnimation } from 'framer-motion';
 import axios from 'axios';
 

@@ -1,8 +1,12 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
-import { TitleText, ContentBox, GlassBox } from '../styles/convertBoxStyles';
+import {
+  TitleText,
+  ContentBox,
+  GlassBox,
+} from '../../../styles/convertBoxStyles';
 import { motion } from 'framer-motion';
-import { useAnimationContext } from '../context/animationContext';
+import { useAnimationContext } from '../../../context/animationContext';
 
 type props = {
   data: string;

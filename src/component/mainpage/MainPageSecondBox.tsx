@@ -5,8 +5,8 @@ import {
   SubTitleText,
   ContentText,
   ExplainGridBox,
-} from '../styles/mainStyles';
-import { ReactComponent as ArrowRightIcon } from '../assets/icons/arrow_right_icon.svg';
+} from '../../styles/mainStyles';
+import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right_icon.svg';
 
 const MainPageSecondBox = () => {
   const [select, setSelect] = useState<number>(0);

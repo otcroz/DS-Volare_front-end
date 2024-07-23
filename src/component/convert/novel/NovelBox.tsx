@@ -6,15 +6,15 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as FileUploadIcon } from '../assets/icons/file_upload_icon.svg';
+import { ReactComponent as FileUploadIcon } from '../../../assets/icons/file_upload_icon.svg';
 import {
   GlassBox,
   TitleText,
   ContentBox,
   FileButton,
   ScrollTextArea,
-} from '../styles/convertBoxStyles';
-import { useConvertStep } from '../context/convertStepContext';
+} from '../../../styles/convertBoxStyles';
+import { useConvertStep } from '../../../context/convertStepContext';
 
 type props = {
   data: string;

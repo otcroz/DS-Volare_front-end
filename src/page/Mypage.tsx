@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import bgImg from '../assets/background/bg-1.png';
-import Pagenation from '../component/Pagenation';
-import ScriptListCard from '../component/ScriptListCard';
-import { dummyData } from '../component/mypageDummyData'; // dummy data
+import Pagenation from '../component/mypage/Pagenation';
+import ScriptListCard from '../component/mypage/ScriptListCard';
+import { dummyData } from '../component/mypage/mypageDummyData'; // dummy data
 import { useAnimation } from 'framer-motion';
 
 interface ScriptListProps {

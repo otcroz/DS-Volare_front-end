@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
+import { ReactComponent as FileDownloadIcon } from '../../../assets/icons/file_download_icon.svg';
 import {
   GlassBox,
   TitleText,
@@ -12,9 +12,9 @@ import {
   HighlightedText,
   ConvertButton,
   FileButton,
-} from '../styles/convertBoxStyles';
-import { useAnimationContext } from '../context/animationContext';
-import { useConvertStep } from '../context/convertStepContext';
+} from '../../../styles/convertBoxStyles';
+import { useAnimationContext } from '../../../context/animationContext';
+import { useConvertStep } from '../../../context/convertStepContext';
 
 type props = {
   data: string;
