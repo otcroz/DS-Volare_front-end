@@ -40,4 +40,13 @@ export const GlobalStyle = createGlobalStyle`
           outline: none;
       }
   }
+  textarea {
+      font-family: 'BookkMyungjo';
+      resize: none;
+      border: none;
+      background: transparent;
+      &:focus {
+          outline: none;
+      }
+  }
 `;

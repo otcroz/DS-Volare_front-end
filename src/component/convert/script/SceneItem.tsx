@@ -13,44 +13,34 @@ interface SceneItemProps {
   ) => void;
 }
 
-const calculateWidth = (str?: string): number => {
-  return new TextEncoder().encode(str!).length * 0.625;
-};
-
 const SceneItem: React.FC<SceneItemProps> = ({
   scene,
   sceneIndex,
   onContentChange,
 }) => {
-  const actionDialogRef = useRef<(HTMLInputElement | null)[]>([]);
+  const actionDialogRef = useRef<(HTMLTextAreaElement | null)[]>([]);
 
-  // 초기 설정
+  // 초기 height 설정
   useEffect(() => {
-    let value = '';
-    scene.content.forEach((content, index) => {
-      if (actionDialogRef.current[index]) {
-        if (content.type === '지문') {
-          value = content.content!;
-        } else {
-          // content.type == '대사'
-          value = content.action
-            ? `(${content.action}) ${content.dialog}`
-            : content.dialog || '';
-        }
-
-        const width = calculateWidth(value);
-        actionDialogRef.current[index]!.style.width = `${width}ch`;
+    scene.content.forEach((content, contentIndex) => {
+      if (actionDialogRef.current[contentIndex]) {
+        actionDialogRef.current[contentIndex]!.style.height = `${
+          actionDialogRef.current[contentIndex]!.scrollHeight
+        }px`;
       }
     });
   }, [scene]);
 
-  const handleInputAllChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+  const handleTextAreaChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
     contentIndex: number
   ) => {
     const value = e.target.value;
-    const width = calculateWidth(value);
-    actionDialogRef.current[contentIndex]!.style.width = `${width}ch`;
+
+    actionDialogRef.current[contentIndex]!.style.height = 'auto';
+    actionDialogRef.current[contentIndex]!.style.height = `${
+      actionDialogRef.current[contentIndex]!.scrollHeight
+    }px`;
 
     let action = '';
     let dialog = '';
@@ -75,11 +65,6 @@ const SceneItem: React.FC<SceneItemProps> = ({
   ) => {
     const value = e.target.value;
     onContentChange(sceneIndex, contentIndex, field, value);
-
-    // if (e.target) {
-    //   const width = calculateWidth(value);
-    //   e.target.style.width = `${width}ch`;
-    // }
   };
 
   return (
@@ -106,10 +91,9 @@ const SceneItem: React.FC<SceneItemProps> = ({
                 }
                 field="character"
               />
-              <ActionDialogInput
-                type="text"
+              <ActionDialogTextArea
                 ref={(el) => (actionDialogRef.current[contentIndex] = el)}
-                onChange={(e) => handleInputAllChange(e, contentIndex)}
+                onChange={(e) => handleTextAreaChange(e, contentIndex)}
                 value={
                   content.action
                     ? `${content.action} ${content.dialog}`
@@ -140,24 +124,31 @@ const SceneHeader = styled.div`
 
 const ContentItem = styled.div<{ type: string }>`
   margin-bottom: 10px;
-  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  height: auto;
 `;
 
 const DirectionInput = styled.input<{ field: string }>`
-  width: 100%;
-  margin-bottom: 5px;
+  width: 90%;
+  margin-left: auto;
   font-size: 1em;
+  font-style: italic;
 `;
 
 const CharacterInput = styled.input<{ field: string }>`
   width: 5em;
   font-weight: bold;
-  margin-bottom: 5px;
   font-size: 1em;
+  align-self: flex-start;
 `;
 
-const ActionDialogInput = styled.input`
+const ActionDialogTextArea = styled.textarea`
   max-width: 25rem;
-  margin-bottom: 5px;
+  min-height: 1rem;
+  overflow-y: hidden;
   font-size: 1em;
+  box-sizing: border-box;
+  flex: 1;
+  line-height: 1.5rem;
 `;
