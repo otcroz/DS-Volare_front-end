@@ -1,11 +1,28 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const TitleText = styled.div`
-  font-weight: bold;
-  color: white;
-  font-size: 2rem;
-  padding: 1rem;
-`;
+type buttonProps = { isWrite: boolean };
+
+export const GlassBox = styled.div<{ hasData: boolean }>`
+  min-width: 41rem;
+  height: 45rem;
+  background: rgba(255, 252, 245, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;  
+  padding: 1.5rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  // 데이터가 없는 경우 튜토리얼
+  ${({ hasData }) =>
+    !hasData &&
+    css`
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    `}
+`
 
 export const ContentBox = styled.div`
   background-color: white;
@@ -13,6 +30,13 @@ export const ContentBox = styled.div`
   height: 90%;
   border-radius: 20px;
   padding: 1.25rem;
+`;
+
+export const TitleText = styled.div`
+  font-weight: bold;
+  color: white;
+  font-size: 2rem;
+  padding: 1rem;
 `;
 
 export const ScrollText = styled.div`
@@ -25,7 +49,7 @@ export const ScrollText = styled.div`
   white-space: pre-wrap;
   overflow-y: scroll;
   overflow-wrap: break-word;
-`
+`;
 
 export const ScrollTextArea = styled.textarea`
   width: 100%;
@@ -39,11 +63,11 @@ export const ScrollTextArea = styled.textarea`
   overflow-y: scroll;
   overflow-wrap: break-word;
 
-  resize: none;  
+  resize: none;
   &:focus {
     outline: none;
   }
-`
+`;
 
 export const TutorialBox = styled.div`
   width: 80%;
@@ -73,8 +97,10 @@ export const HighlightedText = styled.span`
   font-weight: bold;
 `;
 
-export const ConvertButton = styled.button`
-  background: linear-gradient(90deg, ${({ theme }) => theme.colors.orange}, #84411d);
+export const ConvertButton = styled.button.attrs((props) => ({
+  disabled: !props.disabled ? true : undefined,
+}))<buttonProps>`
+  background: linear-gradient(90deg, #d9d9d9, #b5b5b5);
   color: #ffffff;
   border: none;
   border-radius: 3rem;
@@ -82,6 +108,16 @@ export const ConvertButton = styled.button`
   cursor: pointer;
   font-size: 1.25rem;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+
+  ${({ isWrite }) =>
+    isWrite &&
+    css`
+      background: linear-gradient(
+        90deg,
+        ${({ theme }) => theme.colors.orange},
+        #84411d
+      );
+    `}
 `;
 
 export const FileButton = styled.div`
@@ -99,4 +135,4 @@ export const FileButton = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;
