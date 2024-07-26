@@ -2,54 +2,6 @@ import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { Scene } from '../../../types';
 
-const SceneContainer = styled.div`
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.beige};
-  border-radius: 5px;
-`;
-
-const SceneHeader = styled.div`
-  font-weight: bold;
-  margin-bottom: 10px;
-`;
-
-const ContentItem = styled.div<{ type: string }>`
-  margin-bottom: 10px;
-  border: 1px solid ${({ theme }) => theme.colors.beige};
-  border-radius: 5px;
-`;
-
-const ActionDialogInput = styled.input`
-  background: transparent;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const Input = styled.input<{ field: string }>`
-  width: ${({ field }) => {
-    switch (field) {
-      case 'character':
-        return '4em';
-      case 'direction':
-        return '100%';
-      default:
-        return 'auto';
-    }
-  }};
-  font-weight: ${({ field }) => (field === 'character' ? 'bold' : 'normal')};
-  min-width: 5ch; /* 최소 너비 설정 */
-  max-width: 100%; /* 최대 너비 설정 */
-  padding: 5px;
-  margin-bottom: 5px;
-  border: none;
-  background: transparent;
-  &:focus {
-    outline: none;
-  }
-`;
-
 interface SceneItemProps {
   scene: Scene;
   sceneIndex: number;
@@ -70,13 +22,13 @@ const SceneItem: React.FC<SceneItemProps> = ({
   sceneIndex,
   onContentChange,
 }) => {
-  const refActionDialog = useRef<(HTMLInputElement | null)[]>([]);
+  const actionDialogRef = useRef<(HTMLInputElement | null)[]>([]);
 
   // 초기 설정
   useEffect(() => {
     let value = '';
     scene.content.forEach((content, index) => {
-      if (refActionDialog.current[index]) {
+      if (actionDialogRef.current[index]) {
         if (content.type === '지문') {
           value = content.content!;
         } else {
@@ -87,7 +39,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
         }
 
         const width = calculateWidth(value);
-        refActionDialog.current[index]!.style.width = `${width}ch`;
+        actionDialogRef.current[index]!.style.width = `${width}ch`;
       }
     });
   }, [scene]);
@@ -98,7 +50,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
   ) => {
     const value = e.target.value;
     const width = calculateWidth(value);
-    refActionDialog.current[contentIndex]!.style.width = `${width}ch`;
+    actionDialogRef.current[contentIndex]!.style.width = `${width}ch`;
 
     let action = '';
     let dialog = '';
@@ -124,10 +76,10 @@ const SceneItem: React.FC<SceneItemProps> = ({
     const value = e.target.value;
     onContentChange(sceneIndex, contentIndex, field, value);
 
-    if (e.target) {
-      const width = calculateWidth(value);
-      e.target.style.width = `${width}ch`;
-    }
+    // if (e.target) {
+    //   const width = calculateWidth(value);
+    //   e.target.style.width = `${width}ch`;
+    // }
   };
 
   return (
@@ -138,7 +90,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
       {scene.content.map((content, contentIndex) => (
         <ContentItem key={contentIndex} type={content.type}>
           {content.type === '지문' ? (
-            <Input
+            <DirectionInput
               type="text"
               value={content.content || ''}
               onChange={(e) => handleInputChange(e, contentIndex, 'content')}
@@ -146,7 +98,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
             />
           ) : (
             <>
-              <Input
+              <CharacterInput
                 type="text"
                 value={content.character || ''}
                 onChange={(e) =>
@@ -156,7 +108,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
               />
               <ActionDialogInput
                 type="text"
-                ref={(el) => (refActionDialog.current[contentIndex] = el)}
+                ref={(el) => (actionDialogRef.current[contentIndex] = el)}
                 onChange={(e) => handleInputAllChange(e, contentIndex)}
                 value={
                   content.action
@@ -164,10 +116,6 @@ const SceneItem: React.FC<SceneItemProps> = ({
                     : content.dialog
                 }
               />
-              {/* 확인용 */}
-              dialog: {content.dialog}
-              <br />
-              action: {content.action}
             </>
           )}
         </ContentItem>
@@ -177,3 +125,39 @@ const SceneItem: React.FC<SceneItemProps> = ({
 };
 
 export default SceneItem;
+
+const SceneContainer = styled.div`
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.colors.beige};
+  border-radius: 5px;
+`;
+
+const SceneHeader = styled.div`
+  font-weight: bold;
+  margin-bottom: 10px;
+`;
+
+const ContentItem = styled.div<{ type: string }>`
+  margin-bottom: 10px;
+  border-radius: 5px;
+`;
+
+const DirectionInput = styled.input<{ field: string }>`
+  width: 100%;
+  margin-bottom: 5px;
+  font-size: 1em;
+`;
+
+const CharacterInput = styled.input<{ field: string }>`
+  width: 5em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 1em;
+`;
+
+const ActionDialogInput = styled.input`
+  max-width: 25rem;
+  margin-bottom: 5px;
+  font-size: 1em;
+`;
