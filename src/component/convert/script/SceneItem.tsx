@@ -19,6 +19,13 @@ const ContentItem = styled.div<{ type: string }>`
   border-radius: 5px;
 `;
 
+const ActionDialogInput = styled.input`
+  background: transparent;
+  &:focus {
+    outline: none;
+  }
+`;
+
 const Input = styled.input<{ field: string }>`
   width: ${({ field }) => {
     switch (field) {
@@ -68,8 +75,8 @@ interface SceneItemProps {
   ) => void;
 }
 
-const calculateWidth = (str: string): number => {
-  return new TextEncoder().encode(str).length * 0.625;
+const calculateWidth = (str?: string): number => {
+  return new TextEncoder().encode(str!).length * 0.625;
 };
 
 const SceneItem: React.FC<SceneItemProps> = ({
@@ -77,25 +84,44 @@ const SceneItem: React.FC<SceneItemProps> = ({
   sceneIndex,
   onContentChange,
 }) => {
-  // 함수 실행 속도 때문에 Ref를 유형별로 나누어 사용
+  const refActionDialog = useRef<(HTMLInputElement | null)[]>([]);
 
-  const actionRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const dialogRefs = useRef<(HTMLInputElement | null)[]>([]);
-
+  // 초기 설정
   useEffect(() => {
     scene.content.forEach((content, index) => {
-      if (actionRefs.current[index]) {
-        const value = content.action || '';
+      if (refActionDialog.current[index]) {
+        const value = content.action
+          ? `(${content.action}) ${content.dialog}`
+          : content.dialog;
         const width = calculateWidth(value);
-        actionRefs.current[index]!.style.width = `${width}ch`;
-      }
-      if (dialogRefs.current[index]) {
-        const value = content.dialog || '';
-        const width = calculateWidth(value);
-        dialogRefs.current[index]!.style.width = `${width}ch`;
+        refActionDialog.current[index]!.style.width = `${width}ch`;
       }
     });
   }, [scene]);
+
+  const handleInputAllChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    contentIndex: number
+  ) => {
+    const value = e.target.value;
+    const width = calculateWidth(value);
+    refActionDialog.current[contentIndex]!.style.width = `${width}ch`;
+
+    let action = '';
+    let dialog = '';
+    const regex = /\(([^)]+)\)(.*)/;
+    const match = value.match(regex);
+
+    if (match) {
+      action = `(${match[1]})`;
+      dialog = match[2].replace(/^\s+/, '');
+    } else {
+      action = '';
+      dialog = value;
+    }
+    onContentChange(sceneIndex, contentIndex, 'action', action);
+    onContentChange(sceneIndex, contentIndex, 'dialog', dialog);
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -135,24 +161,20 @@ const SceneItem: React.FC<SceneItemProps> = ({
                 }
                 field="character"
               />
-              {content.action && (
-                <Input
-                  type="text"
-                  value={content.action || ''}
-                  onChange={(e) => handleInputChange(e, contentIndex, 'action')}
-                  field="action"
-                  ref={(el) => (actionRefs.current[contentIndex] = el)}
-                />
-              )}
-              {content.dialog && (
-                <Input
-                  type="text"
-                  value={content.dialog || ''}
-                  onChange={(e) => handleInputChange(e, contentIndex, 'dialog')}
-                  field="dialog"
-                  ref={(el) => (dialogRefs.current[contentIndex] = el)}
-                />
-              )}
+              <ActionDialogInput
+                type="text"
+                ref={(el) => (refActionDialog.current[contentIndex] = el)}
+                onChange={(e) => handleInputAllChange(e, contentIndex)}
+                value={
+                  content.action
+                    ? `${content.action} ${content.dialog}`
+                    : content.dialog
+                }
+              />
+              {/* 확인용 */}
+              dialog: {content.dialog}
+              <br />
+              action: {content.action}
             </>
           )}
         </ContentItem>
