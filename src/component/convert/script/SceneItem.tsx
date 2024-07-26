@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { Scene } from '../../../types';
 
 const SceneContainer = styled.div`
   margin-bottom: 20px;
@@ -49,21 +50,6 @@ const Input = styled.input<{ field: string }>`
   }
 `;
 
-interface Content {
-  type: '지문' | '대사';
-  content?: string;
-  character?: string;
-  action?: string;
-  dialog?: string;
-}
-
-interface Scene {
-  scene_num: number;
-  location: string;
-  time: string;
-  content: Content[];
-}
-
 interface SceneItemProps {
   scene: Scene;
   sceneIndex: number;
@@ -88,11 +74,18 @@ const SceneItem: React.FC<SceneItemProps> = ({
 
   // 초기 설정
   useEffect(() => {
+    let value = '';
     scene.content.forEach((content, index) => {
       if (refActionDialog.current[index]) {
-        const value = content.action
-          ? `(${content.action}) ${content.dialog}`
-          : content.dialog;
+        if (content.type === '지문') {
+          value = content.content!;
+        } else {
+          // content.type == '대사'
+          value = content.action
+            ? `(${content.action}) ${content.dialog}`
+            : content.dialog || '';
+        }
+
         const width = calculateWidth(value);
         refActionDialog.current[index]!.style.width = `${width}ch`;
       }

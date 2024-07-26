@@ -1,17 +1,4 @@
-interface Script {
-  scene: Scene[];
-}
-
-interface Scene {
-  scene_num: number;
-  location: string;
-  time: string;
-  content: Content[];
-}
-
-type Content =
-  | { type: '지문'; content: string }
-  | { type: '대사'; character: string; action: string; dialog: string };
+import { Script } from "../../../types";
 
 export const script1: Script = {
   scene: [
