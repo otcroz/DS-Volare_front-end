@@ -1,6 +1,7 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
+import { useAuth } from '../../hooks/useAuth';
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,6 +9,8 @@ interface ModalProps {
 }
 
 const LoginModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
+  const { login } = useAuth();
+
   return (
     <Modal
       isOpen={isOpen}
@@ -26,11 +29,13 @@ const LoginModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
         <div style={{ height: '80px' }} />
         <ButtonBox>
           <Button
+            onClick={() => login('naver')}
             style={{ backgroundColor: 'rgba(45,180,0,0.7)', color: 'white' }}
           >
             네이버로 로그인
           </Button>
           <Button
+            onClick={() => login('google')}
             style={{
               backgroundColor: theme.colors.beige,
               color: theme.colors.darkBrown,
@@ -69,7 +74,7 @@ const ButtonBox = styled.div`
 `;
 
 // conponent
-const Button = styled.div`
+const Button = styled.button`
   text-align: center;
   width: 270px;
   padding: 0.8rem 0;
