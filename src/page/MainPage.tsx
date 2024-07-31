@@ -10,6 +10,7 @@ import MainPageSecondBox from '../component/mainpage/MainPageSecondBox';
 import MainPageThirdBox from '../component/mainpage/MainPageThirdBox';
 import { motion, useAnimation } from 'framer-motion';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 type pageProps = {
   page: number;
@@ -71,23 +72,16 @@ const MainPage = () => {
     }
   };
 
-  // api test
-  const testFlaskAPI = async () => {
-    const result = await axios.get('/flask/');
-    const data = result.data;
-    console.log('flask data: ', data);
-    return data;
-  };
-
-  const testSpringAPI = async () => {
-    const result = await axios.get('/spring/');
-    const data = result.data;
-    console.log('spring data: ', data);
-    return data;
-  };
   useEffect(() => {
-    testFlaskAPI();
-    testSpringAPI();
+    const accessToken = Cookies.get('accessToken') ?? ''; // null or undefined 일때 '' 반환
+    const refreshToken = Cookies.get('refreshToken') ?? '';
+
+    if (accessToken !== '' || refreshToken !== '') {
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+    }
+    //console.log('accessToken: ', accessToken);
+    //console.log('refreshToken: ', refreshToken);
   }, []);
 
   return (

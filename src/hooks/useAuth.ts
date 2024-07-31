@@ -6,19 +6,9 @@ export const useAuth = () => {
 
   const login = async (endpoint: string) => {
     try {
-      const result = await axios.get(`/spring/oauth/authorize/${endpoint}`);
-      const data = result.data;
-
-      console.log(data);
-      if (data.accessToken != null && data.refreshToken != null) {
-        updateUser({
-          id: data.id,
-          accessToken: data.accessToken,
-          refreshToken: data.refreshToken,
-        });
-      }
+      window.location.href = `http://localhost:8080/oauth/authorize/naver`;
     } catch (err) {
-      console.log(err); // temporary
+      console.log(err); // temporary error handling
     }
   };
 
