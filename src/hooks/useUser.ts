@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { queryKeys } from '../styles/queryKeys';
+import { queryKeys } from '../utils/queryKeys';
 
 type User = {
   id: string;
