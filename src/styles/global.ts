@@ -32,4 +32,21 @@ export const GlobalStyle = createGlobalStyle`
       cursor: pointer;
       font-family: 'BookkMyungjo';
   }
+  input {
+      font-family: 'BookkMyungjo';
+      border: none;
+      background: transparent;
+      &:focus {
+          outline: none;
+      }
+  }
+  textarea {
+      font-family: 'BookkMyungjo';
+      resize: none;
+      border: none;
+      background: transparent;
+      &:focus {
+          outline: none;
+      }
+  }
 `;

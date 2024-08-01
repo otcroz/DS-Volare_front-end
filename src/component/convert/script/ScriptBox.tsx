@@ -5,7 +5,7 @@ import {
   GlassBox,
   TitleText,
   ContentBox,
-  ScrollTextArea,
+  ScrollText,
   TutorialBox,
   TutorialTitle,
   TutorialText,
@@ -15,6 +15,7 @@ import {
 } from '../../../styles/convertBoxStyles';
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
+import SceneList from './SceneList';
 
 type props = {
   data: string;
@@ -56,7 +57,9 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
               &nbsp;다운로드
             </FileButton>
             <ContentBox>
-              <ScrollTextArea placeholder="텍스트" />
+              <ScrollText>
+                <SceneList />
+              </ScrollText>
             </ContentBox>
           </GlassBox>
         ) : (
