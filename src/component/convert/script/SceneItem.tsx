@@ -13,11 +13,7 @@ interface SceneItemProps {
   ) => void;
 }
 
-const SceneItem: React.FC<SceneItemProps> = ({
-  scene,
-  sceneIndex,
-  onContentChange,
-}) => {
+const SceneItem = ({ scene, sceneIndex, onContentChange }: SceneItemProps) => {
   const actionDialogRef = useRef<(HTMLTextAreaElement | null)[]>([]);
 
   // 초기 height 설정
@@ -73,7 +69,7 @@ const SceneItem: React.FC<SceneItemProps> = ({
         #{scene.scene_num}. {scene.location} ({scene.time})
       </SceneHeader>
       {scene.content.map((content, contentIndex) => (
-        <ContentItem key={contentIndex} type={content.type}>
+        <ContentItem key={contentIndex}>
           {content.type === '지문' ? (
             <DirectionInput
               type="text"
@@ -122,7 +118,7 @@ const SceneHeader = styled.div`
   margin-bottom: 10px;
 `;
 
-const ContentItem = styled.div<{ type: string }>`
+const ContentItem = styled.div`
   margin-bottom: 10px;
   display: flex;
   flex-direction: row;

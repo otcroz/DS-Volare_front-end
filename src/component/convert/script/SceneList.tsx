@@ -7,7 +7,7 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const SceneList: React.FC = () => {
+const SceneList = () => {
   const [script, setScript] = useState(script2); // 초기값을 원하는 스크립트로 설정
 
   const handleContentChange = (
