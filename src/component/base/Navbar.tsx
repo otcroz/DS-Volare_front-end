@@ -7,7 +7,7 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   // temp useState
-  const [isLogin, setIsLogin] = useState<Boolean>(true);
+  const [isLogin, setIsLogin] = useState<Boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const navigateConvertScript = () => {
