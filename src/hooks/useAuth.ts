@@ -6,7 +6,7 @@ export const useAuth = () => {
 
   const login = async (endpoint: string) => {
     try {
-      window.location.href = `http://localhost:8080/oauth/authorize/naver`;
+      window.location.href = `/spring/oauth/authorize/${endpoint}`;
     } catch (err) {
       console.log(err); // temporary error handling
     }
