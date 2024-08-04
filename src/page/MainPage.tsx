@@ -9,8 +9,7 @@ import MainPageFirstBox from '../component/mainpage/MainPageFirstBox';
 import MainPageSecondBox from '../component/mainpage/MainPageSecondBox';
 import MainPageThirdBox from '../component/mainpage/MainPageThirdBox';
 import { motion, useAnimation } from 'framer-motion';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import { useUser } from '../hooks/useUser';
 
 type pageProps = {
   page: number;
@@ -21,6 +20,8 @@ const MainPage = () => {
 
   const controls = useAnimation(); // 화면 전환 애니메이션 컨트롤
   const indicatorControls = useAnimation(); // 인디케이터 애니메이션 컨트롤
+
+  const { updateUser } = useUser();
 
   // scroll transition && animation
   const handleScroll = (event: React.WheelEvent) => {
@@ -73,15 +74,7 @@ const MainPage = () => {
   };
 
   useEffect(() => {
-    const accessToken = Cookies.get('accessToken') ?? ''; // null or undefined 일때 '' 반환
-    const refreshToken = Cookies.get('refreshToken') ?? '';
-
-    if (accessToken !== '' || refreshToken !== '') {
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-    }
-    //console.log('accessToken: ', accessToken);
-    //console.log('refreshToken: ', refreshToken);
+    updateUser(); // 유저 정보 업데이트
   }, []);
 
   return (
