@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
+import { useUser } from '../../hooks/useUser';
 
 const NavBar = () => {
   const navigate = useNavigate();
 
   // temp useState
-  const [isLogin, setIsLogin] = useState<Boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const { isLoginedUser } = useUser();
 
   const navigateConvertScript = () => {
     navigate('/convert');
@@ -28,7 +30,7 @@ const NavBar = () => {
       <Logo />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
-      {!isLogin ? (
+      {!isLoginedUser() ? (
         <>
           <Text>회원가입</Text>
           <Text onClick={openModalFunc}>로그인</Text>
