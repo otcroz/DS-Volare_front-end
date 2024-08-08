@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
+import { ReactComponent as NavLogo } from '../../assets/icons/nav_logo_icon.svg';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const NavBar = () => {
   return (
     <Container>
       <LoginModal isOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
-      <Logo />
+      <NavLogo width={50} />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
       {!isLogin ? (
@@ -57,14 +58,6 @@ const Container = styled.div`
   padding: 0 50px;
   gap: 30px;
   background-color: ${({ theme }) => theme.colors.olive};
-`;
-
-// component
-const Logo = styled.image`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  background-color: white;
 `;
 
 export default NavBar;
