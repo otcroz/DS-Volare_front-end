@@ -27,16 +27,16 @@ export const useUser = () => {
     // 로그아웃하면서 삭제할 쿼리에 대해 추가, removeQueries
   };
 
-  const isLoginedUser = () => {
-    const accessToken = Cookies.get('accessToken') ?? '';
+  const getTokenUser = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+    const isCheckUser = localStorage.getItem('isCheckUser');
 
-    if (accessToken !== '') return true;
-    else return false;
+    return { accessToken, refreshToken, isCheckUser };
   };
-
   return {
     updateUser,
     clearUser,
-    isLoginedUser,
+    getTokenUser,
   };
 };
