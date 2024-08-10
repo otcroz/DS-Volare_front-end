@@ -32,9 +32,9 @@ const NavBar = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
+    const complete = await logout();
     // 로그아웃 성공 여부 처리
-    setIsLogin(false);
+    if (complete) setIsLogin(false);
     // 추후에 모달 or 토스트 띄울 예정
   };
 
