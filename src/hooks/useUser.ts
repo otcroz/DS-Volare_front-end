@@ -24,6 +24,10 @@ export const useUser = () => {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('isCheckUser');
 
+    // 쿠키 삭제
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+
     // 로그아웃하면서 삭제할 쿼리에 대해 추가, removeQueries
   };
 
