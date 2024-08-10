@@ -38,9 +38,15 @@ export const useUser = () => {
 
     return { accessToken, refreshToken, isCheckUser };
   };
+
+  const reissueToken = (accessToken: string, refreshToken: string) => {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+  };
   return {
     updateUser,
     clearUser,
     getTokenUser,
+    reissueToken,
   };
 };
