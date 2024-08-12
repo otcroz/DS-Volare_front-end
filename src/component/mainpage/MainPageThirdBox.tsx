@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import exampleOne from '../../assets/background/example-1.png';
 import exampleTwo from '../../assets/background/example-2.png';
@@ -9,12 +9,19 @@ import {
   ExplainGridBox,
 } from '../../styles/mainStyles';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../hooks/useUser';
 
 const MainPageThirdBox = () => {
   const navigate = useNavigate();
+  const { getTokenUser } = useUser();
   // temp useState
   const [isLogin, setIsLogin] = useState<Boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  useEffect(() => {
+    const { isCheckUser } = getTokenUser();
+    if (Boolean(isCheckUser)) setIsLogin(true);
+  }, []);
 
   const moveToPage = () => {
     if (isLogin) navigate('/convert');
