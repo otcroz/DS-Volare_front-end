@@ -130,7 +130,7 @@ const Background = styled.div`
   `}
 `;
 
-const BackgroundImage = styled.p<pageProps>`
+const BackgroundImage = styled.div<pageProps>`
   display: flex;
   flex: 1;
   background-size: cover;
@@ -152,7 +152,7 @@ const BackgroundImage = styled.p<pageProps>`
   }}
 `;
 
-const BackgroundCover = styled.p<pageProps>`
+const BackgroundCover = styled.div<pageProps>`
   display: flex;
   flex: 1;
   backdrop-filter: blur(3px);

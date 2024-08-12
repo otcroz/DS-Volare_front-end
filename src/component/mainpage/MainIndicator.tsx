@@ -78,6 +78,12 @@ const IndicatorShape = styled.div<boxProps>`
       height: 2.5rem;
       background-color: ${({ theme }) => theme.colors.orange};
     `}
+
+  transition: width 0.5s ease, height 0.5s ease;
+  &:hover {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
 `;
 
 export default MainIndicator;

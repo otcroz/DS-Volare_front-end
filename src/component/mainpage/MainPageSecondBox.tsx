@@ -7,6 +7,9 @@ import {
   ExplainGridBox,
 } from '../../styles/mainStyles';
 import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right_icon.svg';
+import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '../../utils/queryKeys';
+import axios from 'axios';
 
 const MainPageSecondBox = () => {
   const [select, setSelect] = useState<number>(0);
@@ -17,16 +20,26 @@ const MainPageSecondBox = () => {
     '샘플내용3',
     '샘플내용4',
   ];
-  const resultNovel: string[] = [
-    '결과내용1',
-    '결과내용2',
-    '결과내용3',
-    '결과내용4',
-  ]; //임시
 
   useEffect(() => {
     setIsClick(false); // 결과 text 초기화
   }, [select]);
+
+  // fetch data
+  const fetchDemo = async (select: number) => {
+    const result = await axios.get(
+      `/spring/scripts/sample/SAMPLE${select + 1}`
+    );
+    const data = result.data;
+
+    return data;
+  };
+
+  const demoQuery = useQuery({
+    queryKey: [queryKeys.demo, select],
+    queryFn: () => fetchDemo(select),
+    enabled: !!isClick, // isClick이 true일 때만 실행
+  });
 
   // 설명 박스의 내용
   const explainContents = () => {
@@ -38,7 +51,7 @@ const MainPageSecondBox = () => {
           1. 4개의 소설 샘플 중 하나의 샘플을 선택합니다. <br />
         </ContentText>
         <ContentText page="second">
-          2.
+          2.&nbsp;
           <ContentText page="second" style={{ color: '#EA7333' }}>
             대본 변환 버튼
           </ContentText>
@@ -53,21 +66,27 @@ const MainPageSecondBox = () => {
 
   return (
     <LayoutWrapper>
-      <SampleContainer>
-        <SampleNovelSelector select={select} setSelect={setSelect} />
-        <TextBox>{sampleNovel[select]}</TextBox>
-        <ConvertButton onClick={() => setIsClick(true)}>
-          대본 변환
-        </ConvertButton>
-      </SampleContainer>
-      <ArrowRightIcon />
-      <SampleContainer>
-        <div style={{ height: '30px' }} />
-        <TextBox>{isClick && resultNovel[select]}</TextBox>
-        <div style={{ height: '2.5rem' }} />
-      </SampleContainer>
-      {/* explain */}
-      <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
+      <>
+        <SampleContainer>
+          <SampleNovelSelector select={select} setSelect={setSelect} />
+          <TextBox>{sampleNovel[select]}</TextBox>
+          <ConvertButton onClick={() => setIsClick(true)}>
+            대본 변환
+          </ConvertButton>
+        </SampleContainer>
+        <ArrowRightIcon />
+        <SampleContainer>
+          <div style={{ height: '30px' }} />
+          <TextBox>
+            {isClick &&
+              !demoQuery.isLoading &&
+              demoQuery.data.result.sampleScript}{' '}
+          </TextBox>
+          <div style={{ height: '2.5rem' }} />
+        </SampleContainer>
+        {/* explain */}
+        <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
+      </>
     </LayoutWrapper>
   );
 };
@@ -92,6 +111,12 @@ const TextBox = styled.div`
   background-color: white;
   border-radius: 1.5rem;
   padding: 1rem;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+
+  line-height: 1.5;
 `;
 
 // component

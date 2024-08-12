@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
+import { ReactComponent as NavLogo } from '../../assets/icons/nav_logo_icon.svg';
 import { useUser } from '../../hooks/useUser';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -45,6 +46,7 @@ const NavBar = () => {
   return (
     <Container>
       <LoginModal isOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+      <NavLogo width={50} />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
       {!isLogin ? (

@@ -104,7 +104,7 @@ const ExampleBox = styled.div`
 `;
 
 // component
-const ExampleImage = styled.image`
+const ExampleImage = styled.img`
   width: 30vw;
   height: 45vh;
   border-radius: 0.5rem;
