@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useUser } from './useUser';
 
 export const useAuth = () => {
-  const { updateUser, clearUser } = useUser();
+  const { updateUser, clearUser, getTokenUser, reissueToken } = useUser();
 
   const login = async (endpoint: string) => {
     try {
@@ -12,11 +12,63 @@ export const useAuth = () => {
     }
   };
 
-  const logout = () => {
-    clearUser();
+  const logout = async () => {
+    const { accessToken, refreshToken } = getTokenUser();
+    //console.log('accessToken: ', accessToken);
+    //console.log('refreshToken: ', refreshToken);
+
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+      'refresh-Token': refreshToken,
+    };
+
+    try {
+      const result = await axios.post(
+        `/spring/users/sign-out`,
+        {},
+        {
+          headers: headers,
+        }
+      );
+
+      const data = result.data;
+      console.log('data: ', data);
+      if (data.isSuccess) {
+        console.log(data.message);
+        clearUser();
+        return true;
+      } else {
+        console.log(data.message);
+        return false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
   };
 
-  const refreshFunc = () => {};
+  const refreshFunc = async () => {
+    const { accessToken, refreshToken } = getTokenUser();
+
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+      'refresh-Token': refreshToken,
+    };
+    const result = await axios.post(
+      `/spring/users/reissue-token`,
+      {},
+      {
+        headers: headers,
+      }
+    );
+    console.log(result);
+    const tokens = result.headers;
+
+    const resAccessToken = tokens.accessToken;
+    const resRefreshToken = tokens.refreshToken;
+
+    // restore token
+    reissueToken(resAccessToken, resRefreshToken);
+  };
   return {
     login,
     logout,
