@@ -13,10 +13,14 @@ const NavBar = () => {
   // temp useState
   const [isLogin, setIsLogin] = useState<Boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { updateUser } = useUser();
 
   useEffect(() => {
     const { isCheckUser } = getTokenUser();
     if (Boolean(isCheckUser)) setIsLogin(true);
+    else {
+      updateUser(); // 유저 정보 업데이트
+    }
   }, []);
 
   const navigateConvertScript = () => {
