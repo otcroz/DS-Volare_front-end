@@ -51,7 +51,7 @@ const MainPageSecondBox = () => {
           1. 4개의 소설 샘플 중 하나의 샘플을 선택합니다. <br />
         </ContentText>
         <ContentText page="second">
-          2.
+          2.&nbsp;
           <ContentText page="second" style={{ color: '#EA7333' }}>
             대본 변환 버튼
           </ContentText>
