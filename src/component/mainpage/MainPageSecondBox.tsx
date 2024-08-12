@@ -66,25 +66,27 @@ const MainPageSecondBox = () => {
 
   return (
     <LayoutWrapper>
-      {!demoQuery.isLoading && (
-        <>
-          <SampleContainer>
-            <SampleNovelSelector select={select} setSelect={setSelect} />
-            <TextBox>{sampleNovel[select]}</TextBox>
-            <ConvertButton onClick={() => setIsClick(true)}>
-              대본 변환
-            </ConvertButton>
-          </SampleContainer>
-          <ArrowRightIcon />
-          <SampleContainer>
-            <div style={{ height: '30px' }} />
-            <TextBox>{isClick && demoQuery.data.result.sampleScript} </TextBox>
-            <div style={{ height: '2.5rem' }} />
-          </SampleContainer>
-          {/* explain */}
-          <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
-        </>
-      )}
+      <>
+        <SampleContainer>
+          <SampleNovelSelector select={select} setSelect={setSelect} />
+          <TextBox>{sampleNovel[select]}</TextBox>
+          <ConvertButton onClick={() => setIsClick(true)}>
+            대본 변환
+          </ConvertButton>
+        </SampleContainer>
+        <ArrowRightIcon />
+        <SampleContainer>
+          <div style={{ height: '30px' }} />
+          <TextBox>
+            {isClick &&
+              !demoQuery.isLoading &&
+              demoQuery.data.result.sampleScript}{' '}
+          </TextBox>
+          <div style={{ height: '2.5rem' }} />
+        </SampleContainer>
+        {/* explain */}
+        <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
+      </>
     </LayoutWrapper>
   );
 };
