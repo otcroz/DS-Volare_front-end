@@ -12,6 +12,7 @@ import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
+import { useConvert } from '../hooks/useConvert';
 
 interface TextProps {
   color: string;
@@ -28,8 +29,19 @@ const ConvertPage = () => {
   // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
   const [temp, setTemp] = useState(['', '', '']);
 
+  const { saveNovel } = useConvert();
+
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
+  };
+
+  // 소설 저장 함수
+  const handleSaveNovel = async (title: string, novel: string) => {
+    const isSaved = await saveNovel('title', 'novel');
+    if (isSaved) {
+      // 추후에 모달 or 토스트 띄울 예정
+      console.log('저장되었습니다!');
+    }
   };
 
   // 인디케이터 이동
@@ -57,7 +69,7 @@ const ConvertPage = () => {
               />
               <div style={{ width: '2rem' }} />
               <SaveButtonBox>
-                <SaveButton>
+                <SaveButton onClick={() => handleSaveNovel('title', 'string')}>
                   <SaveFileIcon width={25} />
                   저장
                 </SaveButton>
