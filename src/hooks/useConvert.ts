@@ -21,13 +21,7 @@ export const useConvert = () => {
         headers: headers,
       });
       const data = result.data;
-      if (data.isSuccess) {
-        console.log(data.message);
-        return true;
-      } else {
-        console.log(data.message);
-        return false;
-      }
+      return data;
     } catch (err) {
       console.log(err); // temporary error handling
     }
