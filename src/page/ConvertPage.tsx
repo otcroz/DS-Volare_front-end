@@ -13,7 +13,13 @@ import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
 import { useConvert } from '../hooks/useConvert';
-import { useNovelTitleData, useNovelData } from '../context/convertDataContext';
+import {
+  useNovelTitleData,
+  useNovelData,
+  useNovelIdData,
+} from '../context/convertDataContext';
+import { useMutation } from '@tanstack/react-query';
+import { mutationKeys } from '../utils/queryKeys';
 
 interface TextProps {
   color: string;
@@ -33,18 +39,31 @@ const ConvertPage = () => {
   const [temp, setTemp] = useState(['', '', '']);
 
   const { saveNovel } = useConvert();
+  const { setNovelId } = useNovelIdData();
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
   };
 
+  // const NovelSaveMutate = useMutation({
+  //   mutationKey: mutationKeys.mutateSaveNovel,
+  //   mutationFn: () => saveNovel(title, text),
+  //   onSuccess: (result) => {
+  //     // 추후에 toast 추가
+  //     setNovelId(result.result.novelId); // 소설 id 저장
+  //   },
+  //   onError: () => {
+  //     console.log('update review failure.');
+  //   },
+  //   onSettled: () => {
+  //     console.log('call NovelSaveMutate API');
+  //   },
+  // });
+
   // 소설 저장 함수
   const handleSaveNovel = async () => {
-    const isSaved = await saveNovel(title, text);
-    if (isSaved) {
-      // 추후에 모달 or 토스트 띄울 예정
-      console.log('저장되었습니다!');
-    }
+    // // func: 소설 저장
+    // NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
