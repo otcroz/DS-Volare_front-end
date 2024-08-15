@@ -53,7 +53,7 @@ const ConvertPage = () => {
   //     setNovelId(result.result.novelId); // 소설 id 저장
   //   },
   //   onError: () => {
-  //     console.log('update review failure.');
+  //     console.log('update failure.');
   //   },
   //   onSettled: () => {
   //     console.log('call NovelSaveMutate API');

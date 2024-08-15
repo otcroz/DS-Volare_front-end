@@ -225,7 +225,7 @@ const CharacterBox = ({
     },
     onError: () => {
       // fail
-      console.log('update review failure.');
+      console.log('update failure.');
     },
     onSettled: () => {
       // 성공, 실패 상관없이 실행
@@ -241,7 +241,7 @@ const CharacterBox = ({
       setNovelId(result.result.novelId); // 소설 id 저장
     },
     onError: () => {
-      console.log('update review failure.');
+      console.log('update failure.');
     },
     onSettled: () => {
       console.log('call NovelSaveMutate API');

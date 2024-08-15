@@ -69,7 +69,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
         }, 1000);
       },
       onError: () => {
-        console.log('update review failure.');
+        console.log('update failure.');
       },
       onSettled: () => {
         console.log('call cognizeCharacter API');
