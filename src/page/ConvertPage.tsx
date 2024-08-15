@@ -145,7 +145,7 @@ const Background = styled.div`
   `}
 `;
 
-const BackgroundCover = styled.p`
+const BackgroundCover = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
