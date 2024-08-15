@@ -16,6 +16,11 @@ import {
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
 import SceneList from './SceneList';
+import { useConvert } from '../../../hooks/useConvert';
+import {
+  useCharaterData,
+  useNovelData,
+} from '../../../context/convertDataContext';
 
 type props = {
   data: string;
@@ -29,22 +34,39 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
   ({ data, temp, setTemp, onMoveScroll, setSelect }, ref) => {
     const { controlScripts, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
+
+    const { text } = useNovelData();
+    const { characterList } = useCharaterData();
+
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
+    const { convertScript } = useConvert();
 
-    const handleClick = () => {
-      temp[1] = 'data';
-      setTemp([...temp]);
-      step[2] = true;
-      setStep([...step]);
+    const handleClick = async () => {
+      //console.log(' script 요청 text: ', text);
+      //console.log(' script 요청 characterList: ', characterList);
+      const result = await convertScript(
+        characterList,
+        text,
+        '3d60ef52-dcd3-4aaf-a93a-922e78a69778'
+      );
+      console.log(result);
+      if (result) {
+        temp[1] = 'data';
+        setTemp([...temp]);
+        step[2] = true;
+        setStep([...step]);
 
-      // 인디케이터 select 값 변경
-      setSelect(2); // 스토리보드로 이동
+        // 인디케이터 select 값 변경
+        setSelect(2); // 스토리보드로 이동
 
-      // 애니메이션
-      onMoveScroll();
-      setTimeout(() => {
-        startAnimation(controlStoryboard);
-      }, 1000);
+        // 애니메이션
+        onMoveScroll();
+        setTimeout(() => {
+          startAnimation(controlStoryboard);
+        }, 1000);
+      } else {
+        console.log('fail to convert script!');
+      }
     };
 
     return (

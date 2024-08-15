@@ -15,6 +15,11 @@ import {
 import { useAnimationContext } from '../../../context/animationContext';
 import { motion } from 'framer-motion';
 import { useConvertStep } from '../../../context/convertStepContext';
+import { useConvert } from '../../../hooks/useConvert';
+import {
+  useCharaterData,
+  useNovelData,
+} from '../../../context/convertDataContext';
 
 // dummy data (입력 데이터 예시)
 const inputSentences = [
@@ -101,10 +106,14 @@ const CharacterBox = ({
   onMoveScroll,
   setSelect,
 }: Props) => {
-  const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
+  //const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
+  const { characterList, setCharacterList } = useCharaterData();
+  const { text } = useNovelData();
+
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { step, setStep } = useConvertStep(); // 변환 단계 관리
+  const { saveNovel, cognizeCharacter } = useConvert();
 
   // 각 어절을 div로 렌더링
   const renderWords = () => {
@@ -183,21 +192,29 @@ const CharacterBox = ({
     }
   };
 
-  const handleClick = () => {
-    // 인디케이터 활성 및 변환 플로우
-    step[1] = true;
-    setStep([...step]);
-    temp[0] = 'data';
-    setTemp([...temp]);
+  const handleClick = async () => {
+    // func: 등장인물 인식
+    const result = await cognizeCharacter(text);
+    //console.log(result);
+    if (result) {
+      // 등장인물 결과 저장
+      setCharacterList(result.center_character);
 
-    // 인디케이터 select 값 변경
-    setSelect(1); // 대본으로 이동
+      // 인디케이터 활성 및 변환 플로우
+      step[1] = true;
+      setStep([...step]);
+      temp[0] = 'data';
+      setTemp([...temp]);
 
-    // 애니메이션
-    onMoveScroll();
-    setTimeout(() => {
-      startAnimation(controlScripts);
-    }, 1000);
+      // 인디케이터 select 값 변경
+      setSelect(1); // 대본으로 이동
+
+      // 애니메이션
+      onMoveScroll();
+      setTimeout(() => {
+        startAnimation(controlScripts);
+      }, 1000);
+    }
   };
 
   return (
@@ -211,7 +228,7 @@ const CharacterBox = ({
             </ScrollText>
           </ContentBox>
           <TitleText>등장인물</TitleText>
-          <CharacterChipList characterList={characterList} />
+          <CharacterChipList />
         </GlassBox>
       ) : (
         <GlassBox hasData={false}>

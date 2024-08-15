@@ -13,6 +13,7 @@ import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
 import { useConvert } from '../hooks/useConvert';
+import { ConvertDataProvider } from '../context/convertDataContext';
 
 interface TextProps {
   color: string;
@@ -55,65 +56,69 @@ const ConvertPage = () => {
   return (
     <Background>
       <BackgroundCover>
-        <ConvertStepProvider>
-          <TopContainer>
-            <TitleInputBox>
-              <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
-            </TitleInputBox>
-            <IndicatorBox>
-              <ConvertIndicator
-                step={step}
-                select={select}
-                setSelect={setSelect}
-                stepTabs={stepTabs}
-              />
-              <div style={{ width: '2rem' }} />
-              <SaveButtonBox>
-                <SaveButton onClick={() => handleSaveNovel('title', 'string')}>
-                  <SaveFileIcon width={25} />
-                  저장
-                </SaveButton>
-              </SaveButtonBox>
-            </IndicatorBox>
-          </TopContainer>
-          {/* components */}
-          <AnimationProvider>
-            <ConvertStepWrapper>
-              <NovelBox
-                ref={stepTabs[0].element}
-                data=""
-                onScroll={handleScroll}
-                scrollTop={scrollTop}
-              />
-              <CharacterBox
-                data={temp[0]}
-                onScroll={handleScroll}
-                scrollTop={scrollTop}
-                temp={temp}
-                setTemp={setTemp}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[1].onMoveElement}
-              />
-              <ScriptBox
-                ref={stepTabs[1].element}
-                data={temp[1]}
-                temp={temp}
-                setTemp={setTemp}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[2].onMoveElement}
-              />
-              <StoryboardBox
-                ref={stepTabs[2].element}
-                data={temp[2]}
-                temp={temp}
-                setTemp={setTemp}
-                setSelect={setSelect}
-                onMoveScroll={stepTabs[3].onMoveElement}
-              />
-              <StatisticsBox ref={stepTabs[3].element} data="" />
-            </ConvertStepWrapper>
-          </AnimationProvider>
-        </ConvertStepProvider>
+        <ConvertDataProvider>
+          <ConvertStepProvider>
+            <TopContainer>
+              <TitleInputBox>
+                <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
+              </TitleInputBox>
+              <IndicatorBox>
+                <ConvertIndicator
+                  step={step}
+                  select={select}
+                  setSelect={setSelect}
+                  stepTabs={stepTabs}
+                />
+                <div style={{ width: '2rem' }} />
+                <SaveButtonBox>
+                  <SaveButton
+                    onClick={() => handleSaveNovel('title', 'string')}
+                  >
+                    <SaveFileIcon width={25} />
+                    저장
+                  </SaveButton>
+                </SaveButtonBox>
+              </IndicatorBox>
+            </TopContainer>
+            {/* components */}
+            <AnimationProvider>
+              <ConvertStepWrapper>
+                <NovelBox
+                  ref={stepTabs[0].element}
+                  data=""
+                  onScroll={handleScroll}
+                  scrollTop={scrollTop}
+                />
+                <CharacterBox
+                  data={temp[0]}
+                  onScroll={handleScroll}
+                  scrollTop={scrollTop}
+                  temp={temp}
+                  setTemp={setTemp}
+                  setSelect={setSelect}
+                  onMoveScroll={stepTabs[1].onMoveElement}
+                />
+                <ScriptBox
+                  ref={stepTabs[1].element}
+                  data={temp[1]}
+                  temp={temp}
+                  setTemp={setTemp}
+                  setSelect={setSelect}
+                  onMoveScroll={stepTabs[2].onMoveElement}
+                />
+                <StoryboardBox
+                  ref={stepTabs[2].element}
+                  data={temp[2]}
+                  temp={temp}
+                  setTemp={setTemp}
+                  setSelect={setSelect}
+                  onMoveScroll={stepTabs[3].onMoveElement}
+                />
+                <StatisticsBox ref={stepTabs[3].element} data="" />
+              </ConvertStepWrapper>
+            </AnimationProvider>
+          </ConvertStepProvider>
+        </ConvertDataProvider>
         <ChatbotBox />
       </BackgroundCover>
     </Background>
