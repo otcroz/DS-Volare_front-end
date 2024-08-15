@@ -20,6 +20,7 @@ import { useConvert } from '../../../hooks/useConvert';
 import {
   useCharaterData,
   useNovelData,
+  useScriptData,
 } from '../../../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../../../utils/queryKeys';
@@ -41,6 +42,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
 
     const { text } = useNovelData();
     const { characterList } = useCharaterData();
+    const { setScript } = useScriptData();
 
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
     const { convertScript } = useConvert();
@@ -55,8 +57,8 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
           '3d60ef52-dcd3-4aaf-a93a-922e78a69778'
         ),
       onSuccess: (result) => {
-        // *comment: script context 생성 후 저장해야 합니다.
-        console.log(result);
+        setScript(result.script);
+
         temp[1] = 'data';
         setTemp([...temp]);
         step[2] = true;
