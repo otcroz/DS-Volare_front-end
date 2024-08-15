@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useUser } from './useUser';
+import { useNovelIdData } from '../context/convertDataContext';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
+  const { novelId } = useNovelIdData();
 
   // api: save novel / spring
   const saveNovel = async (title: string, novel: string) => {
@@ -41,11 +43,7 @@ export const useConvert = () => {
   };
 
   // api: convert a script / spring
-  const convertScript = async (
-    candidates: string[],
-    text: string,
-    novelId: string
-  ) => {
+  const convertScript = async (candidates: string[], text: string) => {
     const { accessToken } = getTokenUser();
     const headers = {
       'X-AUTH-TOKEN': accessToken,

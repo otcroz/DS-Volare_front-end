@@ -50,12 +50,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
 
     const ScriptMutate = useMutation({
       mutationKey: mutationKeys.mutateScript,
-      mutationFn: () =>
-        convertScript(
-          characterList,
-          text,
-          '3d60ef52-dcd3-4aaf-a93a-922e78a69778'
-        ),
+      mutationFn: () => convertScript(characterList, text),
       onSuccess: (result) => {
         setScript(result.script);
 
