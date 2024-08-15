@@ -19,6 +19,7 @@ import { useConvert } from '../../../hooks/useConvert';
 import {
   useCharaterData,
   useNovelData,
+  useNovelIdData,
   useNovelTitleData,
 } from '../../../context/convertDataContext';
 import Spinner from '../../base/Spinner';
@@ -116,6 +117,7 @@ const CharacterBox = ({
   const { characterList, setCharacterList } = useCharaterData();
   const { text } = useNovelData();
   const { title } = useNovelTitleData();
+  const { setNovelId } = useNovelIdData();
 
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -231,6 +233,21 @@ const CharacterBox = ({
     },
   });
 
+  const NovelSaveMutate = useMutation({
+    mutationKey: mutationKeys.mutateSaveNovel,
+    mutationFn: () => saveNovel(title, text),
+    onSuccess: (result) => {
+      // 추후에 toast 추가
+      setNovelId(result.result.novelId); // 소설 id 저장
+    },
+    onError: () => {
+      console.log('update review failure.');
+    },
+    onSettled: () => {
+      console.log('call NovelSaveMutate API');
+    },
+  });
+
   const handleScroll = () => {
     if (scrollAreaRef.current) {
       onScroll(scrollAreaRef.current.scrollTop);
@@ -240,14 +257,7 @@ const CharacterBox = ({
   const handleClick = async () => {
     setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
     // func: 소설 저장
-    const isSave = await saveNovel(title, text);
-
-    // 추후에 toast 추가
-    if (isSave) {
-      console.log('save!');
-    } else {
-      console.log('not save!');
-    }
+    NovelSaveMutate.mutate();
 
     // func: 등장인물 인식
     CharacterMutate.mutate();

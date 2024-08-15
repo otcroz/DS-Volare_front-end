@@ -4,6 +4,7 @@ export const queryKeys = {
 };
 
 export const mutationKeys = {
+  mutateSaveNovel: ['mutate-save-novel'],
   mutateCharacterList: ['mutate-character-list'],
   mutateScript: ['mutate-script'],
 };

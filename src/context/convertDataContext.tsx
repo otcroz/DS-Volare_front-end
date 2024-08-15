@@ -2,6 +2,11 @@ import React, { createContext, useContext, useState } from 'react';
 import { Script } from '../types';
 
 // 타입 정의
+type NovelIdContextType = {
+  novelId: string;
+  setNovelId: React.Dispatch<React.SetStateAction<string>>;
+};
+
 type NovelTitleContextType = {
   title: string;
   setTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -27,6 +32,11 @@ type StoryboardContextType = {};
 type StatisticsContextType = {};
 
 // 전역: 컨택스트 정의
+const NovelIdContext = createContext<NovelIdContextType | undefined>({
+  novelId: '',
+  setNovelId: () => {},
+});
+
 const NovelTitleContext = createContext<NovelTitleContextType | undefined>({
   title: '',
   setTitle: () => {},
@@ -55,13 +65,16 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [characterList, setCharacterList] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('');
   const [script, setScript] = useState<Script>({ scene: [] });
+  const [novelId, setNovelId] = useState<string>('');
 
   return (
     <NovelTitleContext.Provider value={{ title, setTitle }}>
       <NovelContext.Provider value={{ text, setText }}>
         <CharacterContext.Provider value={{ characterList, setCharacterList }}>
           <ScriptContext.Provider value={{ script, setScript }}>
-            {children}
+            <NovelIdContext.Provider value={{ novelId, setNovelId }}>
+              {children}
+            </NovelIdContext.Provider>
           </ScriptContext.Provider>
         </CharacterContext.Provider>
       </NovelContext.Provider>
@@ -70,6 +83,14 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // 컨텍스트 값을 사용하는 커스텀 훅
+const useNovelIdData = () => {
+  const context = useContext(NovelIdContext);
+  if (context === undefined) {
+    throw new Error('useNovelIdData must be used within a ConvertDataProvider');
+  }
+  return context;
+};
+
 const useNovelTitleData = () => {
   const context = useContext(NovelTitleContext);
   if (context === undefined) {
@@ -112,4 +133,5 @@ export {
   useNovelData,
   useCharaterData,
   useScriptData,
+  useNovelIdData,
 };
