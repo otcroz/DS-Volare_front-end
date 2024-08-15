@@ -23,72 +23,74 @@ import {
 } from '../../../context/convertDataContext';
 import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
+import { useMutation } from '@tanstack/react-query';
+import { mutationKeys, queryKeys } from '../../../utils/queryKeys';
 
 // dummy data (입력 데이터 예시)
-const inputSentences = [
-  [
-    '왕자는',
-    '너무도',
-    '친숙한',
-    '라푼젤의',
-    '목소리가',
-    '들리자',
-    '앞으로',
-    '나아갔어요.',
-  ],
-  [
-    '왕자는',
-    '다가오자마자',
-    '라푼젤은',
-    '왕자를',
-    '알아보고',
-    '목을',
-    '감싸며',
-    '안겨서',
-    '울었어요.',
-  ],
-  ['그때', '라푼젤의', '눈물', '두', '방울이', '그의', '눈들을', '적셨어요.'],
-  [
-    '그러자',
-    '왕자의',
-    '시력이',
-    '점점',
-    '밝아지며',
-    '급기야',
-    '예전처럼',
-    '라푼젤을',
-    '볼',
-    '수',
-    '있게',
-    '되었어요.',
-  ],
-  ['왕자는', '라푼젤을', '데리고', '자신의', '왕국으로', '돌아갔어요.'],
-  ['왕국에서도', '왕자의', '일행을', '대환영해주었어요.'],
-  [
-    '이후',
-    '그들은',
-    '행복해하고',
-    '만족해하며',
-    '오래토록',
-    '잘',
-    '살았답니다.',
-  ],
-];
+// const inputSentences = [
+//   [
+//     '왕자는',
+//     '너무도',
+//     '친숙한',
+//     '라푼젤의',
+//     '목소리가',
+//     '들리자',
+//     '앞으로',
+//     '나아갔어요.',
+//   ],
+//   [
+//     '왕자는',
+//     '다가오자마자',
+//     '라푼젤은',
+//     '왕자를',
+//     '알아보고',
+//     '목을',
+//     '감싸며',
+//     '안겨서',
+//     '울었어요.',
+//   ],
+//   ['그때', '라푼젤의', '눈물', '두', '방울이', '그의', '눈들을', '적셨어요.'],
+//   [
+//     '그러자',
+//     '왕자의',
+//     '시력이',
+//     '점점',
+//     '밝아지며',
+//     '급기야',
+//     '예전처럼',
+//     '라푼젤을',
+//     '볼',
+//     '수',
+//     '있게',
+//     '되었어요.',
+//   ],
+//   ['왕자는', '라푼젤을', '데리고', '자신의', '왕국으로', '돌아갔어요.'],
+//   ['왕국에서도', '왕자의', '일행을', '대환영해주었어요.'],
+//   [
+//     '이후',
+//     '그들은',
+//     '행복해하고',
+//     '만족해하며',
+//     '오래토록',
+//     '잘',
+//     '살았답니다.',
+//   ],
+// ];
 // dummy data (하이라이트할 결과 데이터 예시)
-const resultData1 = [
-  { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
-  { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
-];
-const resultData = [
-  [
-    { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
-    { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
-  ],
-  [
-    { text: '라푼젤의', sent_id: 0, start_eid: 3, end_eid: 3 },
-    { text: '라푼젤을', sent_id: 4, start_eid: 1, end_eid: 1 },
-  ],
-];
+// const resultData1 = [
+//   { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
+//   { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
+// ];
+// const resultData = [
+//   [
+//     { text: '왕자는', sent_id: 0, start_eid: 0, end_eid: 0 },
+//     { text: '그를', sent_id: 1, start_eid: 3, end_eid: 3 },
+//   ],
+//   [
+//     { text: '라푼젤의', sent_id: 0, start_eid: 3, end_eid: 3 },
+//     { text: '라푼젤을', sent_id: 4, start_eid: 1, end_eid: 1 },
+//   ],
+// ];
 
 interface Props {
   onScroll: (scrollTop: number) => void;
@@ -96,6 +98,13 @@ interface Props {
   onMoveScroll: () => void;
   setSelect: (select: number) => void;
 }
+
+type highlitingType = {
+  text: string;
+  sent_id: number;
+  start_eid: number;
+  end_eid: number;
+};
 
 const CharacterBox = ({
   onScroll,
@@ -113,6 +122,9 @@ const CharacterBox = ({
   const { step, setStep } = useConvertStep(); // 변환 단계 관리
   const { saveNovel, cognizeCharacter } = useConvert();
   const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
+
+  const [inputSentences, setInputSentences] = useState<string[][]>([]);
+  const [resultData, setResultData] = useState<highlitingType[][]>([]);
 
   // 각 어절을 div로 렌더링
   const renderWords = () => {
@@ -185,6 +197,40 @@ const CharacterBox = ({
     }
   }, [scrollTop]);
 
+  // fetch, 추후에 낙관적 업데이트를 위한 onMutate 함수 추가
+  const CharacterMutate = useMutation({
+    mutationKey: mutationKeys.mutateCharacterList,
+    mutationFn: () => cognizeCharacter(text),
+    onSuccess: (result) => {
+      // 성공했을 때 실행
+      console.log('update review success.');
+      setCharacterList(result.center_character); // 등장인물 저장
+      setInputSentences(result.total_words); // 소설 원문 저장
+      setResultData(result.words_index); // 하이라이팅
+
+      // 인디케이터 활성 및 변환 플로우
+      step[1] = true;
+      setStep([...step]);
+
+      // 인디케이터 select 값 변경
+      setSelect(1); // 대본으로 이동
+
+      // 애니메이션
+      onMoveScroll();
+      setTimeout(() => {
+        startAnimation(controlScripts);
+      }, 1000);
+    },
+    onError: () => {
+      // fail
+      console.log('update review failure.');
+    },
+    onSettled: () => {
+      // 성공, 실패 상관없이 실행
+      console.log('call cognizeCharacter API');
+    },
+  });
+
   const handleScroll = () => {
     if (scrollAreaRef.current) {
       onScroll(scrollAreaRef.current.scrollTop);
@@ -204,25 +250,7 @@ const CharacterBox = ({
     }
 
     // func: 등장인물 인식
-    const result = await cognizeCharacter(text);
-    //console.log(result);
-    if (result) {
-      // 등장인물 결과 저장
-      setCharacterList(result.center_character);
-
-      // 인디케이터 활성 및 변환 플로우
-      step[1] = true;
-      setStep([...step]);
-
-      // 인디케이터 select 값 변경
-      setSelect(1); // 대본으로 이동
-
-      // 애니메이션
-      onMoveScroll();
-      setTimeout(() => {
-        startAnimation(controlScripts);
-      }, 1000);
-    }
+    CharacterMutate.mutate();
   };
 
   return (
@@ -230,16 +258,27 @@ const CharacterBox = ({
       {isClick ? (
         // temporary
         <GlassBox hasData={true}>
-          {characterList.length >= 1 ? (
+          {!CharacterMutate.isPending ? (
             <>
-              <TitleText>등장인물 인식 결과</TitleText>
-              <ContentBox style={{ height: '27rem' }}>
-                <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
-                  {renderWords()}
-                </ScrollText>
-              </ContentBox>
-              <TitleText>등장인물</TitleText>
-              <CharacterChipList />
+              {CharacterMutate.isSuccess && (
+                <>
+                  <TitleText>등장인물 인식 결과</TitleText>
+                  <ContentBox style={{ height: '27rem' }}>
+                    <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
+                      {renderWords()}
+                    </ScrollText>
+                  </ContentBox>
+                  <TitleText>등장인물</TitleText>
+                  <CharacterChipList />
+                </>
+              )}
+              {CharacterMutate.isError && (
+                <>
+                  <TitleText>
+                    등장인물 목록을 불러오는 것을 실패했습니다..
+                  </TitleText>
+                </>
+              )}
             </>
           ) : (
             <Spinner text={spinnerText.character} />
