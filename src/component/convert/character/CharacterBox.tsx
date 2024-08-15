@@ -19,6 +19,7 @@ import { useConvert } from '../../../hooks/useConvert';
 import {
   useCharaterData,
   useNovelData,
+  useNovelTitleData,
 } from '../../../context/convertDataContext';
 
 // dummy data (입력 데이터 예시)
@@ -109,6 +110,7 @@ const CharacterBox = ({
   //const [characterList, setCharacterList] = useState(['왕자', '라푼젤']);
   const { characterList, setCharacterList } = useCharaterData();
   const { text } = useNovelData();
+  const { title } = useNovelTitleData();
 
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -193,6 +195,16 @@ const CharacterBox = ({
   };
 
   const handleClick = async () => {
+    // func: 소설 저장
+    const isSave = await saveNovel(title, text);
+
+    // 추후에 toast 추가
+    if (isSave) {
+      console.log('save!');
+    } else {
+      console.log('not save!');
+    }
+
     // func: 등장인물 인식
     const result = await cognizeCharacter(text);
     //console.log(result);

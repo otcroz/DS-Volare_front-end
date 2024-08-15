@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import styled, { css } from 'styled-components';
 import ConvertIndicator from '../component/convert/ConvertIndicator';
 import NovelBox from '../component/convert/novel/NovelBox';
@@ -13,7 +13,7 @@ import { AnimationProvider } from '../context/animationContext';
 import { ConvertStepProvider } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
 import { useConvert } from '../hooks/useConvert';
-import { ConvertDataProvider } from '../context/convertDataContext';
+import { useNovelTitleData, useNovelData } from '../context/convertDataContext';
 
 interface TextProps {
   color: string;
@@ -22,6 +22,8 @@ interface TextProps {
 }
 
 const ConvertPage = () => {
+  const { title, setTitle } = useNovelTitleData();
+  const { text } = useNovelData();
   const [step, setStep] = useState([false, false, false, false]); // 진행도
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
   const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
@@ -37,8 +39,8 @@ const ConvertPage = () => {
   };
 
   // 소설 저장 함수
-  const handleSaveNovel = async (title: string, novel: string) => {
-    const isSaved = await saveNovel('title', 'novel');
+  const handleSaveNovel = async () => {
+    const isSaved = await saveNovel(title, text);
     if (isSaved) {
       // 추후에 모달 or 토스트 띄울 예정
       console.log('저장되었습니다!');
@@ -53,72 +55,76 @@ const ConvertPage = () => {
     useMoveScroll('통계'),
   ];
 
+  const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
   return (
     <Background>
       <BackgroundCover>
-        <ConvertDataProvider>
-          <ConvertStepProvider>
-            <TopContainer>
-              <TitleInputBox>
-                <TitleInput placeholder="제목을 입력해주세요.(n0자)" />
-              </TitleInputBox>
-              <IndicatorBox>
-                <ConvertIndicator
-                  step={step}
-                  select={select}
-                  setSelect={setSelect}
-                  stepTabs={stepTabs}
-                />
-                <div style={{ width: '2rem' }} />
-                <SaveButtonBox>
-                  <SaveButton
-                    onClick={() => handleSaveNovel('title', 'string')}
-                  >
-                    <SaveFileIcon width={25} />
-                    저장
-                  </SaveButton>
-                </SaveButtonBox>
-              </IndicatorBox>
-            </TopContainer>
-            {/* components */}
-            <AnimationProvider>
-              <ConvertStepWrapper>
-                <NovelBox
-                  ref={stepTabs[0].element}
-                  data=""
-                  onScroll={handleScroll}
-                  scrollTop={scrollTop}
-                />
-                <CharacterBox
-                  data={temp[0]}
-                  onScroll={handleScroll}
-                  scrollTop={scrollTop}
-                  temp={temp}
-                  setTemp={setTemp}
-                  setSelect={setSelect}
-                  onMoveScroll={stepTabs[1].onMoveElement}
-                />
-                <ScriptBox
-                  ref={stepTabs[1].element}
-                  data={temp[1]}
-                  temp={temp}
-                  setTemp={setTemp}
-                  setSelect={setSelect}
-                  onMoveScroll={stepTabs[2].onMoveElement}
-                />
-                <StoryboardBox
-                  ref={stepTabs[2].element}
-                  data={temp[2]}
-                  temp={temp}
-                  setTemp={setTemp}
-                  setSelect={setSelect}
-                  onMoveScroll={stepTabs[3].onMoveElement}
-                />
-                <StatisticsBox ref={stepTabs[3].element} data="" />
-              </ConvertStepWrapper>
-            </AnimationProvider>
-          </ConvertStepProvider>
-        </ConvertDataProvider>
+        <ConvertStepProvider>
+          <TopContainer>
+            <TitleInputBox>
+              <TitleInput
+                value={title}
+                onChange={handleTextChange}
+                placeholder="제목을 입력해주세요.(n0자)"
+              />
+            </TitleInputBox>
+            <IndicatorBox>
+              <ConvertIndicator
+                step={step}
+                select={select}
+                setSelect={setSelect}
+                stepTabs={stepTabs}
+              />
+              <div style={{ width: '2rem' }} />
+              <SaveButtonBox>
+                <SaveButton onClick={handleSaveNovel}>
+                  <SaveFileIcon width={25} />
+                  저장
+                </SaveButton>
+              </SaveButtonBox>
+            </IndicatorBox>
+          </TopContainer>
+          {/* components */}
+          <AnimationProvider>
+            <ConvertStepWrapper>
+              <NovelBox
+                ref={stepTabs[0].element}
+                data=""
+                onScroll={handleScroll}
+                scrollTop={scrollTop}
+              />
+              <CharacterBox
+                data={temp[0]}
+                onScroll={handleScroll}
+                scrollTop={scrollTop}
+                temp={temp}
+                setTemp={setTemp}
+                setSelect={setSelect}
+                onMoveScroll={stepTabs[1].onMoveElement}
+              />
+              <ScriptBox
+                ref={stepTabs[1].element}
+                data={temp[1]}
+                temp={temp}
+                setTemp={setTemp}
+                setSelect={setSelect}
+                onMoveScroll={stepTabs[2].onMoveElement}
+              />
+              <StoryboardBox
+                ref={stepTabs[2].element}
+                data={temp[2]}
+                temp={temp}
+                setTemp={setTemp}
+                setSelect={setSelect}
+                onMoveScroll={stepTabs[3].onMoveElement}
+              />
+              <StatisticsBox ref={stepTabs[3].element} data="" />
+            </ConvertStepWrapper>
+          </AnimationProvider>
+        </ConvertStepProvider>
         <ChatbotBox />
       </BackgroundCover>
     </Background>
