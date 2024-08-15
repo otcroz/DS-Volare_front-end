@@ -6,6 +6,7 @@ import MainPage from './page/MainPage';
 import MyPage from './page/Mypage';
 import ConvertPage from './page/ConvertPage';
 import NavBar from './component/base/Navbar';
+import { ConvertDataProvider } from './context/convertDataContext';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -20,15 +21,17 @@ const App = () => {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/main/" element={<MainPage />} />
-            <Route path="/mypage/" element={<MyPage />} />
-            <Route path="/convert/" element={<ConvertPage />} />
-          </Routes>
-        </Router>
-        <ReactQueryDevtools initialIsOpen={true} />
+        <ConvertDataProvider>
+          <Router>
+            <NavBar />
+            <Routes>
+              <Route path="/main/" element={<MainPage />} />
+              <Route path="/mypage/" element={<MyPage />} />
+              <Route path="/convert/" element={<ConvertPage />} />
+            </Routes>
+          </Router>
+          <ReactQueryDevtools initialIsOpen={true} />
+        </ConvertDataProvider>
       </QueryClientProvider>
     </>
   );
