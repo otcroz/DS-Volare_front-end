@@ -21,6 +21,8 @@ import {
   useNovelData,
   useNovelTitleData,
 } from '../../../context/convertDataContext';
+import Spinner from '../../base/Spinner';
+import { spinnerText } from '../../../utils/spinnerText';
 
 // dummy data (입력 데이터 예시)
 const inputSentences = [
@@ -89,21 +91,15 @@ const resultData = [
 ];
 
 interface Props {
-  data: string;
   onScroll: (scrollTop: number) => void;
   scrollTop: number;
-  temp: string[];
-  setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
   setSelect: (select: number) => void;
 }
 
 const CharacterBox = ({
-  data,
   onScroll,
   scrollTop,
-  temp,
-  setTemp,
   onMoveScroll,
   setSelect,
 }: Props) => {
@@ -116,6 +112,7 @@ const CharacterBox = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { step, setStep } = useConvertStep(); // 변환 단계 관리
   const { saveNovel, cognizeCharacter } = useConvert();
+  const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
 
   // 각 어절을 div로 렌더링
   const renderWords = () => {
@@ -195,6 +192,7 @@ const CharacterBox = ({
   };
 
   const handleClick = async () => {
+    setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
     // func: 소설 저장
     const isSave = await saveNovel(title, text);
 
@@ -215,8 +213,6 @@ const CharacterBox = ({
       // 인디케이터 활성 및 변환 플로우
       step[1] = true;
       setStep([...step]);
-      temp[0] = 'data';
-      setTemp([...temp]);
 
       // 인디케이터 select 값 변경
       setSelect(1); // 대본으로 이동
@@ -231,16 +227,23 @@ const CharacterBox = ({
 
   return (
     <motion.div>
-      {data ? (
+      {isClick ? (
+        // temporary
         <GlassBox hasData={true}>
-          <TitleText>등장인물 인식 결과</TitleText>
-          <ContentBox style={{ height: '27rem' }}>
-            <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
-              {renderWords()}
-            </ScrollText>
-          </ContentBox>
-          <TitleText>등장인물</TitleText>
-          <CharacterChipList />
+          {characterList.length >= 1 ? (
+            <>
+              <TitleText>등장인물 인식 결과</TitleText>
+              <ContentBox style={{ height: '27rem' }}>
+                <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
+                  {renderWords()}
+                </ScrollText>
+              </ContentBox>
+              <TitleText>등장인물</TitleText>
+              <CharacterChipList />
+            </>
+          ) : (
+            <Spinner text={spinnerText.character} />
+          )}
         </GlassBox>
       ) : (
         <GlassBox hasData={false}>

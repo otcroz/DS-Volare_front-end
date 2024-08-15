@@ -97,11 +97,8 @@ const ConvertPage = () => {
                 scrollTop={scrollTop}
               />
               <CharacterBox
-                data={temp[0]}
                 onScroll={handleScroll}
                 scrollTop={scrollTop}
-                temp={temp}
-                setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[1].onMoveElement}
               />
