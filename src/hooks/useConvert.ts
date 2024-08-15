@@ -1,10 +1,11 @@
 import axios from 'axios';
+import { useUser } from './useUser';
 
 export const useConvert = () => {
-  //const { getUserToken } = useUser();
+  const { getTokenUser } = useUser();
 
   const saveNovel = async (title: string, novel: string) => {
-    const accessToken = localStorage.getItem('accessToken'); // 임시
+    const { accessToken } = getTokenUser();
     const headers = {
       'X-AUTH-TOKEN': accessToken,
     };
