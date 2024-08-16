@@ -9,16 +9,24 @@ import MainPageFirstBox from '../component/mainpage/MainPageFirstBox';
 import MainPageSecondBox from '../component/mainpage/MainPageSecondBox';
 import MainPageThirdBox from '../component/mainpage/MainPageThirdBox';
 import { motion, useAnimation } from 'framer-motion';
+import {
+  useMainAnimationContext,
+  usePageContext,
+} from '../context/mainAnimationContext';
+import { useScreenTransitionAnimation } from '../hooks/useScreenTransitionAnimation';
 
 type pageProps = {
   page: number;
 };
 
 const MainPage = () => {
-  const [page, setPage] = useState(1); // 화면 전환 state
+  //const [page, setPage] = useState(1); // 화면 전환 state
+  const { page, setPage } = usePageContext();
 
   const controls = useAnimation(); // 화면 전환 애니메이션 컨트롤
   const indicatorControls = useAnimation(); // 인디케이터 애니메이션 컨트롤
+  const { controlScreen } = useMainAnimationContext(); // 애니메이션을 적용할 컨트롤러 context
+  const { transitionWheelAnimation } = useScreenTransitionAnimation();
 
   // scroll transition && animation
   const handleScroll = (event: React.WheelEvent) => {
@@ -72,21 +80,17 @@ const MainPage = () => {
 
   return (
     <>
-      <Background onWheel={handleScroll}>
+      <Background onWheel={transitionWheelAnimation}>
         <BackgroundImage page={page}>
           <BackgroundCover page={page}>
             <LayoutWrapper>
               {/* main content box */}
-              <IntroduceContainer animate={controls}>
+              <IntroduceContainer animate={controlScreen}>
                 {pageTransitionFunc()}
               </IntroduceContainer>
               {/* indicator */}
               <div style={{ flex: 1 }} />
-              <MainIndicator
-                page={page}
-                setPage={setPage}
-                controls={indicatorControls}
-              />
+              <MainIndicator />
             </LayoutWrapper>
           </BackgroundCover>
         </BackgroundImage>
