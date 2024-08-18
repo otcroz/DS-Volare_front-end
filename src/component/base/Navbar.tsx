@@ -5,6 +5,8 @@ import LoginModal from './LoginModal';
 import { ReactComponent as NavLogo } from '../../assets/icons/nav_logo_icon.svg';
 import { useUser } from '../../hooks/useUser';
 import LogoutModal from './LogoutModal';
+import { Toast } from '../../styles/ToastStyle';
+import { toastText } from '../../utils/toastText';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -18,8 +20,9 @@ const NavBar = () => {
 
   useEffect(() => {
     const { isCheckUser } = getTokenUser();
-    if (Boolean(isCheckUser)) setIsLogin(true);
-    else {
+    if (Boolean(isCheckUser)) {
+      setIsLogin(true);
+    } else {
       updateUser(); // 유저 정보 업데이트
     }
   }, []);
@@ -46,6 +49,7 @@ const NavBar = () => {
       <LogoutModal
         isOpen={logoutModalIsOpen}
         setModalIsOpen={setLogoutModalIsOpen}
+        setIsLogin={setIsLogin}
       />
       <NavLogo width={50} />
       <Text onClick={navigateConvertScript}>대본 변환</Text>

@@ -9,9 +9,10 @@ import { toastText } from '../../utils/toastText';
 interface ModalProps {
   isOpen: boolean;
   setModalIsOpen: (value: boolean) => void;
+  setIsLogin: (value: boolean) => void;
 }
 
-const LogoutModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
+const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
   const { logout } = useAuth();
 
   const handleLogout = async () => {
@@ -19,6 +20,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
     // 로그아웃 성공 여부 처리
     if (complete) {
       setModalIsOpen(false);
+      setIsLogin(false);
       Toast.success(toastText.logoutSuccess);
     } else {
       Toast.error(toastText.logoutError);
