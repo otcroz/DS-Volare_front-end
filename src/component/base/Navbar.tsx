@@ -4,16 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import LoginModal from './LoginModal';
 import { ReactComponent as NavLogo } from '../../assets/icons/nav_logo_icon.svg';
 import { useUser } from '../../hooks/useUser';
-import { useAuth } from '../../hooks/useAuth';
+import LogoutModal from './LogoutModal';
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { getTokenUser } = useUser();
-  const { logout } = useAuth();
 
   // temp useState
   const [isLogin, setIsLogin] = useState<Boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [logoutModalIsOpen, setLogoutModalIsOpen] = useState(false);
   const { updateUser } = useUser();
 
   useEffect(() => {
@@ -37,15 +37,16 @@ const NavBar = () => {
   };
 
   const handleLogout = async () => {
-    const complete = await logout();
-    // 로그아웃 성공 여부 처리
-    if (complete) setIsLogin(false);
-    // 추후에 모달 or 토스트 띄울 예정
+    setLogoutModalIsOpen(!logoutModalIsOpen);
   };
 
   return (
     <Container>
       <LoginModal isOpen={modalIsOpen} setModalIsOpen={setModalIsOpen} />
+      <LogoutModal
+        isOpen={logoutModalIsOpen}
+        setModalIsOpen={setLogoutModalIsOpen}
+      />
       <NavLogo width={50} />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
