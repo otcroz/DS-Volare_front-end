@@ -6,6 +6,8 @@ import MainPage from './page/MainPage';
 import MyPage from './page/Mypage';
 import ConvertPage from './page/ConvertPage';
 import NavBar from './component/base/Navbar';
+import { StyledToastConatiner } from './styles/ToastStyle';
+import 'react-toastify/dist/ReactToastify.css';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -30,6 +32,7 @@ const App = () => {
         </Router>
         <ReactQueryDevtools initialIsOpen={true} />
       </QueryClientProvider>
+      <StyledToastConatiner limit={1} />
     </>
   );
 };
