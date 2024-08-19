@@ -35,6 +35,10 @@ const NavBar = () => {
     navigate('/mypage');
   };
 
+  const navigateMainPage = () => {
+    navigate('/main');
+  };
+
   const openModalFunc = () => {
     setModalIsOpen(!modalIsOpen);
   };
@@ -51,7 +55,7 @@ const NavBar = () => {
         setModalIsOpen={setLogoutModalIsOpen}
         setIsLogin={setIsLogin}
       />
-      <NavLogo width={50} />
+      <NavLogo width={50} onClick={navigateMainPage} />
       <Text onClick={navigateConvertScript}>대본 변환</Text>
       <div style={{ flex: 1 }} />
       {!isLogin ? (

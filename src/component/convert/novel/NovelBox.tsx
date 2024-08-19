@@ -15,6 +15,7 @@ import {
   ScrollTextArea,
 } from '../../../styles/convertBoxStyles';
 import { useConvertStep } from '../../../context/convertStepContext';
+import { useNovelData } from '../../../context/convertDataContext';
 
 type props = {
   data: string;
@@ -24,7 +25,8 @@ type props = {
 
 const NovelBox = forwardRef<HTMLDivElement, props>(
   ({ data, onScroll, scrollTop }, ref) => {
-    const [text, setText] = useState<string>('');
+    //const [text, setText] = useState<string>('');
+    const { text, setText } = useNovelData();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { step, setStep } = useConvertStep(); // 변환 단계 관리

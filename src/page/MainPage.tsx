@@ -3,61 +3,25 @@ import styled, { css } from 'styled-components';
 import bgImgFirst from '../assets/background/bg-2.png';
 import bgImgSecond from '../assets/background/bg-3.png';
 import bgImgThird from '../assets/background/bg-4.png';
-import { useState, WheelEvent, useEffect } from 'react';
 import MainIndicator from '../component/mainpage/MainIndicator';
 import MainPageFirstBox from '../component/mainpage/MainPageFirstBox';
 import MainPageSecondBox from '../component/mainpage/MainPageSecondBox';
 import MainPageThirdBox from '../component/mainpage/MainPageThirdBox';
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
+import {
+  useMainAnimationContext,
+  usePageContext,
+} from '../context/mainAnimationContext';
+import { useScreenTransitionAnimation } from '../hooks/useScreenTransitionAnimation';
 
 type pageProps = {
   page: number;
 };
 
 const MainPage = () => {
-  const [page, setPage] = useState(1); // 화면 전환 state
-
-  const controls = useAnimation(); // 화면 전환 애니메이션 컨트롤
-  const indicatorControls = useAnimation(); // 인디케이터 애니메이션 컨트롤
-
-  // scroll transition && animation
-  const handleScroll = (event: React.WheelEvent) => {
-    // 인디케이터 애니메이션 동작
-    if ((event.deltaY > 0 && page < 3) || (event.deltaY < 0 && page > 1)) {
-      indicatorControls
-        .start({
-          y: 0,
-          transition: { type: 'spring', stiffness: 100 },
-        })
-        .then(() => {
-          // 애니메이션 재시작
-          indicatorControls.start({
-            y: 10,
-            transition: { type: 'spring', stiffness: 100 },
-          });
-        });
-
-      // 메인페이지 화면 전환
-      controls
-        .start({
-          opacity: 0,
-          transition: { duration: 0.5 },
-        })
-        .then(() => {
-          if (event.deltaY > 0 && page < 3) {
-            setPage((prevPage) => prevPage + 1);
-          } else if (event.deltaY < 0 && page > 1) {
-            setPage((prevPage) => prevPage - 1);
-          }
-
-          // 애니메이션 재시작
-          controls.start({
-            opacity: 1,
-            transition: { duration: 0.5 },
-          });
-        });
-    }
-  };
+  const { page } = usePageContext();
+  const { controlScreen } = useMainAnimationContext(); // 애니메이션을 적용할 컨트롤러 context
+  const { transitionWheelAnimation } = useScreenTransitionAnimation();
 
   const pageTransitionFunc = () => {
     switch (page) {
@@ -72,21 +36,17 @@ const MainPage = () => {
 
   return (
     <>
-      <Background onWheel={handleScroll}>
+      <Background onWheel={transitionWheelAnimation}>
         <BackgroundImage page={page}>
           <BackgroundCover page={page}>
             <LayoutWrapper>
               {/* main content box */}
-              <IntroduceContainer animate={controls}>
+              <IntroduceContainer animate={controlScreen}>
                 {pageTransitionFunc()}
               </IntroduceContainer>
               {/* indicator */}
               <div style={{ flex: 1 }} />
-              <MainIndicator
-                page={page}
-                setPage={setPage}
-                controls={indicatorControls}
-              />
+              <MainIndicator />
             </LayoutWrapper>
           </BackgroundCover>
         </BackgroundImage>

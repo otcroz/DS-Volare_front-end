@@ -16,6 +16,16 @@ import {
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
 import SceneList from './SceneList';
+import { useConvert } from '../../../hooks/useConvert';
+import {
+  useCharaterData,
+  useNovelData,
+  useScriptData,
+} from '../../../context/convertDataContext';
+import { useMutation } from '@tanstack/react-query';
+import { mutationKeys } from '../../../utils/queryKeys';
+import Spinner from '../../base/Spinner';
+import { spinnerText } from '../../../utils/spinnerText';
 
 type props = {
   data: string;
@@ -29,38 +39,75 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
   ({ data, temp, setTemp, onMoveScroll, setSelect }, ref) => {
     const { controlScripts, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
+
+    const { text } = useNovelData();
+    const { characterList } = useCharaterData();
+    const { setScript } = useScriptData();
+
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
+    const { convertScript } = useConvert();
+    const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
 
-    const handleClick = () => {
-      temp[1] = 'data';
-      setTemp([...temp]);
-      step[2] = true;
-      setStep([...step]);
+    const ScriptMutate = useMutation({
+      mutationKey: mutationKeys.mutateScript,
+      mutationFn: () => convertScript(characterList, text),
+      onSuccess: (result) => {
+        setScript(result.script);
 
-      // 인디케이터 select 값 변경
-      setSelect(2); // 스토리보드로 이동
+        temp[1] = 'data';
+        setTemp([...temp]);
+        step[2] = true;
+        setStep([...step]);
 
-      // 애니메이션
-      onMoveScroll();
-      setTimeout(() => {
-        startAnimation(controlStoryboard);
-      }, 1000);
+        // 인디케이터 select 값 변경
+        setSelect(2); // 스토리보드로 이동
+
+        // 애니메이션
+        onMoveScroll();
+        setTimeout(() => {
+          startAnimation(controlStoryboard);
+        }, 1000);
+      },
+      onError: () => {
+        console.log('update failure.');
+      },
+      onSettled: () => {
+        console.log('call cognizeCharacter API');
+      },
+    });
+
+    const handleClick = async () => {
+      setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
+      ScriptMutate.mutate();
     };
 
     return (
       <motion.div ref={ref} animate={controlScripts} style={{ opacity: 0 }}>
-        {data ? (
+        {isClick ? (
           <GlassBox hasData={true}>
-            <TitleText>대본화</TitleText>
-            <FileButton>
-              <FileDownloadIcon width="2rem" height="2rem" />
-              &nbsp;다운로드
-            </FileButton>
-            <ContentBox>
-              <ScrollText>
-                <SceneList />
-              </ScrollText>
-            </ContentBox>
+            {!ScriptMutate.isPending ? (
+              <>
+                {ScriptMutate.isSuccess && (
+                  <>
+                    <TitleText>대본화</TitleText>
+                    <FileButton>
+                      <FileDownloadIcon width="2rem" height="2rem" />
+                      &nbsp;다운로드
+                    </FileButton>
+                    <ContentBox>
+                      <ScrollText>
+                        <SceneList />
+                      </ScrollText>
+                    </ContentBox>
+                  </>
+                )}
+                {ScriptMutate.isError && (
+                  <TitleText>대본 변환을 실패했습니다..</TitleText>
+                )}
+              </>
+            ) : (
+              <Spinner text={spinnerText.scripts} />
+            )}
           </GlassBox>
         ) : (
           <GlassBox hasData={false}>

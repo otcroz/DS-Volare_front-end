@@ -1,16 +1,15 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import CharacterChip from './CharacterChip';
-
-interface Props {
-  characterList: string[];
-}
+import { useCharaterData } from '../../../context/convertDataContext';
 
 const calculateWidth = (str: string): number => {
   return new TextEncoder().encode(str).length * 0.58;
 };
 
-const CharacterChipList = ({ characterList }: Props) => {
+const CharacterChipList = () => {
+  // characterList, chips 역할이 중복됨.
+  const { characterList, setCharacterList } = useCharaterData();
   const [chips, setChips] = useState<string[]>(characterList);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -20,6 +19,7 @@ const CharacterChipList = ({ characterList }: Props) => {
   const addChip = () => {
     if (inputValue) {
       setChips([...chips, inputValue]);
+      setCharacterList([...chips, inputValue]); // add
       setInputValue('');
       setInputVisible(false);
       setAddVisible(true);
@@ -29,6 +29,7 @@ const CharacterChipList = ({ characterList }: Props) => {
   const removeChip = (index: number) => {
     const newChips = chips.filter((_, i) => i !== index);
     setChips(newChips);
+    setCharacterList(newChips); // add
   };
 
   const handleAddButtonClick = () => {

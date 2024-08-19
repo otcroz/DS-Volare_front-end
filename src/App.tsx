@@ -8,6 +8,8 @@ import ConvertPage from './page/ConvertPage';
 import NavBar from './component/base/Navbar';
 import { StyledToastConatiner } from './styles/ToastStyle';
 import 'react-toastify/dist/ReactToastify.css';
+import { ConvertDataProvider } from './context/convertDataContext';
+import { MainPageAnimateProvider } from './context/mainAnimationContext';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -21,18 +23,21 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/main/" element={<MainPage />} />
-            <Route path="/mypage/" element={<MyPage />} />
-            <Route path="/convert/" element={<ConvertPage />} />
-          </Routes>
-        </Router>
-        <ReactQueryDevtools initialIsOpen={true} />
-      </QueryClientProvider>
-      <StyledToastConatiner limit={1} />
+      <MainPageAnimateProvider>
+        <ConvertDataProvider>
+          <QueryClientProvider client={queryClient}>
+            <Router>
+              <NavBar />
+              <Routes>
+                <Route path="/main/" element={<MainPage />} />
+                <Route path="/mypage/" element={<MyPage />} />
+                <Route path="/convert/" element={<ConvertPage />} />
+              </Routes>
+            </Router>
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </ConvertDataProvider>
+      </MainPageAnimateProvider>
     </>
   );
 };
