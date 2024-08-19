@@ -6,6 +6,8 @@ import MainPage from './page/MainPage';
 import MyPage from './page/Mypage';
 import ConvertPage from './page/ConvertPage';
 import NavBar from './component/base/Navbar';
+import { StyledToastConatiner } from './styles/ToastStyle';
+import 'react-toastify/dist/ReactToastify.css';
 import { ConvertDataProvider } from './context/convertDataContext';
 import { MainPageAnimateProvider } from './context/mainAnimationContext';
 

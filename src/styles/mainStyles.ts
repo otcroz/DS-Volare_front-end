@@ -50,3 +50,30 @@ export const ExplainGridBox = styled.div<textProps>`
   border-color: rgba(255, 255, 255, 0.35);
   border-radius: 1rem;
 `;
+
+// modal style
+export const ModalCustomStyle: ReactModal.Styles = {
+  overlay: {
+    backgroundColor: 'rgba(0,0,0,0.4)',
+  },
+  content: {
+    maxWidth: '500px',
+    position: 'fixed',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    height: 370,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    overflow: 'auto',
+    borderStyle: 'none',
+    borderRadius: '30px',
+    outline: 'none',
+    padding: 0,
+    boxShadow: '0px 2px 7px rgba(0,0,0,0.3)',
+  },
+};
