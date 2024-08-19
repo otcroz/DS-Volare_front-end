@@ -1,23 +1,30 @@
 import styled, { css } from 'styled-components';
 import { motion, AnimationControls } from 'framer-motion';
+import {
+  useMainAnimationContext,
+  usePageContext,
+} from '../../context/mainAnimationContext';
+import { useScreenTransitionAnimation } from '../../hooks/useScreenTransitionAnimation';
 
 interface boxProps {
   selected: number;
   index: number;
 }
 
-interface selectProps {
-  page: number;
-  setPage: (select: React.SetStateAction<number>) => void;
-  controls: AnimationControls;
-}
-
-const MainIndicator = ({ page, setPage, controls }: selectProps) => {
+const MainIndicator = () => {
   const IndicatorName: string[] = [
     '서비스 소개',
     '체험하기',
     '서비스 사용하기',
   ];
+
+  const { page, setPage } = usePageContext();
+  const { controlIndicater } = useMainAnimationContext(); // 애니메이션을 적용할 컨트롤러 context
+  const { transitionClickAnimation } = useScreenTransitionAnimation();
+
+  const handleClick = (page: number) => {
+    transitionClickAnimation(page);
+  };
 
   return (
     <IndicatorContainer>
@@ -25,8 +32,8 @@ const MainIndicator = ({ page, setPage, controls }: selectProps) => {
         return (
           <IndicatorBox
             key={index}
-            onClick={() => setPage(index + 1)}
-            animate={controls}
+            onClick={() => handleClick(index + 1)}
+            animate={controlIndicater}
           >
             <IndicatorText selected={page} index={index + 1}>
               {item}
