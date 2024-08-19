@@ -6,6 +6,7 @@ import MainPage from './page/MainPage';
 import MyPage from './page/Mypage';
 import ConvertPage from './page/ConvertPage';
 import NavBar from './component/base/Navbar';
+import { ConvertDataProvider } from './context/convertDataContext';
 import { MainPageAnimateProvider } from './context/mainAnimationContext';
 
 // initialize queryClient
@@ -21,17 +22,19 @@ const App = () => {
   return (
     <>
       <MainPageAnimateProvider>
-        <QueryClientProvider client={queryClient}>
-          <Router>
-            <NavBar />
-            <Routes>
-              <Route path="/main/" element={<MainPage />} />
-              <Route path="/mypage/" element={<MyPage />} />
-              <Route path="/convert/" element={<ConvertPage />} />
-            </Routes>
-          </Router>
-          <ReactQueryDevtools initialIsOpen={true} />
-        </QueryClientProvider>
+        <ConvertDataProvider>
+          <QueryClientProvider client={queryClient}>
+            <Router>
+              <NavBar />
+              <Routes>
+                <Route path="/main/" element={<MainPage />} />
+                <Route path="/mypage/" element={<MyPage />} />
+                <Route path="/convert/" element={<ConvertPage />} />
+              </Routes>
+            </Router>
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </ConvertDataProvider>
       </MainPageAnimateProvider>
     </>
   );
