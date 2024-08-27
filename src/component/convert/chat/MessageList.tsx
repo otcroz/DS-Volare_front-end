@@ -5,8 +5,8 @@ import ChatMessage from './ChatMessage';
 
 interface MessageListProps {
   messages: Message[];
-  currentTypingId: number | null;
-  onEndTyping: (id: number) => void;
+  currentTypingId: string | null;
+  onEndTyping: (id: string) => void;
 }
 
 const MessageList = React.forwardRef<HTMLDivElement, MessageListProps>(

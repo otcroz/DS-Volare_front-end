@@ -10,37 +10,38 @@ import {
 } from '../../../styles/chatbotStyles';
 
 interface ChatMessageProps extends Message {
-  onEndTyping: (id: number) => void;
-  currentTypingId: number | null;
+  onEndTyping: (id: string) => void;
+  currentTypingId: string | null;
 }
 
 const ChatMessage = ({
-  text,
-  isUser,
+  message,
+  messageType,
+  messageId,
+  createdAt,
   isTyping,
-  id,
   onEndTyping,
   currentTypingId,
 }: ChatMessageProps) => {
   return (
     <>
-      {isUser ? (
+      { (messageType === "QUESTION") ? (
         <MessageContainer>
           <UserMessage>
-            <p>{text}</p>
+            <p>{message}</p>
           </UserMessage>
-          <UserMessageDateTime>2024.xx.xx</UserMessageDateTime>
+          <UserMessageDateTime>{createdAt}</UserMessageDateTime>
         </MessageContainer>
       ) : (
         <MessageContainer>
           <ChatbotIcon></ChatbotIcon>
           <ChatbotMessage>
-            {isTyping && id && currentTypingId === id ? (
+            {isTyping && messageId && currentTypingId === messageId ? (
               <TypeAnimation
                 sequence={[
-                  text,
+                  message,
                   () => {
-                    id && onEndTyping(id);
+                    messageId && onEndTyping(messageId);
                   },
                 ]}
                 wrapper="span"
@@ -49,10 +50,10 @@ const ChatMessage = ({
                 cursor={false}
               />
             ) : (
-              <p>{text}</p>
+              <p>{message}</p>
             )}
           </ChatbotMessage>
-          <ChatbotMessageDateTime>2024.xx.xx</ChatbotMessageDateTime>
+          <ChatbotMessageDateTime>{createdAt}</ChatbotMessageDateTime>
         </MessageContainer>
       )}
     </>

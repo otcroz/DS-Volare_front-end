@@ -10,36 +10,23 @@ import MessageForm from './MessageForm';
 import MessageList from './MessageList';
 import { Message } from '../../../types';
 
-type Props = {
-  chatId?: string; // 추후 변경
-};
-
-const ChatbotBox = ({ chatId }: Props) => {
+const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
   const [messages, setMessages] = useState<Message[]>([]); // 모든 채팅 메시지
-  const [currentTypingId, setCurrentTypingId] = useState<number | null>(null); // 타이핑 애니메이션을 재생할 채팅 메시지
+  const [currentTypingId, setCurrentTypingId] = useState<string | null>(null); // 타이핑 애니메이션을 재생할 채팅 메시지
   const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
 
   // 메시지 전송 함수
   const handleSendMessage = (message: string) => {
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: message, isUser: true },
-      {
-        text: `${message}`,
-        isUser: false,
-        isTyping: true,
-        id: Date.now(),
-      },
-    ]);
+
   };
 
   // 타이핑이 끝났을 때(Typing 컴포넌트의 onFinishedTyping 리스너) 호출되는 함수
-  const handleEndTyping = (id: number) => {
+  const handleEndTyping = (id: string) => {
     setMessages((prevMessages) =>
       prevMessages.map((msg) =>
-        msg.id === id ? { ...msg, isTyping: false } : msg
+        msg.messageId === id ? { ...msg, isTyping: false } : msg
       )
     );
     setCurrentTypingId(null);
@@ -49,10 +36,10 @@ const ChatbotBox = ({ chatId }: Props) => {
   useEffect(() => {
     if (currentTypingId === null) {
       const nextTypingMessage = messages.find(
-        (msg) => !msg.isUser && msg.isTyping
+        (msg) => msg.messageType === "GPT" && msg.isTyping
       );
-      if (nextTypingMessage && nextTypingMessage.id) {
-        setCurrentTypingId(nextTypingMessage.id);
+      if (nextTypingMessage && nextTypingMessage.messageId) {
+        setCurrentTypingId(nextTypingMessage.messageId);
       }
     }
   }, [messages, currentTypingId]);
