@@ -16,7 +16,7 @@ type props = {
 const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
   const { controlStatistics } = useAnimationContext();
   return (
-    <motion.div ref={ref} animate={controlStatistics} style={{ opacity: 100 }}>
+    <motion.div ref={ref} animate={controlStatistics} style={{ opacity: 0 }}>
       <GlassBox hasData={true}>
         <TitleText>통계</TitleText>
         <ContentBox>
