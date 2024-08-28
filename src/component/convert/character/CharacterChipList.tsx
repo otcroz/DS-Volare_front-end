@@ -8,9 +8,7 @@ const calculateWidth = (str: string): number => {
 };
 
 const CharacterChipList = () => {
-  // characterList, chips 역할이 중복됨.
   const { characterList, setCharacterList } = useCharaterData();
-  const [chips, setChips] = useState<string[]>(characterList);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -18,8 +16,7 @@ const CharacterChipList = () => {
 
   const addChip = () => {
     if (inputValue) {
-      setChips([...chips, inputValue]);
-      setCharacterList([...chips, inputValue]); // add
+      setCharacterList([...characterList, inputValue]);
       setInputValue('');
       setInputVisible(false);
       setAddVisible(true);
@@ -27,9 +24,8 @@ const CharacterChipList = () => {
   };
 
   const removeChip = (index: number) => {
-    const newChips = chips.filter((_, i) => i !== index);
-    setChips(newChips);
-    setCharacterList(newChips); // add
+    const newChips = characterList.filter((_, i) => i !== index);
+    setCharacterList(newChips);
   };
 
   const handleAddButtonClick = () => {
@@ -60,10 +56,10 @@ const CharacterChipList = () => {
 
   return (
     <ChipContainer>
-      {chips.map((chip, index) => (
+      {characterList.map((character, index) => (
         <CharacterChip
           key={index}
-          label={chip}
+          label={character}
           onDelete={() => removeChip(index)}
         />
       ))}
