@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import CutItem, { CutItemProps } from './CutItem';
+import CutItem from './CutItem';
+import { Cut } from '../../../types/storyboard';
 
 type Props = {
-  cuts: CutItemProps[];
+  cuts: Cut[];
 }
 
 const CutList = ({ cuts }: Props) => {
