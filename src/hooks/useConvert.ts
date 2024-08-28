@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useUser } from './useUser';
 import { useNovelIdData } from '../context/convertDataContext';
+import { Script } from '../types';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
@@ -77,9 +78,47 @@ export const useConvert = () => {
     }
   };
 
+  // api: convert storyboard
+  const convertStoryboard = async (scriptId: string, script: Script) => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+
+    const requestData = {
+      scriptId: scriptId,
+      script: script,
+    };
+
+    try {
+      const result = await axios.post(
+        `/spring/sb/generate-storyboard`,
+        requestData,
+        {
+          headers: headers,
+        }
+      );
+
+      const data = result.data;
+      console.log(data);
+      if (data.isSuccess) {
+        console.log(data.message);
+        return data.result;
+      } else {
+        console.log(data.message);
+        return false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
+
+
+
   return {
     saveNovel,
     cognizeCharacter,
     convertScript,
+    convertStoryboard
   };
 };

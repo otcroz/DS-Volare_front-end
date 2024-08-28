@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
 import { Storyboard } from '../../../types/storyboard';
+import { useStoryboardData } from '../../../context/convertDataContext';
 import { sb1 } from './storyboardDummy';
 
 type props = {
@@ -34,7 +35,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
 
-    const [storyboard, setStoryboard] = useState<Storyboard>(sb1);
+    const { storyboard, setStoryboard } = useStoryboardData();
 
     const handleClick = () => {
       step[3] = true;

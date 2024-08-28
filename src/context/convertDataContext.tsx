@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Script } from '../types';
+import { Storyboard } from '../types/storyboard';
 
 // 타입 정의
 type NovelIdContextType = {
@@ -27,7 +28,10 @@ type ScriptContextType = {
   setScript: React.Dispatch<React.SetStateAction<Script>>;
 };
 
-type StoryboardContextType = {};
+type StoryboardContextType = {
+  storyboard: Storyboard;
+  setStoryboard: React.Dispatch<React.SetStateAction<Storyboard>>;
+};
 
 type StatisticsContextType = {};
 
@@ -59,6 +63,13 @@ const ScriptContext = createContext<ScriptContextType | undefined>({
   setScript: () => {},
 });
 
+const StoryboardContext = createContext<StoryboardContextType | undefined>({
+  storyboard: {
+    scene: [],
+  },
+  setStoryboard: () => {},
+});
+
 // 컨택스트를 전역적으로 제공할 수 있는 프로바이더 작성, 컴포넌트 순서 상관X
 const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [text, setText] = useState<string>('');
@@ -66,19 +77,24 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [title, setTitle] = useState<string>('');
   const [script, setScript] = useState<Script>({ scene: [] });
   const [novelId, setNovelId] = useState<string>('');
+  const [storyboard, setStoryboard] = useState<Storyboard>({ scene: [] });
 
   return (
-    <NovelTitleContext.Provider value={{ title, setTitle }}>
-      <NovelContext.Provider value={{ text, setText }}>
-        <CharacterContext.Provider value={{ characterList, setCharacterList }}>
-          <ScriptContext.Provider value={{ script, setScript }}>
-            <NovelIdContext.Provider value={{ novelId, setNovelId }}>
-              {children}
-            </NovelIdContext.Provider>
-          </ScriptContext.Provider>
-        </CharacterContext.Provider>
-      </NovelContext.Provider>
-    </NovelTitleContext.Provider>
+    <StoryboardContext.Provider value={{ storyboard, setStoryboard }}>
+      <NovelTitleContext.Provider value={{ title, setTitle }}>
+        <NovelContext.Provider value={{ text, setText }}>
+          <CharacterContext.Provider
+            value={{ characterList, setCharacterList }}
+          >
+            <ScriptContext.Provider value={{ script, setScript }}>
+              <NovelIdContext.Provider value={{ novelId, setNovelId }}>
+                {children}
+              </NovelIdContext.Provider>
+            </ScriptContext.Provider>
+          </CharacterContext.Provider>
+        </NovelContext.Provider>
+      </NovelTitleContext.Provider>
+    </StoryboardContext.Provider>
   );
 };
 
@@ -127,6 +143,16 @@ const useScriptData = () => {
   return context;
 };
 
+const useStoryboardData = () => {
+  const context = useContext(StoryboardContext);
+  if (context === undefined) {
+    throw new Error(
+      'useStoryboardData must be used within a ConvertDataProvider'
+    );
+  }
+  return context;
+};
+
 export {
   ConvertDataProvider,
   useNovelTitleData,
@@ -134,4 +160,5 @@ export {
   useCharaterData,
   useScriptData,
   useNovelIdData,
+  useStoryboardData,
 };
