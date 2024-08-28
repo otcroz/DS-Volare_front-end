@@ -9,6 +9,8 @@ import {
 import MessageForm from './MessageForm';
 import MessageList from './MessageList';
 import { Message } from '../../../types';
+import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
+import { useConvert } from '../../../hooks/useConvert';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -16,10 +18,80 @@ const ChatbotBox = () => {
   const [currentTypingId, setCurrentTypingId] = useState<string | null>(null); // 타이핑 애니메이션을 재생할 채팅 메시지
   const [isTyping, setIsTyping] = useState(false); // 타이핑 애니메이션이 동작 중이면 true
   const messageListRef = useRef<HTMLDivElement>(null); // 메시지 리스트 영역. 스크롤 조작을 위함
+  const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
+  const { startNewChat, getChatList } = useConvert();
 
-  // 메시지 전송 함수
-  const handleSendMessage = (message: string) => {
+  // 변경
+  const scriptId = '2';
+  const [chatRoomId, setChatRoomId] = useState<string>(
+    'e0cfaa64-2da2-4e67-b566-1a1c6e6a42b8'
+  );
 
+  const startChatHandler = async () => {
+    const result = await startNewChat(scriptId);
+    setChatRoomId(result.chatRoomId);
+  };
+
+  // (stomp) connect & subscribe
+  const connectHandler = async () => {
+    const result = await getChatList(chatRoomId);
+    setMessages(result.allMessages);
+
+    client.current = Stomp.over(() => {
+      const sock = new WebSocket(`ws://localhost:8080/websocket`);
+      return sock;
+    });
+    client.current!.debug = function (str) {}; // console.log off
+
+    client.current.connect(
+      {
+        // request header
+      },
+      () => {
+        // connectCallback 함수 설정
+        client.current!.subscribe(
+          `/sub/chats/${chatRoomId}`,
+          (msg: IMessage) => {
+            let newMessage: Message = JSON.parse(msg.body); // 메시지 내용 꺼내기
+            newMessage = { ...newMessage, isTyping: true };
+            setMessages((prevState) => [...prevState, newMessage]);
+          },
+          {
+            // request header
+          }
+        );
+      },
+      () => {
+        // 에러 핸들링 콜백... 채팅 종료
+        client.current!.disconnect(() => {
+          // window.location.reload();
+        });
+      }
+    );
+    return client;
+  };
+
+  // (stomp) disconnect
+  const disconnectHandler = () => {
+    if (client.current) {
+      client.current.disconnect(() => {
+        // window.location.reload();
+      });
+    }
+  };
+
+  // (stomp) send(=publish)
+  const sendHandler = (message: string) => {
+    client.current!.send(
+      `/pub/chats/${chatRoomId}`,
+      {
+        // request header
+      },
+      JSON.stringify({
+        message: message.trim(),
+        messageType: 'QUESTION',
+      })
+    );
   };
 
   // 타이핑이 끝났을 때(Typing 컴포넌트의 onFinishedTyping 리스너) 호출되는 함수
@@ -36,7 +108,7 @@ const ChatbotBox = () => {
   useEffect(() => {
     if (currentTypingId === null) {
       const nextTypingMessage = messages.find(
-        (msg) => msg.messageType === "GPT" && msg.isTyping
+        (msg) => msg.messageType === 'GPT' && msg.isTyping
       );
       if (nextTypingMessage && nextTypingMessage.messageId) {
         setCurrentTypingId(nextTypingMessage.messageId);
@@ -80,10 +152,7 @@ const ChatbotBox = () => {
                 onEndTyping={handleEndTyping}
                 ref={messageListRef}
               />
-              <MessageForm
-                onSendMessage={handleSendMessage}
-                isTyping={isTyping}
-              />
+              <MessageForm onSendMessage={sendHandler} isTyping={isTyping} />
             </ChatBox>
           </ChatContainer>
         )}
@@ -96,6 +165,14 @@ const ChatbotBox = () => {
         whileTap={{ scale: 0.9 }}
         onClick={() => {
           setIsDrawerOpen(!isDrawerOpen);
+
+          if (chatRoomId === 'none') {
+            startChatHandler();
+          } else if (isDrawerOpen) {
+            disconnectHandler();
+          } else {
+            connectHandler();
+          }
         }}
       />
     </>

@@ -77,9 +77,63 @@ export const useConvert = () => {
     }
   };
 
+  // api: create a new chatRoom / spring
+  const startNewChat = async (scriptId: string) => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+
+    try {
+      const result = await axios.post(
+        `/spring/chatRooms/${scriptId}`, {}, { headers: headers }
+      );
+
+      const data = result.data;
+      console.log(data);
+      if (data.isSuccess) {
+        console.log(data.message);
+        return data.result;
+      } else {
+        console.log(data.message);
+        return false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
+
+  // api: get chat list / spring
+  // (need fix) cursor-based-pagination
+  const getChatList = async (chatRoomId: string) => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+
+    try {
+      const result = await axios.get(`/spring/chats/${chatRoomId}`, {
+        headers: headers,
+      });
+
+      const data = result.data;
+      if (data.isSuccess) {
+        // console.log(data.result.allMessages);
+        return data.result;
+      } else {
+        console.log(data.message);
+        return false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  }
+  
   return {
     saveNovel,
     cognizeCharacter,
     convertScript,
+    startNewChat,
+    getChatList
   };
 };
