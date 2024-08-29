@@ -1,9 +1,9 @@
 
 export type Cut = {
-  cutNum: number;
+  cut_num: number;
   // angleCam: string;
-  cutImage: string;
-  text: string
+  cut_image: string;
+  text: string;
 };
 
 export type StoryboardScene = {

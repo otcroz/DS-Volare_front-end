@@ -10,7 +10,7 @@ export interface Message {
 export interface Scene {
   scene_num: number;
   location: string;
-  time: string;
+  time?: string;
   content: Content[];
 }
 

@@ -66,7 +66,8 @@ const SceneItem = ({ scene, sceneIndex, onContentChange }: SceneItemProps) => {
   return (
     <SceneContainer>
       <SceneHeader>
-        #{scene.scene_num}. {scene.location} ({scene.time})
+        #{scene.scene_num}. {scene.location}
+        {/* ({scene.time}) */}
       </SceneHeader>
       {scene.content.map((content, contentIndex) => (
         <ContentItem key={contentIndex}>

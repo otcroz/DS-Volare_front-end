@@ -17,9 +17,15 @@ import CutList from './CutList';
 import { motion } from 'framer-motion';
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
-import { Storyboard } from '../../../types/storyboard';
-import { useStoryboardData } from '../../../context/convertDataContext';
+import {
+  useScriptData,
+  useScriptIdData,
+  useStoryboardData,
+} from '../../../context/convertDataContext';
 import { sb1 } from './storyboardDummy';
+import { useMutation } from '@tanstack/react-query';
+import { mutationKeys } from '../../../utils/queryKeys';
+import { useConvert } from '../../../hooks/useConvert';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
@@ -34,51 +40,87 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     const { controlStatistics, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
+    const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
 
+    const { scriptId } = useScriptIdData();
+    const { script } = useScriptData();
     const { storyboard, setStoryboard } = useStoryboardData();
+    const { convertStoryboard } = useConvert();
+
+    const StoryboardMutate = useMutation({
+      mutationKey: mutationKeys.mutateStoryboard,
+      mutationFn: () => convertStoryboard(scriptId, script),
+      onSuccess: (result) => {
+        const resultScene = result.scene;
+        setStoryboard({ scene: resultScene });
+        console.log(storyboard);
+
+        step[3] = true;
+        setStep([...step]);
+        temp[2] = 'data';
+        setTemp([...temp]);
+
+        // 인디케이터 select 값 변경
+        setSelect(3); // 통계로 이동
+
+        // 애니메이션
+        onMoveScroll();
+        setTimeout(() => {
+          startAnimation(controlStatistics);
+        }, 1000);
+      },
+      onError: () => {
+        console.log('update failure.');
+      },
+      onSettled: () => {
+        console.log('call convertStoryboard API');
+      },
+    });
 
     const handleClick = () => {
-      step[3] = true;
-      setStep([...step]);
-      temp[2] = 'data';
-      setTemp([...temp]);
-
-      // 인디케이터 select 값 변경
-      setSelect(3); // 통계로 이동
-
-      // 애니메이션
-      onMoveScroll();
-      setTimeout(() => {
-        startAnimation(controlStatistics);
-      }, 1000);
+      setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
+      StoryboardMutate.mutate();
     };
 
     return (
       <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
-        {data ? (
+        {isClick ? (
           <GlassBox hasData={true}>
-            <TitleText>스토리보드</TitleText>
-            <FileButton>
-              <FileDownloadIcon width="2rem" height="2rem" />
-              &nbsp;다운로드
-            </FileButton>
-            <ContentBox>
-              <ScrollText>
-                {storyboard.scene.map((s, index) => (
+            {!StoryboardMutate.isPending ? (
+              <>
+                {StoryboardMutate.isSuccess && (
                   <>
-                    <StoryboardInfo
-                      data={{
-                        sceneNum: s.sceneNum,
-                        summary: s.summary,
-                        location: s.location,
-                        cutCount: s.content!.length,
-                      }}
-                    />
-                    <CutList cuts={s.content!} />
+                    <TitleText>스토리보드</TitleText>
+                    <FileButton>
+                      <FileDownloadIcon width="2rem" height="2rem" />
+                      &nbsp;다운로드
+                    </FileButton>
+                    <ContentBox>
+                      <ScrollText>
+                        {storyboard.scene.map((s, index) => (
+                          <>
+                            <StoryboardInfo
+                              data={{
+                                sceneNum: s.sceneNum,
+                                summary: s.summary,
+                                location: s.location,
+                                cutCount: s.content!.length,
+                              }}
+                            />
+                            <CutList cuts={s.content!} />
+                          </>
+                        ))}
+                      </ScrollText>
+                    </ContentBox>
                   </>
-                ))}
-              </ScrollText>
-            </ContentBox>
+                )}
+                {StoryboardMutate.isError && (
+                  <TitleText>스토리보드 변환을 실패했습니다..</TitleText>
+                )}
+              </>
+            ) : (
+              <>스피너 적용</>
+            )}
           </GlassBox>
         ) : (
           <GlassBox hasData={false}>

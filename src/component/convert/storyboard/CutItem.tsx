@@ -11,11 +11,11 @@ const CutItem = ({ data }: Props) => {
     <StyledListItem>
       <LeftWrapper>
         <LeftHeader>
-          <CutNumber>cut#{data.cutNum}</CutNumber>
+          <CutNumber>cut#{data.cut_num}</CutNumber>
           <div style={{ flex: 1 }} />
           {/* <CameraAngle>{data.angleCam}</CameraAngle> */}
         </LeftHeader>
-        <CutImg src={data.cutImage} />
+        <CutImg src={data.cut_image} />
       </LeftWrapper>
       <RightWrapper>
         <RightHeader>액션&대사</RightHeader>

@@ -23,6 +23,11 @@ type CharacterContextType = {
   setCharacterList: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
+type ScriptIdContextType = {
+  scriptId: string;
+  setScriptId: React.Dispatch<React.SetStateAction<string>>;
+};
+
 type ScriptContextType = {
   script: Script;
   setScript: React.Dispatch<React.SetStateAction<Script>>;
@@ -54,6 +59,11 @@ const NovelContext = createContext<NovelContextType | undefined>({
 const CharacterContext = createContext<CharacterContextType | undefined>({
   characterList: [],
   setCharacterList: () => {},
+});
+
+const ScriptIdContext = createContext<ScriptIdContextType | undefined>({
+  scriptId: '',
+  setScriptId: () => {},
 });
 
 const ScriptContext = createContext<ScriptContextType | undefined>({
@@ -135,6 +145,16 @@ const useCharaterData = () => {
   return context;
 };
 
+const useScriptIdData = () => {
+  const context = useContext(ScriptIdContext);
+  if (context === undefined) {
+    throw new Error(
+      'useScriptIdData must be used within a ConvertDataProvider'
+    );
+  }
+  return context;
+};
+
 const useScriptData = () => {
   const context = useContext(ScriptContext);
   if (context === undefined) {
@@ -155,10 +175,11 @@ const useStoryboardData = () => {
 
 export {
   ConvertDataProvider,
+  useNovelIdData,
   useNovelTitleData,
   useNovelData,
   useCharaterData,
+  useScriptIdData,
   useScriptData,
-  useNovelIdData,
   useStoryboardData,
 };
