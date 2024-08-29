@@ -2,6 +2,7 @@ export const queryKeys = {
   user: ['user'],
   demo: ['demo'],
   appearance: ['appearance-rate'],
+  userinfo: ['user-info'],
 };
 
 export const mutationKeys = {

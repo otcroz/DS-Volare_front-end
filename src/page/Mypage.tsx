@@ -5,6 +5,9 @@ import Pagenation from '../component/mypage/Pagenation';
 import ScriptListCard from '../component/mypage/ScriptListCard';
 import { dummyData } from '../component/mypage/mypageDummyData'; // dummy data
 import { useAnimation } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from '../utils/queryKeys';
+import { useAuth } from '../hooks/useAuth';
 
 interface ScriptListProps {
   date: string;
@@ -20,6 +23,13 @@ const MyPage = () => {
 
   // pagenation animate
   const control = useAnimation();
+
+  const { userInfoFunc } = useAuth();
+
+  const userInfoQuery = useQuery({
+    queryKey: queryKeys.userinfo,
+    queryFn: () => userInfoFunc(),
+  });
 
   const pagenationAnimate = () => {
     control.start({
@@ -55,9 +65,11 @@ const MyPage = () => {
         <BackgroundCover>
           <LayoutWrapper>
             <UserInfoTextBox>
-              <TitleText style={{ fontSize: '20px' }}>
-                asfg1234@gmail.com
-              </TitleText>
+              {!userInfoQuery.isLoading && (
+                <TitleText style={{ fontSize: '20px' }}>
+                  {userInfoQuery.data}
+                </TitleText>
+              )}
               <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
             </UserInfoTextBox>
             {/* scripts list */}
