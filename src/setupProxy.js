@@ -10,7 +10,7 @@ module.exports = function (app) {
   );
   app.use(
     createProxyMiddleware('/flask', {
-      target: 'http://75.63.212.250:44809',
+      target: 'http://75.63.212.242:44809',
       changeOrigin: true,
       pathRewrite: { '^/flask': '/' },
     })

@@ -1,9 +1,10 @@
 // chatbot
 export interface Message {
-  text: string;
-  isUser: boolean;
+  message: string;
+  messageType: string;  // "QUESTION" | "GPT"
+  messageId: string;
+  createdAt: string;
   isTyping?: boolean;
-  id?: number;
 }
 
 // script
