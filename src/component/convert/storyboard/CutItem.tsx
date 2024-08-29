@@ -1,35 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Cut } from '../../../types/storyboard';
 
 type Props = {
-  data: CutItemProps;
-};
-
-export type CutItemProps = {
-  cutNum: number;
-  angleCam: string;
-  cutImage: string;
-  cutText: string;  // 액션 & 대사. 변경 필요
+  data: Cut;
 };
 
 const CutItem = ({ data }: Props) => {
   return (
-	<StyledListItem>
-	  <LeftWrapper>
-		<LeftHeader>
-		  <CutNumber>cut#{data.cutNum}</CutNumber>
-		  <div style={{flex: 1}} />
-		  <CameraAngle>{data.angleCam}</CameraAngle>
-		</LeftHeader>
-		<CutImg />
-	  </LeftWrapper>
-
-	  <RightWrapper>
-		<RightHeader>액션&대사</RightHeader>
-  	    <CutText>{data.cutText}</CutText>
-	  </RightWrapper>
-
-	</StyledListItem>
+    <StyledListItem>
+      <LeftWrapper>
+        <LeftHeader>
+          <CutNumber>cut#{data.cut_num}</CutNumber>
+          <div style={{ flex: 1 }} />
+          {/* <CameraAngle>{data.angleCam}</CameraAngle> */}
+        </LeftHeader>
+        <CutImg src={data.cut_image} />
+      </LeftWrapper>
+      <RightWrapper>
+        <RightHeader>액션&대사</RightHeader>
+        <CutText>{data.text}</CutText>
+      </RightWrapper>
+    </StyledListItem>
   );
 };
 
@@ -46,7 +38,7 @@ const StyledListItem = styled.li`
 const LeftWrapper = styled.div`
   flex: 6;
   height: 100%;
-`
+`;
 
 const LeftHeader = styled.div`
   display: flex;
@@ -56,7 +48,7 @@ const LeftHeader = styled.div`
   border-bottom: 1px solid #000;
   border-right: 1px solid #000;
   align-items: center;
-`
+`;
 
 const CutNumber = styled.div`
   font-size: 0.75rem;
@@ -66,14 +58,14 @@ const CameraAngle = styled.div`
   font-size: 0.75rem;
 `;
 
-const CutImg = styled.div`
+const CutImg = styled.img`
   background-color: lightgray;
   height: calc(100% - 1.5rem);
 `;
 
 const RightWrapper = styled.div`
   flex: 4;
-`
+`;
 
 const RightHeader = styled.div`
   display: flex;
@@ -83,11 +75,11 @@ const RightHeader = styled.div`
   border-bottom: 1px solid #000;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const CutText = styled.div`
   width: 100%;
   line-height: 1rem;
   font-size: 0.75rem;
   padding: 0.25rem;
-`
+`;

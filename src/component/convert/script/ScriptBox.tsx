@@ -21,6 +21,7 @@ import {
   useCharaterData,
   useNovelData,
   useScriptData,
+  useScriptIdData,
 } from '../../../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../../../utils/queryKeys';
@@ -43,6 +44,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
     const { text } = useNovelData();
     const { characterList } = useCharaterData();
     const { setScript } = useScriptData();
+    const { setScriptId } = useScriptIdData();
 
     const { step, setStep } = useConvertStep(); // 변환 단계 관리
     const { convertScript } = useConvert();
@@ -53,6 +55,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       mutationFn: () => convertScript(characterList, text),
       onSuccess: (result) => {
         setScript(result.script);
+        setScriptId(result.scriptId);
 
         temp[1] = 'data';
         setTemp([...temp]);
