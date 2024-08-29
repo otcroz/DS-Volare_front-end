@@ -26,6 +26,8 @@ import { sb1 } from './storyboardDummy';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../../../utils/queryKeys';
 import { useConvert } from '../../../hooks/useConvert';
+import Spinner from '../../base/Spinner';
+import { spinnerText } from '../../../utils/spinnerText';
 
 type props = {
   data: string; // 추후 스토리보드 객체로 교체
@@ -119,7 +121,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                 )}
               </>
             ) : (
-              <>스피너 적용</>
+              <Spinner text={spinnerText.storyboard} />
             )}
           </GlassBox>
         ) : (
