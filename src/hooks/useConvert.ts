@@ -78,7 +78,7 @@ export const useConvert = () => {
     }
   };
 
- // api: convert storyboard
+  // api: convert storyboard
   const convertStoryboard = async (scriptId: string, script: Script) => {
     const { accessToken } = getTokenUser();
     const headers = {
@@ -103,7 +103,7 @@ export const useConvert = () => {
       console.log(data);
       if (data.isSuccess) {
         console.log(data.message);
-        return data.result;  // return storyboard
+        return data.result; // return storyboard
       } else {
         console.log(data.message);
         return false;
@@ -113,7 +113,7 @@ export const useConvert = () => {
     }
   };
 
- // api: create a new chatRoom / spring
+  // api: create a new chatRoom / spring
   const startNewChat = async (scriptId: string) => {
     const { accessToken } = getTokenUser();
     const headers = {
@@ -122,7 +122,9 @@ export const useConvert = () => {
 
     try {
       const result = await axios.post(
-        `/spring/chatRooms/${scriptId}`, {}, { headers: headers }
+        `/spring/chatRooms/${scriptId}`,
+        {},
+        { headers: headers }
       );
 
       const data = result.data;
@@ -165,12 +167,36 @@ export const useConvert = () => {
     }
   };
 
+  // api: apperance rate
+  const apperanceRate = async (scriptId: number) => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+
+    try {
+      const result = await axios.get(`/spring/scripts/31/appearance-rate`, {
+        headers: headers,
+      });
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+        return data.false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
+
   return {
     saveNovel,
     cognizeCharacter,
     convertScript,
     convertStoryboard,
     startNewChat,
-    getChatList
+    getChatList,
+    apperanceRate,
   };
 };
