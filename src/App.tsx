@@ -34,10 +34,10 @@ const App = () => {
                 <Route path="/convert/" element={<ConvertPage />} />
               </Routes>
             </Router>
-            <ReactQueryDevtools initialIsOpen={true} />
           </QueryClientProvider>
         </ConvertDataProvider>
       </MainPageAnimateProvider>
+      <StyledToastConatiner limit={1} />
     </>
   );
 };

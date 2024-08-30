@@ -69,9 +69,31 @@ export const useAuth = () => {
     // restore token
     reissueToken(resAccessToken, resRefreshToken);
   };
+
+  const userInfoFunc = async () => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+    try {
+      const result = await axios.get(`/spring/users`, {
+        headers: headers,
+      });
+      const data = result.data.result;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+        return data;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
   return {
     login,
     logout,
     refreshFunc,
+    userInfoFunc,
   };
 };
