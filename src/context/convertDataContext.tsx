@@ -24,8 +24,8 @@ type CharacterContextType = {
 };
 
 type ScriptIdContextType = {
-  scriptId: string;
-  setScriptId: React.Dispatch<React.SetStateAction<string>>;
+  scriptId: number;
+  setScriptId: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type ScriptContextType = {
@@ -62,7 +62,7 @@ const CharacterContext = createContext<CharacterContextType | undefined>({
 });
 
 const ScriptIdContext = createContext<ScriptIdContextType | undefined>({
-  scriptId: '',
+  scriptId: 0,
   setScriptId: () => {},
 });
 
@@ -88,6 +88,7 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
   const [script, setScript] = useState<Script>({ scene: [] });
   const [novelId, setNovelId] = useState<string>('');
   const [storyboard, setStoryboard] = useState<Storyboard>({ scene: [] });
+  const [scriptId, setScriptId] = useState<number>(0);
 
   return (
     <StoryboardContext.Provider value={{ storyboard, setStoryboard }}>
@@ -97,9 +98,11 @@ const ConvertDataProvider = ({ children }: { children: React.ReactNode }) => {
             value={{ characterList, setCharacterList }}
           >
             <ScriptContext.Provider value={{ script, setScript }}>
-              <NovelIdContext.Provider value={{ novelId, setNovelId }}>
-                {children}
-              </NovelIdContext.Provider>
+              <ScriptIdContext.Provider value={{ scriptId, setScriptId }}>
+                <NovelIdContext.Provider value={{ novelId, setNovelId }}>
+                  {children}
+                </NovelIdContext.Provider>
+              </ScriptIdContext.Provider>
             </ScriptContext.Provider>
           </CharacterContext.Provider>
         </NovelContext.Provider>
