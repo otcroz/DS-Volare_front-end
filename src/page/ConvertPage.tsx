@@ -20,6 +20,7 @@ import {
 } from '../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../utils/queryKeys';
+import StoryboardWideBox from '../component/convert/storyboard/StoryboardWideBox';
 
 interface TextProps {
   color: string;
@@ -129,14 +130,15 @@ const ConvertPage = () => {
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[2].onMoveElement}
               />
-              <StoryboardBox
+              {/* <StoryboardBox
                 ref={stepTabs[2].element}
                 data={temp[2]}
                 temp={temp}
                 setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[3].onMoveElement}
-              />
+              /> */}
+              <StoryboardWideBox />
               <StatisticsBox ref={stepTabs[3].element} data="" />
             </ConvertStepWrapper>
           </AnimationProvider>

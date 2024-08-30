@@ -48,6 +48,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     const { script } = useScriptData();
     const { storyboard, setStoryboard } = useStoryboardData();
     const { convertStoryboard } = useConvert();
+    setStoryboard(sb1);
 
     const StoryboardMutate = useMutation({
       mutationKey: mutationKeys.mutateStoryboard,
@@ -85,7 +86,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
+      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 100 }}>
         {isClick ? (
           <GlassBox hasData={true}>
             {!StoryboardMutate.isPending ? (
@@ -103,7 +104,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                           <>
                             <StoryboardInfo
                               data={{
-                                sceneNum: s.sceneNum,
+                                scene_num: s.scene_num,
                                 summary: s.summary,
                                 location: s.location,
                                 cutCount: s.content!.length,
