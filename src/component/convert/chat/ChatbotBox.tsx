@@ -12,6 +12,8 @@ import { Message } from '../../../types';
 import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
 import { useConvert } from '../../../hooks/useConvert';
 import { useScriptIdData } from '../../../context/convertDataContext';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -135,6 +137,13 @@ const ChatbotBox = () => {
     open: { opacity: 1, x: -250, zIndex: 1 },
     closed: { opacity: 1, x: 0, zIndex: 1 },
   };
+
+  // floating button
+  useEffect(() => {
+    if (scriptId !== 0) {
+      Toast.success(toastText.chatbotEnable);
+    }
+  }, [scriptId]);
 
   return (
     <>
