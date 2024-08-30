@@ -34,8 +34,10 @@ const ChatbotBox = () => {
 
   // (stomp) connect & subscribe
   const connectHandler = async () => {
-    const result = await getChatList(chatRoomId);
-    setMessages(result.allMessages);
+    if (chatRoomId !== 'none') {
+      const result = await getChatList(chatRoomId);
+      setMessages(result.allMessages);
+    }
 
     client.current = Stomp.over(() => {
       const sock = new WebSocket(`ws://localhost:8080/websocket`);
@@ -158,23 +160,26 @@ const ChatbotBox = () => {
         )}
       </AnimatePresence>
 
-      <ChatbotButton
-        animate={isDrawerOpen ? 'open' : 'closed'}
-        variants={buttonVariants}
-        transition={{ type: 'tween' }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => {
-          setIsDrawerOpen(!isDrawerOpen);
+      {scriptId !== 0 && (
+        <ChatbotButton
+          animate={isDrawerOpen ? 'open' : 'closed'}
+          variants={buttonVariants}
+          transition={{ type: 'tween' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => {
+            setIsDrawerOpen(!isDrawerOpen);
 
-          if (chatRoomId === 'none') {
-            startChatHandler();
-          } else if (isDrawerOpen) {
-            disconnectHandler();
-          } else {
-            connectHandler();
-          }
-        }}
-      />
+            if (chatRoomId === 'none') {
+              startChatHandler();
+              connectHandler();
+            } else if (isDrawerOpen) {
+              disconnectHandler();
+            } else {
+              connectHandler();
+            }
+          }}
+        />
+      )}
     </>
   );
 };
