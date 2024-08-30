@@ -27,7 +27,7 @@ const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
 
   const appearanceQuery = useQuery({
     queryKey: queryKeys.appearance,
-    queryFn: () => apperanceRate(31),
+    queryFn: () => apperanceRate(scriptId),
     enabled: scriptId !== 0,
   });
 
