@@ -79,7 +79,7 @@ export const useConvert = () => {
   };
 
  // api: convert storyboard
-  const convertStoryboard = async (scriptId: string, script: Script) => {
+  const convertStoryboard = async (scriptId: number, script: Script) => {
     const { accessToken } = getTokenUser();
     const headers = {
       'X-AUTH-TOKEN': accessToken,
@@ -114,7 +114,7 @@ export const useConvert = () => {
   };
 
  // api: create a new chatRoom / spring
-  const startNewChat = async (scriptId: string) => {
+  const startNewChat = async (scriptId: number) => {
     const { accessToken } = getTokenUser();
     const headers = {
       'X-AUTH-TOKEN': accessToken,

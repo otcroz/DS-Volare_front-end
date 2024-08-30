@@ -56,6 +56,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       onSuccess: (result) => {
         setScript(result.script);
         setScriptId(result.scriptId);
+        console.log(result.scriptId);
 
         temp[1] = 'data';
         setTemp([...temp]);

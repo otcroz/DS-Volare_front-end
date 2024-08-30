@@ -11,6 +11,7 @@ import MessageList from './MessageList';
 import { Message } from '../../../types';
 import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
 import { useConvert } from '../../../hooks/useConvert';
+import { useScriptIdData } from '../../../context/convertDataContext';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -21,15 +22,14 @@ const ChatbotBox = () => {
   const client = useRef<CompatClient>(); // 채팅 Stomp 클라이언트
   const { startNewChat, getChatList } = useConvert();
 
-  // 변경
-  const scriptId = '2';
-  const [chatRoomId, setChatRoomId] = useState<string>(
-    'e0cfaa64-2da2-4e67-b566-1a1c6e6a42b8'
-  );
+  const { scriptId } = useScriptIdData();
+  const [chatRoomId, setChatRoomId] = useState<string>('none');
 
   const startChatHandler = async () => {
+    console.log(scriptId);
     const result = await startNewChat(scriptId);
     setChatRoomId(result.chatRoomId);
+    connectHandler();
   };
 
   // (stomp) connect & subscribe
