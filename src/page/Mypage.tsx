@@ -67,7 +67,7 @@ const MyPage = () => {
             <UserInfoTextBox>
               {!userInfoQuery.isLoading && (
                 <TitleText style={{ fontSize: '20px' }}>
-                  {userInfoQuery.data.result.email}
+                  {userInfoQuery.data.email}
                 </TitleText>
               )}
               <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
