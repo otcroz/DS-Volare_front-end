@@ -37,6 +37,7 @@ const App = () => {
           </QueryClientProvider>
         </ConvertDataProvider>
       </MainPageAnimateProvider>
+      <StyledToastConatiner limit={1} />
     </>
   );
 };
