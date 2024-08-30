@@ -175,9 +175,12 @@ export const useConvert = () => {
     };
 
     try {
-      const result = await axios.get(`/spring/scripts/31/appearance-rate`, {
-        headers: headers,
-      });
+      const result = await axios.get(
+        `/spring/scripts/${scriptId}/appearance-rate`,
+        {
+          headers: headers,
+        }
+      );
       const data = result.data;
       if (data.isSuccess) {
         return data;
