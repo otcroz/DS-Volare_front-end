@@ -74,6 +74,14 @@ interface ForceGraphProps {
   invalidation?: Promise<void>;
 }
 
+const colorArr: string[] = [
+  'rgb(255, 179, 186)',
+  'rgb(255, 200, 137)',
+  'rgb(130, 215, 255)',
+  'rgb(255, 223, 186)',
+  'rgb(193, 235, 255)',
+];
+
 // ForceGraph 함수
 const ForceGraph = (
   data: { nodes: Node[]; links: Link[] },
@@ -95,7 +103,7 @@ const ForceGraph = (
     linkStrokeWidth = 4,
     linkStrokeLinecap = 'round',
     linkStrength = 0.1,
-    colors = [...d3.schemeTableau10],
+    colors = colorArr,
     width = 640,
     height = 400,
     invalidation,
@@ -127,7 +135,10 @@ const ForceGraph = (
 
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
 
-  const color = d3.scaleOrdinal(nodeGroups || [], colors);
+  //const color = d3.scaleOrdinal(nodeGroups || [], colors);
+  const groupLevelKey = (d: Node) => `${d.group}-${d.level}`;
+
+  const color = d3.scaleOrdinal(data.nodes.map(groupLevelKey), colorArr);
 
   const forceNode = d3
     .forceManyBody()
@@ -249,7 +260,7 @@ const ForceGraph = (
     })
     .attr('fill', (d: d3.SimulationNodeDatum) => {
       const node = d as Node;
-      return color ? color(node.group) : nodeFill;
+      return color(groupLevelKey(node));
     });
 
   node
