@@ -67,7 +67,7 @@ const MyPage = () => {
             <UserInfoTextBox>
               {!userInfoQuery.isLoading && (
                 <TitleText style={{ fontSize: '20px' }}>
-                  {userInfoQuery.data}
+                  {userInfoQuery.data.result.email}
                 </TitleText>
               )}
               <TitleText style={{ fontSize: '40px' }}>Works</TitleText>
@@ -106,14 +106,14 @@ const Background = styled.div`
   height: 100vh;
 `;
 
-const BackgroundImage = styled.p`
+const BackgroundImage = styled.div`
   display: flex;
   height: 75vh;
   background-image: url(${bgImg});
   background-size: cover;
 `;
 
-const BackgroundCover = styled.p`
+const BackgroundCover = styled.div`
   flex: 1;
   background-color: #a6a29a66;
   backdrop-filter: blur(3px);

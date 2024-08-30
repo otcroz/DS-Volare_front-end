@@ -79,7 +79,7 @@ export const useAuth = () => {
       const result = await axios.get(`/spring/users`, {
         headers: headers,
       });
-      const data = result.data;
+      const data = result.data.result;
       if (data.isSuccess) {
         return data;
       } else {
