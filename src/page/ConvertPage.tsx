@@ -20,7 +20,6 @@ import {
 } from '../context/convertDataContext';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../utils/queryKeys';
-import StoryboardWideBox from '../component/convert/storyboard/StoryboardWideBox';
 
 interface TextProps {
   color: string;
@@ -46,25 +45,25 @@ const ConvertPage = () => {
     setScrollTop(newScrollTop);
   };
 
-  // const NovelSaveMutate = useMutation({
-  //   mutationKey: mutationKeys.mutateSaveNovel,
-  //   mutationFn: () => saveNovel(title, text),
-  //   onSuccess: (result) => {
-  //     // 추후에 toast 추가
-  //     setNovelId(result.result.novelId); // 소설 id 저장
-  //   },
-  //   onError: () => {
-  //     console.log('update failure.');
-  //   },
-  //   onSettled: () => {
-  //     console.log('call NovelSaveMutate API');
-  //   },
-  // });
+  const NovelSaveMutate = useMutation({
+    mutationKey: mutationKeys.mutateSaveNovel,
+    mutationFn: () => saveNovel(title, text),
+    onSuccess: (result) => {
+      // 추후에 toast 추가
+      setNovelId(result.result.novelId); // 소설 id 저장
+    },
+    onError: () => {
+      console.log('update failure.');
+    },
+    onSettled: () => {
+      console.log('call NovelSaveMutate API');
+    },
+  });
 
   // 소설 저장 함수
   const handleSaveNovel = async () => {
-    // // func: 소설 저장
-    // NovelSaveMutate.mutate();
+    // func: 소설 저장
+    NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
@@ -130,15 +129,14 @@ const ConvertPage = () => {
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[2].onMoveElement}
               />
-              {/* <StoryboardBox
+              <StoryboardBox
                 ref={stepTabs[2].element}
                 data={temp[2]}
                 temp={temp}
                 setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[3].onMoveElement}
-              /> */}
-              <StoryboardWideBox />
+              />
               <StatisticsBox ref={stepTabs[3].element} data="" />
             </ConvertStepWrapper>
           </AnimationProvider>

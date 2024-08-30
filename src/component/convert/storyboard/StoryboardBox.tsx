@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { ReactComponent as FileDownloadIcon } from '../../../assets/icons/file_download_icon.svg';
 import {
   GlassBox,
@@ -11,9 +11,9 @@ import {
   ConvertButton,
   FileButton,
   ScrollText,
-} from '../../../styles/convertBoxStyles';
-import StoryboardInfo from './StoryboardInfo';
-import CutList from './CutList';
+} from '../../../styles/storyboardStyles';
+import StoryboardInfo from './StoryboardWideInfo';
+import CutList from './WideCutList';
 import { motion } from 'framer-motion';
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
@@ -48,7 +48,6 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     const { script } = useScriptData();
     const { storyboard, setStoryboard } = useStoryboardData();
     const { convertStoryboard } = useConvert();
-    setStoryboard(sb1);
 
     const StoryboardMutate = useMutation({
       mutationKey: mutationKeys.mutateStoryboard,
@@ -86,7 +85,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
     };
 
     return (
-      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 100 }}>
+      <motion.div ref={ref} animate={controlStoryboard} style={{ opacity: 0 }}>
         {isClick ? (
           <GlassBox hasData={true}>
             {!StoryboardMutate.isPending ? (

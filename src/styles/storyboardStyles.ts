@@ -74,7 +74,7 @@ export const TutorialBox = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 1.25rem;
   text-align: center;
-  margin: 20% 0;
+  margin: 10vh 0;
 `;
 
 export const TutorialTitle = styled.h1`
