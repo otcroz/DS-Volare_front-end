@@ -12,6 +12,8 @@ import { Message } from '../../../types';
 import { CompatClient, IMessage, Stomp } from '@stomp/stompjs';
 import { useConvert } from '../../../hooks/useConvert';
 import { useScriptIdData } from '../../../context/convertDataContext';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 const ChatbotBox = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false); // drawer
@@ -34,8 +36,10 @@ const ChatbotBox = () => {
 
   // (stomp) connect & subscribe
   const connectHandler = async () => {
-    const result = await getChatList(chatRoomId);
-    setMessages(result.allMessages);
+    if (chatRoomId !== 'none') {
+      const result = await getChatList(chatRoomId);
+      setMessages(result.allMessages);
+    }
 
     client.current = Stomp.over(() => {
       const sock = new WebSocket(`ws://localhost:8080/websocket`);
@@ -134,6 +138,13 @@ const ChatbotBox = () => {
     closed: { opacity: 1, x: 0, zIndex: 1 },
   };
 
+  // floating button
+  useEffect(() => {
+    if (scriptId !== 0) {
+      Toast.success(toastText.chatbotEnable);
+    }
+  }, [scriptId]);
+
   return (
     <>
       <AnimatePresence>
@@ -158,23 +169,26 @@ const ChatbotBox = () => {
         )}
       </AnimatePresence>
 
-      <ChatbotButton
-        animate={isDrawerOpen ? 'open' : 'closed'}
-        variants={buttonVariants}
-        transition={{ type: 'tween' }}
-        whileTap={{ scale: 0.9 }}
-        onClick={() => {
-          setIsDrawerOpen(!isDrawerOpen);
+      {scriptId !== 0 && (
+        <ChatbotButton
+          animate={isDrawerOpen ? 'open' : 'closed'}
+          variants={buttonVariants}
+          transition={{ type: 'tween' }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => {
+            setIsDrawerOpen(!isDrawerOpen);
 
-          if (chatRoomId === 'none') {
-            startChatHandler();
-          } else if (isDrawerOpen) {
-            disconnectHandler();
-          } else {
-            connectHandler();
-          }
-        }}
-      />
+            if (chatRoomId === 'none') {
+              startChatHandler();
+              connectHandler();
+            } else if (isDrawerOpen) {
+              disconnectHandler();
+            } else {
+              connectHandler();
+            }
+          }}
+        />
+      )}
     </>
   );
 };
