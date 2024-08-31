@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 type buttonProps = { isWrite: boolean };
 
 export const GlassBox = styled.div<{ hasData: boolean }>`
-  min-width: 41rem;
+  min-width: 94rem;
   height: 45rem;
   background: rgba(255, 252, 245, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -74,7 +74,7 @@ export const TutorialBox = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 1.25rem;
   text-align: center;
- margin: 10vh 0;
+  margin: 10vh 0;
 `;
 
 export const TutorialTitle = styled.h1`

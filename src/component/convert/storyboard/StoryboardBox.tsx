@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import { ReactComponent as FileDownloadIcon } from '../../../assets/icons/file_download_icon.svg';
 import {
   GlassBox,
@@ -11,9 +11,9 @@ import {
   ConvertButton,
   FileButton,
   ScrollText,
-} from '../../../styles/convertBoxStyles';
-import StoryboardInfo from './StoryboardInfo';
-import CutList from './CutList';
+} from '../../../styles/storyboardStyles';
+import StoryboardInfo from './StoryboardWideInfo';
+import CutList from './WideCutList';
 import { motion } from 'framer-motion';
 import { useAnimationContext } from '../../../context/animationContext';
 import { useConvertStep } from '../../../context/convertStepContext';
@@ -103,7 +103,7 @@ const StoryboardBox = forwardRef<HTMLDivElement, props>(
                           <>
                             <StoryboardInfo
                               data={{
-                                sceneNum: s.sceneNum,
+                                scene_num: s.scene_num,
                                 summary: s.summary,
                                 location: s.location,
                                 cutCount: s.content!.length,

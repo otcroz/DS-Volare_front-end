@@ -10,7 +10,6 @@ type props = {
 const StoryboardInfo = ({ data }: props) => {
   return (
     <InfoContainer>
-      <StoryboardTitle>(제목)</StoryboardTitle>
       <GridContainer>
         <GridItem bgColor={'lightgray'} fontSize={'large'}>
           Scene
@@ -21,7 +20,7 @@ const StoryboardInfo = ({ data }: props) => {
           Cut
         </GridItem>
         <GridItem bgColor={'lightgray'} fontSize={'large'}>
-          #00{data.sceneNum}
+          #00{data.scene_num}
         </GridItem>
         <GridItem colSpan={2}>장소: {data.location}</GridItem>
         <GridItem fontSize={'large'}>{data.cutCount}</GridItem>

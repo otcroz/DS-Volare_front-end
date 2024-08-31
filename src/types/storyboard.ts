@@ -7,7 +7,7 @@ export type Cut = {
 };
 
 export type StoryboardScene = {
-  sceneNum: number;
+  scene_num: number;
   summary: string;
   location: string;
   content?: Cut[];

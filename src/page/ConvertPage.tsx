@@ -45,25 +45,25 @@ const ConvertPage = () => {
     setScrollTop(newScrollTop);
   };
 
-  // const NovelSaveMutate = useMutation({
-  //   mutationKey: mutationKeys.mutateSaveNovel,
-  //   mutationFn: () => saveNovel(title, text),
-  //   onSuccess: (result) => {
-  //     // 추후에 toast 추가
-  //     setNovelId(result.result.novelId); // 소설 id 저장
-  //   },
-  //   onError: () => {
-  //     console.log('update failure.');
-  //   },
-  //   onSettled: () => {
-  //     console.log('call NovelSaveMutate API');
-  //   },
-  // });
+  const NovelSaveMutate = useMutation({
+    mutationKey: mutationKeys.mutateSaveNovel,
+    mutationFn: () => saveNovel(title, text),
+    onSuccess: (result) => {
+      // 추후에 toast 추가
+      setNovelId(result.result.novelId); // 소설 id 저장
+    },
+    onError: () => {
+      console.log('update failure.');
+    },
+    onSettled: () => {
+      console.log('call NovelSaveMutate API');
+    },
+  });
 
   // 소설 저장 함수
   const handleSaveNovel = async () => {
-    // // func: 소설 저장
-    // NovelSaveMutate.mutate();
+    // func: 소설 저장
+    NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
