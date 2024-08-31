@@ -193,6 +193,29 @@ export const useConvert = () => {
     }
   };
 
+  // api: novel statistics
+  const convertStatistics = async (scriptId: number) => {
+    const { accessToken } = getTokenUser();
+    const headers = {
+      'X-AUTH-TOKEN': accessToken,
+    };
+
+    try {
+      const result = await axios.get(`/spring/scripts/${scriptId}/details`, {
+        headers: headers,
+      });
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+        return data.false;
+      }
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
+
   return {
     saveNovel,
     cognizeCharacter,
@@ -201,5 +224,6 @@ export const useConvert = () => {
     startNewChat,
     getChatList,
     apperanceRate,
+    convertStatistics,
   };
 };

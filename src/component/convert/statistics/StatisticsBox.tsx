@@ -22,7 +22,7 @@ type props = {
 
 const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
   const { controlStatistics } = useAnimationContext();
-  const { apperanceRate } = useConvert();
+  const { apperanceRate, convertStatistics } = useConvert();
   const { scriptId } = useScriptIdData();
 
   const appearanceQuery = useQuery({
@@ -31,14 +31,23 @@ const StatisticsBox = forwardRef<HTMLDivElement, props>(({ data }, ref) => {
     enabled: scriptId !== 0,
   });
 
+  const statisticsQuery = useQuery({
+    queryKey: queryKeys.statistics,
+    queryFn: () => convertStatistics(scriptId),
+    enabled: scriptId !== 0,
+  });
+
   return (
     <motion.div ref={ref} animate={controlStatistics} style={{ opacity: 0 }}>
       <GlassBox hasData={true}>
         <TitleText>통계</TitleText>
         <ContentBox style={{ overflowY: 'scroll' }}>
-          {!appearanceQuery.isFetching && appearanceQuery.data ? (
+          {!appearanceQuery.isFetching &&
+          !statisticsQuery.isFetching &&
+          appearanceQuery.data &&
+          statisticsQuery.data ? (
             <>
-              <Mindmap />
+              <Mindmap result={statisticsQuery.data.result} />
               <RateChart result={appearanceQuery.data.result} />
             </>
           ) : (
