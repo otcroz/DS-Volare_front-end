@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3';
 import { useEffect, useRef } from 'react';
 
-// 데이터 타입 정의
+// mindap data type
 interface Node extends d3.SimulationNodeDatum {
   id: string;
   group: string;
@@ -12,7 +12,7 @@ interface Node extends d3.SimulationNodeDatum {
 interface Link extends d3.SimulationLinkDatum<Node> {
   source: string;
   target: string;
-  value: number; // 중요도, 아직 사용하지 않음
+  value: number;
 }
 
 type Data = {
@@ -20,31 +20,15 @@ type Data = {
   links: Link[];
 };
 
-// dummy data
-const data: Data = {
-  nodes: [
-    { id: '빨간 모자', group: '1', level: 1 },
-    { id: '장소', group: '2', level: 2 },
-    { id: '등장인물', group: '3', level: 2 },
-    { id: '길 위', group: '2', level: 3 },
-    { id: '할머니네 집', group: '2', level: 3 },
-    { id: '엄마네 집', group: '2', level: 3 },
-    { id: '빨간모자', group: '3', level: 3 },
-    { id: '늑대', group: '3', level: 3 },
-    { id: '할머니', group: '3', level: 3 },
-    { id: '엄마', group: '3', level: 3 },
-  ],
-  links: [
-    { source: '빨간 모자', target: '장소', value: 1 },
-    { source: '빨간 모자', target: '등장인물', value: 1 },
-    { source: '장소', target: '길 위', value: 3 },
-    { source: '장소', target: '할머니네 집', value: 3 },
-    { source: '장소', target: '엄마네 집', value: 3 },
-    { source: '등장인물', target: '빨간모자', value: 3 },
-    { source: '등장인물', target: '늑대', value: 3 },
-    { source: '등장인물', target: '할머니', value: 3 },
-    { source: '등장인물', target: '엄마', value: 3 },
-  ],
+// response data type
+type MindmapProps = {
+  result: ResponseStatisticsType;
+};
+
+type ResponseStatisticsType = {
+  title: string;
+  locations: string[];
+  characters: string[];
 };
 
 // Props 타입 정의
@@ -336,12 +320,50 @@ const ForceGraph = (
   }
 };
 
-const Mindmap = () => {
+const Mindmap = ({ result }: MindmapProps) => {
   const width = 928;
   const height = 700;
   const svgRef = useRef<HTMLDivElement | null>(null);
 
+  console.log(result);
+
+  const RefineData = (result: ResponseStatisticsType) => {
+    const data: Data = {
+      nodes: [],
+      links: [],
+    };
+
+    // base push
+    data.nodes.push(
+      { id: result.title, group: '1', level: 1 },
+      { id: '장소', group: '2', level: 2 },
+      { id: '등장인물', group: '3', level: 2 }
+    );
+
+    data.links.push(
+      { source: result.title, target: '장소', value: 1 },
+      { source: result.title, target: '등장인물', value: 1 }
+    );
+
+    // data push
+    result.locations.map((item, _) => {
+      data.nodes.push({ id: item, group: '2', level: 3 });
+      data.links.push({ source: '장소', target: item, value: 3 });
+    });
+
+    result.characters.map((item, _) => {
+      data.nodes.push({ id: item, group: '3', level: 3 });
+      data.links.push({ source: '등장인물', target: item, value: 3 });
+    });
+
+    return data;
+  };
+
   useEffect(() => {
+    // data refine
+    const data = RefineData(result);
+
+    // create mindmap
     if (svgRef.current) {
       // ForceGraph 함수 호출하여 SVG 생성
       const svgNode = ForceGraph(data, { width, height });
@@ -350,7 +372,7 @@ const Mindmap = () => {
         svgRef.current.appendChild(svgNode); // 새 SVG 추가
       }
     }
-  }, [data, width]);
+  }, [width]);
 
   return <div ref={svgRef}></div>;
 };
