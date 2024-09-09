@@ -23,6 +23,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
       setIsLogin(false);
       Toast.success(toastText.logoutSuccess);
     } else {
+      setModalIsOpen(false);
       Toast.error(toastText.logoutError);
     }
   };
@@ -51,6 +52,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
             네
           </Button>
           <Button
+            onClick={() => setModalIsOpen(false)}
             style={{
               backgroundColor: theme.colors.beige,
               color: theme.colors.darkBrown,
