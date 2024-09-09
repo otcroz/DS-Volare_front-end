@@ -1,10 +1,7 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { useAuth } from '../../hooks/useAuth';
 import { ModalCustomStyle } from '../../styles/mainStyles';
-import { Toast } from '../../styles/ToastStyle';
-import { toastText } from '../../utils/toastText';
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,19 +9,9 @@ interface ModalProps {
 }
 
 const TokenExpireModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
-  const { logout } = useAuth();
-  console.log('ㅇㅇ;', isOpen, setModalIsOpen);
-
-  const handleLogout = async () => {
-    const complete = await logout();
-    // 로그아웃 성공 여부 처리
-    if (complete) {
-      setModalIsOpen(false);
-      Toast.success(toastText.logoutSuccess);
-    } else {
-      setModalIsOpen(false);
-      Toast.error(toastText.logoutError);
-    }
+  const handleButtonClick = async () => {
+    setModalIsOpen(false);
+    window.location.reload(); // 페이지 리로드, 모든 상태 초기화
   };
 
   return (
@@ -33,31 +20,23 @@ const TokenExpireModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
       onRequestClose={() => setModalIsOpen(false)}
       style={ModalCustomStyle}
       ariaHideApp={false}
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={false}
     >
       {/* exit */}
       <ExitContainer></ExitContainer>
       {/* content */}
       <LayoutContainer>
         <Text style={{ color: theme.colors.darkBrown }}>
-          오랫동안 접속하지 않아 로그아웃 처리가 되었어요! {'\n'}
-          다시 재로그인 하시겠어요?
+          오랫동안 서비스를 사용하지 않아 로그아웃이 되었어요. <br />
+          다시 로그인을 해서 서비스를 이용해주세요.
         </Text>
         <div style={{ height: '80px' }} />
         <ButtonBox>
           <Button
-            onClick={handleLogout}
+            onClick={handleButtonClick}
             style={{ backgroundColor: theme.colors.olive }}
           >
-            네
-          </Button>
-          <Button
-            style={{
-              backgroundColor: theme.colors.beige,
-              color: theme.colors.darkBrown,
-            }}
-          >
-            아니요
+            알겠습니다!
           </Button>
         </ButtonBox>
       </LayoutContainer>
@@ -68,6 +47,7 @@ const TokenExpireModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
 // text
 const Text = styled.span`
   font-size: 1rem;
+  text-align: center;
 `;
 
 // container
