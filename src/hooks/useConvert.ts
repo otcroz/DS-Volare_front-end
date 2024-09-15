@@ -2,27 +2,27 @@ import axios from 'axios';
 import { useUser } from './useUser';
 import { useNovelIdData } from '../context/convertDataContext';
 import { Script } from '../types';
+import { useAuth } from './useAuth';
+import { useAxiosInstances } from './useAxiosInstance';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
   const { novelId } = useNovelIdData();
+  const { reissue } = useAuth();
+
+  // axios instance 선언
+  const { createAxiosInstance } = useAxiosInstances();
+  const axiosInstance = createAxiosInstance(reissue);
 
   // api: save novel / spring
   const saveNovel = async (title: string, novel: string) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     const requestData = {
       title: title,
       novel: novel,
     };
 
     try {
-      const result = await axios.post(`/spring/novels`, requestData, {
-        headers: headers,
-      });
+      const result = await axiosInstance.post(`/spring/novels`, requestData);
       const data = result.data;
       return data;
     } catch (err) {
@@ -45,23 +45,15 @@ export const useConvert = () => {
 
   // api: convert a script / spring
   const convertScript = async (candidates: string[], text: string) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     const requestData = {
       candidates: candidates,
       text: text,
     };
 
     try {
-      const result = await axios.post(
+      const result = await axiosInstance.post(
         `/spring/scripts/${novelId}`,
-        requestData,
-        {
-          headers: headers,
-        }
+        requestData
       );
 
       const data = result.data;
@@ -80,11 +72,6 @@ export const useConvert = () => {
 
   // api: convert storyboard
   const convertStoryboard = async (scriptId: number, script: Script) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     const requestData = {
       scriptId: scriptId,
       script: script,
@@ -93,10 +80,7 @@ export const useConvert = () => {
     try {
       const result = await axios.post(
         `/spring/sb/generate-storyboard`,
-        requestData,
-        {
-          headers: headers,
-        }
+        requestData
       );
 
       const data = result.data;
@@ -115,17 +99,8 @@ export const useConvert = () => {
 
   // api: create a new chatRoom / spring
   const startNewChat = async (scriptId: number) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     try {
-      const result = await axios.post(
-        `/spring/chatRooms/${scriptId}`,
-        {},
-        { headers: headers }
-      );
+      const result = await axiosInstance.post(`/spring/chatRooms/${scriptId}`);
 
       const data = result.data;
       console.log(data);
@@ -144,15 +119,8 @@ export const useConvert = () => {
   // api: get chat list / spring
   // (need fix) cursor-based-pagination
   const getChatList = async (chatRoomId: string) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     try {
-      const result = await axios.get(`/spring/chats/${chatRoomId}`, {
-        headers: headers,
-      });
+      const result = await axiosInstance.get(`/spring/chats/${chatRoomId}`);
 
       const data = result.data;
       if (data.isSuccess) {
@@ -169,17 +137,9 @@ export const useConvert = () => {
 
   // api: apperance rate
   const apperanceRate = async (scriptId: number) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     try {
-      const result = await axios.get(
-        `/spring/scripts/${scriptId}/appearance-rate`,
-        {
-          headers: headers,
-        }
+      const result = await axiosInstance.get(
+        `/spring/scripts/${scriptId}/appearance-rate`
       );
       const data = result.data;
       if (data.isSuccess) {
@@ -195,15 +155,10 @@ export const useConvert = () => {
 
   // api: novel statistics
   const convertStatistics = async (scriptId: number) => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
-
     try {
-      const result = await axios.get(`/spring/scripts/${scriptId}/details`, {
-        headers: headers,
-      });
+      const result = await axiosInstance.get(
+        `/spring/scripts/${scriptId}/details`
+      );
       const data = result.data;
       if (data.isSuccess) {
         return data;

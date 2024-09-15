@@ -1,8 +1,13 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { useUser } from './useUser';
+import { useTokenModal } from '../context/tokenModalContext';
+import { useAxiosInstances } from './useAxiosInstance';
 
 export const useAuth = () => {
   const { updateUser, clearUser, getTokenUser, reissueToken } = useUser();
+  const { openModal } = useTokenModal();
+  const { createAxiosInstance, createAxiosInstanceTwoTkn } =
+    useAxiosInstances();
 
   const login = async (endpoint: string) => {
     try {
@@ -13,24 +18,10 @@ export const useAuth = () => {
   };
 
   const logout = async () => {
-    const { accessToken, refreshToken } = getTokenUser();
-    //console.log('accessToken: ', accessToken);
-    //console.log('refreshToken: ', refreshToken);
-
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-      'refresh-Token': refreshToken,
-    };
-
     try {
-      const result = await axios.post(
-        `/spring/users/sign-out`,
-        {},
-        {
-          headers: headers,
-        }
-      );
+      const result = await axiosInstanceTwo.post(`/spring/users/sign-out`);
 
+      console.log(result);
       const data = result.data;
       console.log('data: ', data);
       if (data.isSuccess) {
@@ -38,7 +29,6 @@ export const useAuth = () => {
         clearUser();
         return true;
       } else {
-        console.log(data.message);
         return false;
       }
     } catch (err) {
@@ -46,44 +36,44 @@ export const useAuth = () => {
     }
   };
 
-  const refreshFunc = async () => {
+  const reissue = async () => {
     const { accessToken, refreshToken } = getTokenUser();
+    console.log('이거 호출은 됨?');
 
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-      'refresh-Token': refreshToken,
-    };
-    const result = await axios.post(
-      `/spring/users/reissue-token`,
-      {},
-      {
-        headers: headers,
+    try {
+      const result = await axiosInstanceTwo.post(`/spring/users/reissue-token`);
+      const data = result.headers;
+      console.log('reissue', data);
+      // 토큰 재발급 성공
+      if (data) {
+        const tokens = result.headers;
+        const resAccessToken = tokens.accesstoken;
+        const resRefreshToken = tokens.refreshtoken;
+        // restore token
+        reissueToken(resAccessToken, resRefreshToken);
+
+        return true;
+      } else {
+        // 토큰 재발급 실패
+        return false;
       }
-    );
-    console.log(result);
-    const tokens = result.headers;
-
-    const resAccessToken = tokens.accessToken;
-    const resRefreshToken = tokens.refreshToken;
-
-    // restore token
-    reissueToken(resAccessToken, resRefreshToken);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  // axios instance 선언
+  const axiosInstance = createAxiosInstance(reissue);
+  const axiosInstanceTwo = createAxiosInstanceTwoTkn(reissue);
+
   const userInfoFunc = async () => {
-    const { accessToken } = getTokenUser();
-    const headers = {
-      'X-AUTH-TOKEN': accessToken,
-    };
     try {
-      const result = await axios.get(`/spring/users`, {
-        headers: headers,
-      });
+      const result = await axiosInstance.get(`/spring/users`);
+      console.log('result: ', result);
       const data = result.data.result;
       if (data.isSuccess) {
         return data;
       } else {
-        console.log(data.message);
         return data;
       }
     } catch (err) {
@@ -93,7 +83,7 @@ export const useAuth = () => {
   return {
     login,
     logout,
-    refreshFunc,
+    reissue,
     userInfoFunc,
   };
 };

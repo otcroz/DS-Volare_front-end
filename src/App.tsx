@@ -10,6 +10,8 @@ import { StyledToastConatiner } from './styles/ToastStyle';
 import 'react-toastify/dist/ReactToastify.css';
 import { ConvertDataProvider } from './context/convertDataContext';
 import { MainPageAnimateProvider } from './context/mainAnimationContext';
+import { useTokenModal } from './context/tokenModalContext';
+import TokenExpireModal from './component/base/TokenExpireModal';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -21,6 +23,8 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  const { modalIsOpen, closeModal } = useTokenModal();
+
   return (
     <>
       <MainPageAnimateProvider>
@@ -38,6 +42,8 @@ const App = () => {
         </ConvertDataProvider>
       </MainPageAnimateProvider>
       <StyledToastConatiner limit={1} />
+      {/* token expire modal */}
+      <TokenExpireModal isOpen={modalIsOpen} setModalIsOpen={closeModal} />
     </>
   );
 };

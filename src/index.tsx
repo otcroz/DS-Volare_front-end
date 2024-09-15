@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider } from 'styled-components';
+import { ModalProvider } from './context/tokenModalContext';
 
 // global-setting
 import { GlobalStyle } from './styles/global';
@@ -15,8 +16,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
+      <ModalProvider>
+        <GlobalStyle />
+        <App />
+      </ModalProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -1,31 +1,17 @@
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { useAuth } from '../../hooks/useAuth';
 import { ModalCustomStyle } from '../../styles/mainStyles';
-import { Toast } from '../../styles/ToastStyle';
-import { toastText } from '../../utils/toastText';
 
 interface ModalProps {
   isOpen: boolean;
   setModalIsOpen: (value: boolean) => void;
-  setIsLogin: (value: boolean) => void;
 }
 
-const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
-  const { logout } = useAuth();
-
-  const handleLogout = async () => {
-    const complete = await logout();
-    // 로그아웃 성공 여부 처리
-    if (complete) {
-      setModalIsOpen(false);
-      setIsLogin(false);
-      Toast.success(toastText.logoutSuccess);
-    } else {
-      setModalIsOpen(false);
-      Toast.error(toastText.logoutError);
-    }
+const TokenExpireModal = ({ isOpen, setModalIsOpen }: ModalProps) => {
+  const handleButtonClick = async () => {
+    setModalIsOpen(false);
+    window.location.reload(); // 페이지 리로드, 모든 상태 초기화
   };
 
   return (
@@ -34,31 +20,23 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
       onRequestClose={() => setModalIsOpen(false)}
       style={ModalCustomStyle}
       ariaHideApp={false}
-      shouldCloseOnOverlayClick={true}
+      shouldCloseOnOverlayClick={false}
     >
       {/* exit */}
       <ExitContainer></ExitContainer>
       {/* content */}
       <LayoutContainer>
         <Text style={{ color: theme.colors.darkBrown }}>
-          로그아웃 하시겠습니까?
+          오랫동안 서비스를 사용하지 않아 로그아웃이 되었어요. <br />
+          다시 로그인을 해서 서비스를 이용해주세요.
         </Text>
         <div style={{ height: '80px' }} />
         <ButtonBox>
           <Button
-            onClick={handleLogout}
+            onClick={handleButtonClick}
             style={{ backgroundColor: theme.colors.olive }}
           >
-            네
-          </Button>
-          <Button
-            onClick={() => setModalIsOpen(false)}
-            style={{
-              backgroundColor: theme.colors.beige,
-              color: theme.colors.darkBrown,
-            }}
-          >
-            아니요
+            알겠습니다!
           </Button>
         </ButtonBox>
       </LayoutContainer>
@@ -69,6 +47,7 @@ const LogoutModal = ({ isOpen, setModalIsOpen, setIsLogin }: ModalProps) => {
 // text
 const Text = styled.span`
   font-size: 1rem;
+  text-align: center;
 `;
 
 // container
@@ -99,4 +78,4 @@ const Button = styled.button`
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.3);
 `;
 
-export default LogoutModal;
+export default TokenExpireModal;

@@ -33,16 +33,18 @@ const SceneList = () => {
   };
 
   return (
-    <Container>
-      {script.scene.map((scene, sceneIndex) => (
-        <SceneItem
-          key={scene.scene_num}
-          scene={scene}
-          sceneIndex={sceneIndex}
-          onContentChange={handleContentChange}
-        />
-      ))}
-    </Container>
+    script && (
+      <Container>
+        {script.scene.map((scene, sceneIndex) => (
+          <SceneItem
+            key={scene.scene_num}
+            scene={scene}
+            sceneIndex={sceneIndex}
+            onContentChange={handleContentChange}
+          />
+        ))}
+      </Container>
+    )
   );
 };
 
