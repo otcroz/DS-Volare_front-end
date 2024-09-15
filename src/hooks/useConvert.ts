@@ -100,7 +100,7 @@ export const useConvert = () => {
   // api: create a new chatRoom / spring
   const startNewChat = async (scriptId: number) => {
     try {
-      const result = await axios.post(`/spring/chatRooms/${scriptId}`);
+      const result = await axiosInstance.post(`/spring/chatRooms/${scriptId}`);
 
       const data = result.data;
       console.log(data);
@@ -120,7 +120,7 @@ export const useConvert = () => {
   // (need fix) cursor-based-pagination
   const getChatList = async (chatRoomId: string) => {
     try {
-      const result = await axios.get(`/spring/chats/${chatRoomId}`);
+      const result = await axiosInstance.get(`/spring/chats/${chatRoomId}`);
 
       const data = result.data;
       if (data.isSuccess) {
@@ -138,7 +138,7 @@ export const useConvert = () => {
   // api: apperance rate
   const apperanceRate = async (scriptId: number) => {
     try {
-      const result = await axios.get(
+      const result = await axiosInstance.get(
         `/spring/scripts/${scriptId}/appearance-rate`
       );
       const data = result.data;
@@ -156,7 +156,9 @@ export const useConvert = () => {
   // api: novel statistics
   const convertStatistics = async (scriptId: number) => {
     try {
-      const result = await axios.get(`/spring/scripts/${scriptId}/details`);
+      const result = await axiosInstance.get(
+        `/spring/scripts/${scriptId}/details`
+      );
       const data = result.data;
       if (data.isSuccess) {
         return data;
