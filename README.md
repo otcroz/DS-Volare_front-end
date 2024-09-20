@@ -12,7 +12,7 @@ ___
 
 	
 `#소설 IP 확장` `#소설의 대본화` `#스토리보드 생성`  <br /> <br />
-사용자가 작성한 **소설을 대본으로 변환하고 변환된 대본으로 스토리보드를 생성하는 알고리즘**을 통해 제작 과정을 자동화하고  <br />
+사용자가 작성한 **소설을 대본으로 변환하고 변환된 대본으로 스토리보드를 생성하는 알고리즘**을 통해 제작 과정을 자동화하고
 더불어 드라마, 영화, 연극 등의 시청각 창작물 제작을 위한 토대를 마련해줍니다.
 
 
@@ -39,12 +39,12 @@ https://github.com/user-attachments/assets/d16cb270-8ca9-478f-b436-f275e300ab56
 | ![image](https://github.com/user-attachments/assets/ccf2ed1f-80d0-4f47-a1f9-fdf4f5218a00)| ![image](https://github.com/user-attachments/assets/111941ce-482d-4c69-a49f-7e55bd1283b3)|![image](https://github.com/user-attachments/assets/bc363e41-73d4-44c1-9fa6-d15a0012d18b)|
 | :-----: | :-----: | :-----: |
 | 메인: 서비스 소개 | 메인: 대본화 demo  | 메인: 서비스 사용 방법 |  
-|서비스에 대한 소개| 예시로 주어진 소설을 대본으로 변환하는 <br> 체험을 할 수 있으며, 비회원도 체험 가능| 서비스 사용 방법 작성 및 <br> 로그인 창으로 이동 | 
+|서비스에 대한 소개| 예시로 주어진 소설을 대본으로 변환하는 체험을 할 수 있으며, 비회원도 체험 가능| 서비스 사용 방법 작성 및 로그인 창으로 이동 | 
 
 | ![image](https://github.com/user-attachments/assets/8b111109-5b4d-47bc-a645-7e5ebd3732a2)|![image](https://github.com/user-attachments/assets/92d1b1d3-363e-450e-bfab-4fa314831ed6) | ![image](https://github.com/user-attachments/assets/363af14c-e142-46a5-a0c2-d473d5db540d) |
 | :-----: | :-----: | :-----: |
 | 변환 페이지 데이터 관리(소설 작성 ~ 대본화)  | 로그인&로그아웃 | 마이페이지 |
-| context API를 사용하여 변환 페이지에서의 <br> 데이터 전역 관리 | 로그인 & 로그아웃 구현| 사용자가 생성한 변환 정보를 <br> 열람할 수 있음 |
+| context API를 사용하여 변환 페이지에서의 데이터 전역 관리 | 로그인 & 로그아웃 구현| 사용자가 생성한 변환 정보를 열람할 수 있음 |
 
 ### 이외의 구현한 기능
 - 프로젝트 세팅: `styled-components`, `style-reset`을 사용하여 기본 스타일 리셋 및 전역 스타일 설정, 테마 설정
