@@ -10,16 +10,12 @@ import { ReactComponent as ArrowRightIcon } from '../../assets/icons/arrow_right
 import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '../../utils/queryKeys';
 import axios from 'axios';
+import { sample1, sample2, sample3, sample4 } from './demoDummy';
 
 const MainPageSecondBox = () => {
   const [select, setSelect] = useState<number>(0);
   const [isClick, setIsClick] = useState<boolean>(false);
-  const sampleNovel: string[] = [
-    '샘플내용1',
-    '샘플내용2',
-    '샘플내용3',
-    '샘플내용4',
-  ];
+  const sampleNovel: string[] = [sample1, sample2, sample3, sample4];
 
   useEffect(() => {
     setIsClick(false); // 결과 text 초기화
@@ -45,23 +41,27 @@ const MainPageSecondBox = () => {
   const explainContents = () => {
     return (
       <>
-        <SubTitleText page="second">#1 소설을 대본으로 변환하기</SubTitleText>
+        <SubTitleText $page="second">#1 소설을 대본으로 변환하기</SubTitleText>
         <div style={{ height: '1rem' }} />
-        <ContentText page="second">
+        <ContentText $page="second">
           1. 4개의 소설 샘플 중 하나의 샘플을 선택합니다. <br />
         </ContentText>
-        <ContentText page="second">
+        <ContentText $page="second">
           2.&nbsp;
-          <ContentText page="second" style={{ color: '#EA7333' }}>
+          <ContentText $page="second" style={{ color: '#EA7333' }}>
             대본 변환 버튼
           </ContentText>
           을 누릅니다. <br />
         </ContentText>
-        <ContentText page="second">
+        <ContentText $page="second">
           3. 오른쪽 창에서 변환된 대본을 확인할 수 있습니다.
         </ContentText>
       </>
     );
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.stopPropagation(); // 부모 컴포넌트로의 이벤트 전파를 막음
   };
 
   return (
@@ -69,7 +69,7 @@ const MainPageSecondBox = () => {
       <>
         <SampleContainer>
           <SampleNovelSelector select={select} setSelect={setSelect} />
-          <TextBox>{sampleNovel[select]}</TextBox>
+          <TextBox onWheel={handleWheel}>{sampleNovel[select]}</TextBox>
           <ConvertButton onClick={() => setIsClick(true)}>
             대본 변환
           </ConvertButton>
@@ -77,7 +77,7 @@ const MainPageSecondBox = () => {
         <ArrowRightIcon />
         <SampleContainer>
           <div style={{ height: '30px' }} />
-          <TextBox>
+          <TextBox onWheel={handleWheel}>
             {isClick &&
               !demoQuery.isLoading &&
               demoQuery.data.result.sampleScript}{' '}
@@ -85,7 +85,7 @@ const MainPageSecondBox = () => {
           <div style={{ height: '2.5rem' }} />
         </SampleContainer>
         {/* explain */}
-        <ExplainGridBox page={'second'}>{explainContents()}</ExplainGridBox>
+        <ExplainGridBox $page={'second'}>{explainContents()}</ExplainGridBox>
       </>
     </LayoutWrapper>
   );
@@ -116,6 +116,9 @@ const TextBox = styled.div`
   overflow-wrap: break-word;
   white-space: pre-wrap;
 
+  overflow-y: auto;
+  overflow-x: hidden;
+
   line-height: 1.5;
 `;
 
@@ -126,6 +129,9 @@ const ConvertButton = styled.div`
   justify-content: center;
   width: 10rem;
   height: 2.5rem;
+
+  user-select: none;
+  cursor: pointer;
 
   background-color: ${({ theme }) => theme.colors.orange};
   color: white;

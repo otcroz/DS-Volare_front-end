@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import MainPage from './page/MainPage';
@@ -12,6 +12,7 @@ import { ConvertDataProvider } from './context/convertDataContext';
 import { MainPageAnimateProvider } from './context/mainAnimationContext';
 import { useTokenModal } from './context/tokenModalContext';
 import TokenExpireModal from './component/base/TokenExpireModal';
+import { ConvertStepProvider } from './context/convertStepContext';
 
 // initialize queryClient
 const queryClient = new QueryClient({
@@ -30,14 +31,17 @@ const App = () => {
       <MainPageAnimateProvider>
         <ConvertDataProvider>
           <QueryClientProvider client={queryClient}>
-            <Router>
-              <NavBar />
-              <Routes>
-                <Route path="/main/" element={<MainPage />} />
-                <Route path="/mypage/" element={<MyPage />} />
-                <Route path="/convert/" element={<ConvertPage />} />
-              </Routes>
-            </Router>
+            <ConvertStepProvider>
+              <Router>
+                <NavBar />
+                <Routes>
+                <Route path="/" element={<Navigate to="/main" replace />} />
+                  <Route path="/main/" element={<MainPage />} />
+                  <Route path="/mypage/" element={<MyPage />} />
+                  <Route path="/convert/" element={<ConvertPage />} />
+                </Routes>
+              </Router>
+            </ConvertStepProvider>
           </QueryClientProvider>
         </ConvertDataProvider>
       </MainPageAnimateProvider>

@@ -1,25 +1,48 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import ConvertIndicator from '../component/convert/ConvertIndicator';
 import NovelBox from '../component/convert/novel/NovelBox';
 import CharacterBox from '../component/convert/character/CharacterBox';
 import ScriptBox from '../component/convert/script/ScriptBox';
 import StoryboardBox from '../component/convert/storyboard/StoryboardBox';
 import StatisticsBox from '../component/convert/statistics/StatisticsBox';
-import bgImg from '../assets/background/bg-5.png';
+import bgImgOne from '../assets/background/bg-5.png';
+import bgImgTwo from '../assets/background/bg-1.png';
+import bgImgThree from '../assets/background/bg-6.png';
 import { ReactComponent as SaveFileIcon } from '../assets/icons/save_file_icon.svg';
 import { useMoveScroll } from '../hooks/useMoveScroll';
 import { AnimationProvider } from '../context/animationContext';
-import { ConvertStepProvider } from '../context/convertStepContext';
+import { useConvertStep } from '../context/convertStepContext';
 import ChatbotBox from '../component/convert/chat/ChatbotBox';
 import { useConvert } from '../hooks/useConvert';
 import {
   useNovelTitleData,
   useNovelData,
   useNovelIdData,
+  useScriptData,
+  useScriptIdData,
+  useStoryboardData,
+  useChatRoomIdData,
 } from '../context/convertDataContext';
-import { useMutation } from '@tanstack/react-query';
-import { mutationKeys } from '../utils/queryKeys';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { mutationKeys, queryKeys } from '../utils/queryKeys';
+import { useLocation } from 'react-router-dom';
+import PopPageModal from '../component/base/PopPageModal';
+import {
+  FileButton,
+  GlassBox,
+  ScrollText,
+  TitleText,
+} from '../styles/convertBoxStyles';
+import { ReactComponent as FileDownloadIcon } from '../assets/icons/file_download_icon.svg';
+import { ContentBox } from '../styles/storyboardStyles';
+import SceneList from '../component/convert/script/SceneList';
+import CutList from '../component/convert/storyboard/CutList';
+import StoryboardInfo from '../component/convert/storyboard/StoryboardInfo';
+import Mindmap from '../component/convert/statistics/Mindmap';
+import RateChart from '../component/convert/statistics/RateChart';
+import Spinner from '../component/base/Spinner';
+import { spinnerText } from '../utils/spinnerText';
 
 interface TextProps {
   color: string;
@@ -27,43 +50,34 @@ interface TextProps {
   weight: string;
 }
 
+type bgProps = {
+  $bgImg: string;
+  $fade: boolean;
+};
+
 const ConvertPage = () => {
+  // context data
   const { title, setTitle } = useNovelTitleData();
-  const { text } = useNovelData();
-  const [step, setStep] = useState([false, false, false, false]); // 진행도
+  const { text, setText } = useNovelData();
+  const { script, setScript } = useScriptData();
+  const { storyboard, setStoryboard } = useStoryboardData();
+  const { scriptId, setScriptId } = useScriptIdData();
+
   const [select, setSelect] = useState(0); // 사용자가 선택한 컴포넌트
+  const [isOpen, setModalIsOpen] = useState(false);
   const [scrollTop, setScrollTop] = useState(0); // NovelBox, CharacterBox 동시 스크롤
+  const [fadeOut, setFadeOut] = useState(false); // 배경 애니메이션 fade 상태
+  const [currentBg, setCurrentBg] = useState(bgImgOne);
+  const [isDetail, setIsDetail] = useState(false);
+  const { chatRoomId, setChatRoomId } = useChatRoomIdData();
 
-  // 화면 애니메이션을 위한 임시 상태 관리, 추후에 api 호출로 수정
-  // 상호참조, 대본, 스토리보드(버튼 클릭 전/후)
-  const [temp, setTemp] = useState(['', '', '']);
+  const { step, setStep } = useConvertStep();
+  const { convertDetail, apperanceRate, convertStatistics } = useConvert();
 
-  const { saveNovel } = useConvert();
-  const { setNovelId } = useNovelIdData();
+  const location = useLocation();
 
   const handleScroll = (newScrollTop: number) => {
     setScrollTop(newScrollTop);
-  };
-
-  const NovelSaveMutate = useMutation({
-    mutationKey: mutationKeys.mutateSaveNovel,
-    mutationFn: () => saveNovel(title, text),
-    onSuccess: (result) => {
-      // 추후에 toast 추가
-      setNovelId(result.result.novelId); // 소설 id 저장
-    },
-    onError: () => {
-      console.log('update failure.');
-    },
-    onSettled: () => {
-      console.log('call NovelSaveMutate API');
-    },
-  });
-
-  // 소설 저장 함수
-  const handleSaveNovel = async () => {
-    // func: 소설 저장
-    NovelSaveMutate.mutate();
   };
 
   // 인디케이터 이동
@@ -74,74 +88,245 @@ const ConvertPage = () => {
     useMoveScroll('통계'),
   ];
 
+  // convert detail query
+  const convertDetailQuery = useQuery({
+    queryKey: queryKeys.detail,
+    queryFn: () => convertDetail(location.state.novelId),
+    enabled: isDetail, // isDetail이 true
+  });
+
+  const appearanceQuery = useQuery({
+    queryKey: queryKeys.appearance,
+    queryFn: () => apperanceRate(scriptId),
+    enabled: isDetail && scriptId != 0, // isDetail이 true, scriptId가 업데이트 되었을 때 실행하는 쿼리
+  });
+
+  const statisticsQuery = useQuery({
+    queryKey: queryKeys.statistics,
+    queryFn: () => convertStatistics(scriptId),
+    enabled: isDetail && scriptId != 0,
+  });
+
+  // 변환페이지 이동했을시 data, step 초기화
+  useEffect(() => {
+    if (isDetail && !convertDetailQuery.isFetching) {
+      const { novel, script, storyBoard, chatRoomId } =
+        convertDetailQuery.data.result;
+
+      // 1. step 초기화
+      let tempConvertStep = [true]; // 소설은 항상 있으므로 true를 넣어줌
+
+      // script, storybaord, statistics의 step 값 초기화
+      tempConvertStep.push(script.isExist ? true : false);
+      tempConvertStep = tempConvertStep.concat(
+        storyBoard.isExist ? [true, true] : [false, false]
+      );
+      setStep(tempConvertStep);
+
+      // 2. data 초기화
+      setTitle(novel.title); // 소설 제목
+      setText(novel.storyText); // 소설 내용
+      setChatRoomId(chatRoomId); // 채팅방 번호
+
+      if (script.isExist) setScript({ scene: script.data.script }); // 대본
+      if (storyBoard.isExist) setStoryboard(storyBoard.data); // 스토리보드
+      // 통계 정보에 대한 set 필요
+      setScriptId(script.data.scriptId);
+    }
+  }, [convertDetailQuery.isFetching]);
+
+  // 뒤로가기, 새로고침 이벤트, 상세페이지 여부 처리
+  useEffect(() => {
+    const preventGoBack = (event: Event) => {
+      event.preventDefault();
+      setModalIsOpen(true);
+    };
+
+    // mypage -> convert page
+    if (location.state) {
+      setIsDetail(true); // 상세페이지 모드
+    }
+
+    // 뒤로가기, 새로고침 이벤트 추가
+    const preventLoad = (event: Event) => {
+      event.preventDefault();
+    };
+    window.history.pushState(null, '', window.location.href);
+
+    window.addEventListener('popstate', preventGoBack); // 뒤로가기 event
+    window.addEventListener('beforeunload', preventLoad); // 새로고침 event
+
+    return () => {
+      window.removeEventListener('popstate', preventGoBack);
+      window.removeEventListener('beforeunload', preventLoad);
+    };
+  }, [location.state]);
+
+  // 상세 페이지일시 쿼리 재요청
+  useEffect(() => {
+    if (isDetail) {
+      convertDetailQuery.refetch();
+    }
+  }, [isDetail]);
+
   const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
+  // background
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (step[2]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgThree);
+        setFadeOut(false);
+      } else if (step[1]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgTwo);
+        setFadeOut(false);
+      } else if (step[0]) {
+        setFadeOut(true);
+        setCurrentBg(bgImgOne);
+        setFadeOut(false);
+      }
+    }, 1000); // move animation을 고려하여 시간 설정
+
+    return () => clearTimeout(timer);
+  }, [step]);
+
   return (
-    <Background>
+    <Background $fade={fadeOut} $bgImg={currentBg}>
       <BackgroundCover>
-        <ConvertStepProvider>
-          <TopContainer>
-            <TitleInputBox>
-              <TitleInput
-                value={title}
-                onChange={handleTextChange}
-                placeholder="제목을 입력해주세요.(n0자)"
-              />
-            </TitleInputBox>
-            <IndicatorBox>
-              <ConvertIndicator
-                step={step}
-                select={select}
-                setSelect={setSelect}
-                stepTabs={stepTabs}
-              />
-              <div style={{ width: '2rem' }} />
-              <SaveButtonBox>
-                <SaveButton onClick={handleSaveNovel}>
-                  <SaveFileIcon width={25} />
-                  저장
-                </SaveButton>
-              </SaveButtonBox>
-            </IndicatorBox>
-          </TopContainer>
-          {/* components */}
-          <AnimationProvider>
-            <ConvertStepWrapper>
-              <NovelBox
-                ref={stepTabs[0].element}
-                data=""
-                onScroll={handleScroll}
-                scrollTop={scrollTop}
-              />
+        <TopContainer>
+          <TitleInputBox>
+            <TitleInput
+              value={title}
+              onChange={handleTextChange}
+              placeholder="제목을 입력하세요."
+            />
+          </TitleInputBox>
+          <IndicatorBox>
+            <ConvertIndicator
+              select={select}
+              setSelect={setSelect}
+              stepTabs={stepTabs}
+            />
+          </IndicatorBox>
+        </TopContainer>
+        {/* components */}
+        <AnimationProvider>
+          <ConvertStepWrapper>
+            {/* 소설 박스 */}
+            <NovelBox
+              ref={stepTabs[0].element}
+              data=""
+              onScroll={handleScroll}
+              scrollTop={scrollTop}
+            />
+            {/* 마이페이지 -> 변환 페이지로 이동했을 때 보여주지 않음 */}
+            {!isDetail && (
               <CharacterBox
                 onScroll={handleScroll}
                 scrollTop={scrollTop}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[1].onMoveElement}
               />
+            )}
+            {/* 대본 변환 박스 */}
+            {!isDetail && (
               <ScriptBox
                 ref={stepTabs[1].element}
-                data={temp[1]}
-                temp={temp}
-                setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[2].onMoveElement}
               />
+            )}
+            {isDetail &&
+              convertDetailQuery.data &&
+              convertDetailQuery.data.result.script.isExist && (
+                <div ref={stepTabs[1].element}>
+                  <GlassBox $hasData={true}>
+                    <TitleText>대본화</TitleText>
+                    <FileButton>
+                      <FileDownloadIcon width="2rem" height="2rem" />
+                      &nbsp;다운로드
+                    </FileButton>
+                    <ContentBox>
+                      <ScrollText>
+                        <SceneList />
+                      </ScrollText>
+                    </ContentBox>
+                  </GlassBox>
+                </div>
+              )}
+            {/* 스토리보드 박스 */}
+            {!isDetail && (
               <StoryboardBox
                 ref={stepTabs[2].element}
-                data={temp[2]}
-                temp={temp}
-                setTemp={setTemp}
                 setSelect={setSelect}
                 onMoveScroll={stepTabs[3].onMoveElement}
               />
-              <StatisticsBox ref={stepTabs[3].element} data="" />
-            </ConvertStepWrapper>
-          </AnimationProvider>
-        </ConvertStepProvider>
-        <ChatbotBox />
+            )}
+            {isDetail &&
+              convertDetailQuery.data &&
+              convertDetailQuery.data.result.storyBoard.isExist && (
+                <div ref={stepTabs[2].element}>
+                  <GlassBox $hasData={true}>
+                    <TitleText>스토리보드</TitleText>
+                    <FileButton>
+                      <FileDownloadIcon width="2rem" height="2rem" />
+                      &nbsp;다운로드
+                    </FileButton>
+                    <ContentBox>
+                      <ScrollText>
+                        {storyboard.scene.map((s, index) => (
+                          <React.Fragment key={index}>
+                            <StoryboardInfo
+                              data={{
+                                scene_num: s.scene_num,
+                                summary: s.summary,
+                                location: s.location,
+                                cutCount: s.content!.length,
+                              }}
+                            />
+                            <CutList cuts={s.content!} />
+                          </React.Fragment>
+                        ))}
+                      </ScrollText>
+                    </ContentBox>
+                  </GlassBox>
+                </div>
+              )}
+            {/* 통계 박스 */}
+            {!isDetail && <StatisticsBox ref={stepTabs[3].element} data="" />}
+            {isDetail && (
+              <div ref={stepTabs[3].element}>
+                <GlassBox $hasData={true}>
+                  <TitleText>통계</TitleText>
+                  <ContentBox style={{ overflowY: 'scroll' }}>
+                    {!appearanceQuery.isFetching &&
+                    !statisticsQuery.isFetching &&
+                    appearanceQuery.data &&
+                    statisticsQuery.data ? (
+                      <>
+                        <Mindmap result={statisticsQuery.data.result} />
+                        <RateChart result={appearanceQuery.data.result} />
+                      </>
+                    ) : (
+                      <Spinner text={spinnerText.statistics} />
+                    )}
+                  </ContentBox>
+                </GlassBox>
+              </div>
+            )}
+          </ConvertStepWrapper>
+        </AnimationProvider>
+        {/* 챗봇 박스 */}
+        {!isDetail && <ChatbotBox />}
+        {isDetail && convertDetailQuery.data && chatRoomId !== null && (
+          <ChatbotBox />
+        )}
+        {/* pop page modal */}
+        <PopPageModal isOpen={isOpen} setModalIsOpen={setModalIsOpen} />
       </BackgroundCover>
     </Background>
   );
@@ -149,12 +334,26 @@ const ConvertPage = () => {
 
 export default ConvertPage;
 
+// keyframes
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
+
 // background
-const Background = styled.div`
+const Background = styled.div<bgProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-image: url(${bgImg});
+  ${({ $fade, $bgImg }) => css`
+    animation: ${$fade && fadeIn} 1s forwards;
+    background-image: url(${$bgImg});
+  `}
+  transition: 1s ease-in-out;
   background-size: cover;
   ${css`
     height: calc(100vh - 80px);
@@ -163,15 +362,18 @@ const Background = styled.div`
 
 const BackgroundCover = styled.div`
   display: flex;
-  flex-direction: column;
   flex: 1;
   background-color: rgba(166, 162, 154, 0.4);
   backdrop-filter: blur(3px);
-  padding: 0 6.5vw;
+  padding: 0 13rem;
   ${css`
     height: calc(100vh - 80px);
   `}
   overflow: hidden;
+
+  @media ${({ theme }) => theme.mediaSize.xl} {
+    padding: 0 15rem;
+  }
 `;
 
 // container
@@ -237,7 +439,8 @@ const TitleInput = styled.input`
   background-color: transparent;
   border-width: 0 0 1px 0;
   border-color: white;
-  font-family: BookkMyungjo;
+  border-style: solid;
+  font-size: 1rem;
   color: black;
   &::placeholder {
     color: ${({ theme }) => theme.colors.brown};

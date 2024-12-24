@@ -19,20 +19,20 @@ const MainPageFirstBox = () => {
         </ServiceLogoBox>
         <ContentBox>
           <SubTitleContentBox>
-            <SubTitleText page={'first'}>소설을 대본으로</SubTitleText>
-            <ContentText page={'first'}>
+            <SubTitleText $page={'first'}>소설을 대본으로</SubTitleText>
+            <ContentText $page={'first'}>
               {blank}소설을 작성하면 대본으로 변환됩니다.
             </ContentText>
           </SubTitleContentBox>
           <SubTitleContentBox>
-            <SubTitleText page={'first'}>스토리보드 생성</SubTitleText>
-            <ContentText page={'first'}>
+            <SubTitleText $page={'first'}>스토리보드 생성</SubTitleText>
+            <ContentText $page={'first'}>
               {blank}변환된 대본을 기반으로 스토리보드를 생성합니다.
             </ContentText>
           </SubTitleContentBox>
           <SubTitleContentBox>
-            <SubTitleText page={'first'}>챗봇으로 대본 보완하기</SubTitleText>
-            <ContentText page={'first'}>
+            <SubTitleText $page={'first'}>챗봇으로 대본 보완하기</SubTitleText>
+            <ContentText $page={'first'}>
               {blank}챗봇에게 도움을 받아 대본을 보완할 수 있습니다.
             </ContentText>
           </SubTitleContentBox>
@@ -100,7 +100,7 @@ const Circle = styled(motion.div)<typeProps>`
           width: 4rem;
           height: 4rem;
           background-color: ${theme.colors.ivory};
-          top: 14rem;
+          top: 16rem;
           left: 8rem;
 
           animation: ${Gradient} 3s ease-in-out infinite;
@@ -119,7 +119,7 @@ const Circle = styled(motion.div)<typeProps>`
         return css`
           width: 8rem;
           height: 8rem;
-          background-color: ${theme.colors.olive};
+          background-color: ${theme.colors.darkOlive};
           top: 8rem;
           left: -3rem;
 

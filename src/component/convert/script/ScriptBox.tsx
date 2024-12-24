@@ -27,17 +27,16 @@ import { useMutation } from '@tanstack/react-query';
 import { mutationKeys } from '../../../utils/queryKeys';
 import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 type props = {
-  data: string;
-  temp: string[];
-  setTemp: (temp: string[]) => void;
   onMoveScroll: () => void;
   setSelect: (select: number) => void;
 };
 
 const ScriptBox = forwardRef<HTMLDivElement, props>(
-  ({ data, temp, setTemp, onMoveScroll, setSelect }, ref) => {
+  ({ onMoveScroll, setSelect }, ref) => {
     const { controlScripts, controlStoryboard, startAnimation } =
       useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
 
@@ -58,8 +57,6 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
         setScriptId(result.scriptId);
         console.log(result.scriptId);
 
-        temp[1] = 'data';
-        setTemp([...temp]);
         step[2] = true;
         setStep([...step]);
 
@@ -85,10 +82,19 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
       ScriptMutate.mutate();
     };
 
+    const errorProcess = () => {
+      setIsClick(false);
+      Toast.error(toastText.scriptError);
+    };
+
     return (
-      <motion.div ref={ref} animate={controlScripts} style={{ opacity: 0 }}>
+      <motion.div
+        ref={ref}
+        animate={controlScripts}
+        style={{ display: 'none', opacity: 0 }}
+      >
         {isClick ? (
-          <GlassBox hasData={true}>
+          <GlassBox $hasData={true}>
             {!ScriptMutate.isPending ? (
               <>
                 {ScriptMutate.isSuccess && (
@@ -105,16 +111,14 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
                     </ContentBox>
                   </>
                 )}
-                {ScriptMutate.isError && (
-                  <TitleText>대본 변환을 실패했습니다..</TitleText>
-                )}
+                {ScriptMutate.isError && errorProcess()}
               </>
             ) : (
               <Spinner text={spinnerText.scripts} />
             )}
           </GlassBox>
         ) : (
-          <GlassBox hasData={false}>
+          <GlassBox $hasData={false}>
             <TutorialBox>
               <TutorialTitle>#2 소설을 대본으로 변환하기</TutorialTitle>
               <TutorialText>
@@ -125,7 +129,7 @@ const ScriptBox = forwardRef<HTMLDivElement, props>(
                 <HighlightedText>대본 형식으로 변환</HighlightedText>합니다.
               </TutorialText>
             </TutorialBox>
-            <ConvertButton disabled={true} onClick={handleClick} isWrite={true}>
+            <ConvertButton disabled={true} onClick={handleClick} $isWrite={true}>
               대본 변환
             </ConvertButton>
           </GlassBox>

@@ -8,7 +8,7 @@ import { useScreenTransitionAnimation } from '../../hooks/useScreenTransitionAni
 
 interface boxProps {
   selected: number;
-  index: number;
+  $index: number;
 }
 
 const MainIndicator = () => {
@@ -35,10 +35,10 @@ const MainIndicator = () => {
             onClick={() => handleClick(index + 1)}
             animate={controlIndicater}
           >
-            <IndicatorText selected={page} index={index + 1}>
+            <IndicatorText selected={page} $index={index + 1}>
               {item}
             </IndicatorText>
-            <IndicatorShape selected={page} index={index + 1} />
+            <IndicatorShape selected={page} $index={index + 1} />
           </IndicatorBox>
         );
       })}
@@ -62,11 +62,12 @@ const IndicatorBox = styled(motion.div)`
 `;
 
 const IndicatorText = styled.span<boxProps>`
+  user-select: none;
   font-weight: bold;
   font-size: 1rem;
   color: ${({ theme }) => theme.colors.brown};
-  ${({ selected, index }) =>
-    selected === index &&
+  ${({ selected, $index }) =>
+    selected === $index &&
     css`
       font-size: 1.4rem;
       color: ${({ theme }) => theme.colors.darkOrange};
@@ -78,8 +79,10 @@ const IndicatorShape = styled.div<boxProps>`
   height: 2rem;
   background-color: gray;
   border-radius: 5rem;
-  ${({ selected, index }) =>
-    selected === index &&
+  user-select: none;
+  cursor: pointer;
+  ${({ selected, $index }) =>
+    selected === $index &&
     css`
       width: 2.5rem;
       height: 2.5rem;

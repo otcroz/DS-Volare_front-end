@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
-import {
-  ConvertStepProvider,
-  useConvertStep,
-} from '../../context/convertStepContext';
+import { useConvertStep } from '../../context/convertStepContext';
 
 interface IndicatorProps {
   // 모든 단계를 거쳤는지 여부
-  step: boolean[]; // 현재 사용자가 위치한 단계
   select: number;
   setSelect: (select: number) => void;
   stepTabs: Array<UseMoveScrollReturn>;
@@ -21,12 +17,12 @@ type UseMoveScrollReturn = {
 
 type boxProps = {
   selected: number;
-  index: number;
-  step: boolean;
+  $index: number;
+  $step: boolean;
 };
 
 const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
-  const { step, setStep } = useConvertStep();
+  const { step } = useConvertStep();
 
   return (
     <IndicatorContainer>
@@ -34,10 +30,10 @@ const ConvertIndicator = ({ select, setSelect, stepTabs }: IndicatorProps) => {
         return (
           <IndicatorBox
             disabled={step[index]}
-            step={step[index]}
+            $step={step[index]}
             key={index}
             selected={select}
-            index={index}
+            $index={index}
             onClick={() => {
               setSelect(index);
               item.onMoveElement();
@@ -63,26 +59,30 @@ const IndicatorBox = styled.button.attrs((props) => ({
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 7.5rem;
+  min-width: 10rem;
   height: 30px;
   padding: 1.1rem;
   font-size: 1rem;
+  user-select: none;
 
   background-color: ${({ theme }) => theme.colors.beige};
   color: ${({ theme }) => theme.colors.brown};
   font-weight: bold;
+  cursor: default;
 
-  ${({ selected, index, step, theme }) => css`
-    ${step &&
+  ${({ selected, $index, $step, theme }) => css`
+    ${$step &&
     css`
       background-color: ${theme.colors.orange};
       color: white;
+      cursor: pointer;
     `}
 
-    ${selected === index &&
+    ${selected === $index &&
     css`
       background-color: ${theme.colors.darkOrange};
       color: white;
+      cursor: pointer;
     `}
   `}
 `;

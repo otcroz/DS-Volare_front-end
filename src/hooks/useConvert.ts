@@ -1,18 +1,56 @@
 import axios from 'axios';
 import { useUser } from './useUser';
-import { useNovelIdData } from '../context/convertDataContext';
+import {
+  useNovelIdData,
+  useStoryboardData,
+  useCharaterData,
+  useNovelData,
+  useNovelTitleData,
+  useScriptData,
+  useScriptIdData,
+  useChatRoomIdData,
+} from '../context/convertDataContext';
 import { Script } from '../types';
 import { useAuth } from './useAuth';
 import { useAxiosInstances } from './useAxiosInstance';
+import { useConvertStep } from '../context/convertStepContext';
+import { QueryFunctionContext } from '@tanstack/react-query';
 
 export const useConvert = () => {
   const { getTokenUser } = useUser();
-  const { novelId } = useNovelIdData();
+  const { novelId, setNovelId } = useNovelIdData();
   const { reissue } = useAuth();
+  const { setStoryboard } = useStoryboardData();
+  const { setCharacterList } = useCharaterData();
+  const { setText } = useNovelData();
+  const { setTitle } = useNovelTitleData();
+  const { setScript } = useScriptData();
+  const { setScriptId } = useScriptIdData();
+  const { setStep } = useConvertStep();
+  const { setChatRoomId } = useChatRoomIdData();
 
   // axios instance 선언
   const { createAxiosInstance } = useAxiosInstances();
   const axiosInstance = createAxiosInstance(reissue);
+
+  // api: create novel / flask
+  const createNovel = async (
+    location: string,
+    characters: string[],
+    situation: string
+  ) => {
+    try {
+      const result = await axios.post(`/flask/create_novel/`, {
+        location: location,
+        characters: characters,
+        situation: situation,
+      });
+      console.log(result.data);
+      return result.data;
+    } catch (err) {
+      console.log(err); // temporary error handling
+    }
+  };
 
   // api: save novel / spring
   const saveNovel = async (title: string, novel: string) => {
@@ -103,7 +141,6 @@ export const useConvert = () => {
       const result = await axiosInstance.post(`/spring/chatRooms/${scriptId}`);
 
       const data = result.data;
-      console.log(data);
       if (data.isSuccess) {
         console.log(data.message);
         return data.result;
@@ -118,17 +155,25 @@ export const useConvert = () => {
 
   // api: get chat list / spring
   // (need fix) cursor-based-pagination
-  const getChatList = async (chatRoomId: string) => {
-    try {
-      const result = await axiosInstance.get(`/spring/chats/${chatRoomId}`);
+  const getChatList = async ({
+    queryKey,
+    pageParam = '',
+  }: QueryFunctionContext<string[], string>) => {
+    const [, chatRoomId] = queryKey;
 
-      const data = result.data;
+    try {
+      const response = await axios.get(`/spring/chats/${chatRoomId}`, {
+        params: {
+          lastMessageId: pageParam || undefined, // 마지막 메시지 ID를 쿼리 파라미터로 전달
+        },
+      });
+
+      const data = response.data;
       if (data.isSuccess) {
-        // console.log(data.result.allMessages);
-        return data.result;
+        return data;
       } else {
         console.log(data.message);
-        return false;
+        return data.false;
       }
     } catch (err) {
       console.log(err); // temporary error handling
@@ -171,7 +216,54 @@ export const useConvert = () => {
     }
   };
 
+  // api: user convert list
+  const convertList = async (page: number) => {
+    try {
+      const result = await axiosInstance.get(
+        `/spring/users/conversion?pageNo=${page}`
+      );
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const convertDetail = async (novelId: string) => {
+    try {
+      const result = await axiosInstance.get(
+        `/spring/users/conversion-details/${novelId}`
+      );
+      const data = result.data;
+      if (data.isSuccess) {
+        return data;
+      } else {
+        console.log(data.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // clear context data
+  const clearConvertData = () => {
+    setText('');
+    setTitle('');
+    setCharacterList([]);
+    setScript({ scene: [] });
+    setStoryboard({ scene: [] });
+    setScriptId(0);
+    setNovelId('');
+    setStep([false, false, false, false]);
+    setChatRoomId('');
+  };
+
   return {
+    createNovel,
     saveNovel,
     cognizeCharacter,
     convertScript,
@@ -180,5 +272,8 @@ export const useConvert = () => {
     getChatList,
     apperanceRate,
     convertStatistics,
+    convertList,
+    convertDetail,
+    clearConvertData,
   };
 };

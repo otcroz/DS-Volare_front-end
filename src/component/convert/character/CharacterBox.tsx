@@ -26,6 +26,8 @@ import Spinner from '../../base/Spinner';
 import { spinnerText } from '../../../utils/spinnerText';
 import { useMutation } from '@tanstack/react-query';
 import { mutationKeys, queryKeys } from '../../../utils/queryKeys';
+import { Toast } from '../../../styles/ToastStyle';
+import { toastText } from '../../../utils/toastText';
 
 interface Props {
   onScroll: (scrollTop: number) => void;
@@ -53,7 +55,6 @@ const CharacterBox = ({
   const { setNovelId } = useNovelIdData();
 
   const { controlScripts, startAnimation } = useAnimationContext(); // 변환 컴포넌트 애니메이션 컨트롤
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const { step, setStep } = useConvertStep(); // 변환 단계 관리
   const { saveNovel, cognizeCharacter } = useConvert();
   const [isClick, setIsClick] = useState<boolean>(false); // 버튼 클릭했을 시 true
@@ -65,27 +66,6 @@ const CharacterBox = ({
   const renderWords = () => {
     return inputSentences.map((sentence, sentIndex) =>
       sentence.map((word, eid) => {
-        const highlightInfo = resultData.find((dataGroup) =>
-          dataGroup.some(
-            (data) =>
-              data.sent_id === sentIndex &&
-              data.start_eid <= eid &&
-              data.end_eid >= eid
-          )
-        );
-
-        if (!highlightInfo) {
-          return (
-            <HighlightedWord
-              key={`${sentIndex}-${eid}`}
-              highlightColor="transparent"
-            >
-              {word}&nbsp;
-            </HighlightedWord>
-          );
-        }
-
-        // highlightInfo가 포함된 groupIndex 찾기
         const groupIndex = resultData.findIndex((dataGroup) =>
           dataGroup.some(
             (data) =>
@@ -94,43 +74,40 @@ const CharacterBox = ({
               data.end_eid >= eid
           )
         );
-
-        // groupIndex에 따라 색상 설정
-        const highlightColor = getHighlightColor(groupIndex);
-
+        const highlightColor =
+          groupIndex === -1 ? 'transparent' : highlightColors[groupIndex];
         return (
-          <>
-            <HighlightedWord
-              key={`${sentIndex}-${eid}`}
-              highlightColor={highlightColor}
-            >
+          <React.Fragment key={`${sentIndex}-${eid}`}>
+            <HighlightedWord $highlightColor={highlightColor}>
               {word}
             </HighlightedWord>
             &nbsp;
-          </>
+          </React.Fragment>
         );
       })
     );
   };
 
-  // groupIndex에 따라 색상 반환 함수
-  const getHighlightColor = (groupIndex: number): string => {
-    const colors = ['yellow', 'orange', 'lightgreen', 'lightblue']; // 원하는 색상 추가 가능
+  // 등장인물 형광펜 색상 리스트
+  const [highlightColors, setHighlightColors] = useState<string[]>([
+    '#F0E393',
+    '#BED2C7',
+    '#EBB57D',
+    '#A8C2EB',
+    '#EB8E43',
+  ]);
 
-    // groupIndex가 colors 배열의 길이를 넘어가면 추가 색상은 랜덤하게 반환하도록 설정
-    if (groupIndex >= colors.length) {
-      return `#${Math.floor(Math.random() * 16777215).toString(16)}`; // 랜덤 색상 생성
-    }
-
-    return colors[groupIndex];
-  };
-
-  // NovelBox와 동시 스크롤
   useEffect(() => {
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTop = scrollTop;
-    }
-  }, [scrollTop]);
+    setHighlightColors([...highlightColors, generateRandomColor()]);
+  }, [resultData]);
+
+  // 파스텔 톤의 랜덤 색상 생성 함수
+  const generateRandomColor = (): string => {
+    const r = Math.floor(Math.random() * 80 + 160);
+    const g = Math.floor(Math.random() * 80 + 160);
+    const b = Math.floor(Math.random() * 80 + 160);
+    return `rgb(${r}, ${g}, ${b})`;
+  };
 
   // fetch, 추후에 낙관적 업데이트를 위한 onMutate 함수 추가
   const CharacterMutate = useMutation({
@@ -181,12 +158,6 @@ const CharacterBox = ({
     },
   });
 
-  const handleScroll = () => {
-    if (scrollAreaRef.current) {
-      onScroll(scrollAreaRef.current.scrollTop);
-    }
-  };
-
   const handleClick = async () => {
     setIsClick(true); // 버튼 클릭했을 시 다음 단계가 보이도록
     // func: 소설 저장
@@ -196,39 +167,36 @@ const CharacterBox = ({
     CharacterMutate.mutate();
   };
 
+  const errorProcess = () => {
+    setIsClick(false);
+    Toast.error(toastText.characterError);
+  };
+
   return (
     <motion.div>
       {isClick ? (
         // temporary
-        <GlassBox hasData={true}>
+        <GlassBox $hasData={true}>
           {!CharacterMutate.isPending ? (
             <>
               {CharacterMutate.isSuccess && (
                 <>
                   <TitleText>등장인물 인식 결과</TitleText>
                   <ContentBox style={{ height: '27rem' }}>
-                    <ScrollText ref={scrollAreaRef} onScroll={handleScroll}>
-                      {renderWords()}
-                    </ScrollText>
+                    <ScrollText>{renderWords()}</ScrollText>
                   </ContentBox>
                   <TitleText>등장인물</TitleText>
                   <CharacterChipList />
                 </>
               )}
-              {CharacterMutate.isError && (
-                <>
-                  <TitleText>
-                    등장인물 목록을 불러오는 것을 실패했습니다..
-                  </TitleText>
-                </>
-              )}
+              {CharacterMutate.isError && errorProcess()}
             </>
           ) : (
             <Spinner text={spinnerText.character} />
           )}
         </GlassBox>
       ) : (
-        <GlassBox hasData={false}>
+        <GlassBox $hasData={false}>
           <TutorialBox>
             <TutorialTitle>#1 소설 원고 입력하기</TutorialTitle>
             <TutorialText>
@@ -242,9 +210,9 @@ const CharacterBox = ({
           </TutorialBox>
           {/* 소설 작성 후 버튼 활성화 */}
           <ConvertButton
-            disabled={step[0]}
+            disabled={step[0] && title !== ''}
             onClick={handleClick}
-            isWrite={step[0]}
+            $isWrite={step[0] && title !== ''}
           >
             등장인물 인식
           </ConvertButton>
@@ -257,10 +225,10 @@ const CharacterBox = ({
 export default CharacterBox;
 
 interface HighlightedWordProps {
-  highlightColor: string;
+  $highlightColor: string;
 }
 
 const HighlightedWord = styled.p<HighlightedWordProps>`
   display: inline;
-  background-color: ${(props) => props.highlightColor};
+  background-color: ${(props) => props.$highlightColor};
 `;
